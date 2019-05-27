@@ -55,6 +55,7 @@ import math
 import sys
 import matplotlib.pyplot as plt
 import os
+import time
 
 # turn on/off graphics
 graphics = 0
@@ -282,9 +283,11 @@ class myPacket():
         global var
         global Lpld0
         global GL
+        global nrChannels
 
         self.nodeid = nodeid
         self.txpow = Ptx
+        self.ch = 0
 
         # randomize configuration values
         self.sf = random.randint(6,12)
@@ -308,6 +311,8 @@ class myPacket():
             self.cr = 1
             self.bw = 125
 
+        if experiment == 6:
+            self.ch = random.randint(0, nrChannels-1)
 
         # for experiment 3 find the best setting
         # OBS, some hardcoded values
@@ -318,7 +323,7 @@ class myPacket():
         print "Lpl:", Lpl
         Prx = self.txpow - GL - Lpl
 
-        if (experiment == 3) or (experiment == 5):
+        if (experiment == 3) or (experiment == 5) or (experiment == 6):
             minairtime = 9999
             minsf = 0
             minbw = 0
@@ -328,6 +333,8 @@ class myPacket():
             for i in range(0,6):
                 for j in range(1,4):
                     if (sensi[i,j] < Prx):
+                        if (j > 1) and (experiment == 6):
+                            continue
                         self.sf = int(sensi[i,0])
                         if j==1:
                             self.bw = 125
@@ -369,10 +376,12 @@ class myPacket():
         # choose some random frequences
         if experiment == 1:
             self.freq = random.choice([860000000, 864000000, 868000000])
+        elif experiment == 6:
+            self.freq = 860000000 + (4000000) * self.ch
         else:
             self.freq = 860000000
 
-        print "frequency" ,self.freq, "symTime ", self.symTime
+        print "channel", self.ch+1, "frequency" ,self.freq, "symTime ", self.symTime
         print "bw", self.bw, "sf", self.sf, "cr", self.cr, "rssi", self.rssi
         self.rectime = airtime(self.sf,self.cr,self.pl,self.bw)
         print "rectime node ", self.nodeid, "  ", self.rectime

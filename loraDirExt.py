@@ -331,10 +331,8 @@ class myPacket():
             print "Prx:", Prx
 
             for i in range(0,6):
-                for j in range(1,4):
+                for j in range(1,2):
                     if (sensi[i,j] < Prx):
-                        if (j > 1) and (experiment == 6):
-                            continue
                         self.sf = int(sensi[i,0])
                         if j==1:
                             self.bw = 125
@@ -475,7 +473,7 @@ packetsAtBS = []
 env = simpy.Environment()
 
 # maximum number of packets the BS can receive at the same time
-maxBSReceives = 8
+maxBSReceives = 999
 
 
 # max distance: 300m in city, 3000 m outside (5 km Utz experiment)
@@ -489,7 +487,7 @@ nrLost = 0
 Ptx = 14
 gamma = 2.08
 d0 = 40.0
-var = 0           # variance ignored for now
+var = 0           # variance ignored for nows
 Lpld0 = 127.41
 GL = 0
 
