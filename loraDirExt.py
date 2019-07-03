@@ -17,7 +17,7 @@
 
 """
  SYNOPSIS:
-   ./loraDir.py <nodes> <avgsend> <experiment> <simtime> [collision]
+   ./loraDir.py <nodes> <avgsend> <experiment> <simtime> <channels> [collision]
  DESCRIPTION:
     nodes
         number of nodes to simulate
@@ -290,7 +290,7 @@ class myPacket():
         self.ch = 0
 
         # randomize configuration values
-        self.sf = random.randint(6,12)
+        self.sf = random.randint(7,12)
         self.cr = random.randint(1,4)
         self.bw = random.choice([125, 250, 500])
 
@@ -302,9 +302,9 @@ class myPacket():
 
         # for certain experiments override these
         if experiment==2:
-            self.sf = 6
+            self.sf = 7
             self.cr = 1
-            self.bw = 500
+            self.bw = 125
         # lorawan
         if experiment == 4:
             self.sf = 12
@@ -313,6 +313,12 @@ class myPacket():
 
         if experiment == 6:
             self.ch = random.randint(0, nrChannels-1)
+
+        if experiment == 7:
+            self.sf = 7
+            self.cr = 1
+            self.bw = 125
+
 
         # for experiment 3 find the best setting
         # OBS, some hardcoded values
@@ -498,6 +504,8 @@ elif experiment == 2:
     minsensi = -112.0   # no experiments, so value from datasheet
 elif experiment in [3,5,6]:
     minsensi = np.amin(sensi) ## Experiment 3 can use any setting, so take minimum
+elif experiment == 7:
+    minsensi = -123
 Lpl = Ptx - minsensi
 print ("amin", minsensi, "Lpl", Lpl)
 maxDist = d0*(math.e**((Lpl-Lpld0)/(10.0*gamma)))
