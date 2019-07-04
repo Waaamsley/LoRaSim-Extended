@@ -315,7 +315,7 @@ class myPacket():
             self.ch = random.randint(0, nrChannels-1)
 
         if experiment == 7:
-            self.sf = 7
+            self.sf = 12
             self.cr = 1
             self.bw = 125
 
