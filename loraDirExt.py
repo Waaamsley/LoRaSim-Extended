@@ -73,12 +73,12 @@ full_collision = False
 
 # this is an array with measured values for sensitivity
 # see paper, Table 3
-sf7 = np.array([7,-126.5,-124.25,-120.75])
-sf8 = np.array([8,-127.25,-126.75,-124.0])
-sf9 = np.array([9,-131.25,-128.25,-127.5])
-sf10 = np.array([10,-132.75,-130.25,-128.75])
-sf11 = np.array([11,-134.5,-132.75,-128.75])
-sf12 = np.array([12,-133.25,-132.25,-132.25])
+sf7 = np.array([7,-123,-120,-116])
+sf8 = np.array([8,-126,-123,-119])
+sf9 = np.array([9,-129,-125,-122])
+sf10 = np.array([10,-132,-128,-125])
+sf11 = np.array([11,-133,-130,-128])
+sf12 = np.array([12,-136,-133,-130])
 
 #
 # check for collisions at base station
