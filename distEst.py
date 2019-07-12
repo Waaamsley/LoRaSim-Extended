@@ -9,6 +9,9 @@ def hataUrban(sensi):
 
 if (len(sys.argv) == 2):
     sf_sensi = int(sys.argv[1])
+else:
+    print("Incorrect input")
+    exit()
 
 hataUrban(sf_sensi)
 exit()
