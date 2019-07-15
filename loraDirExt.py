@@ -425,7 +425,7 @@ class myPacket():
 # a global list of packet being processed at the gateway
 # is maintained
 #
-def transmit(env,node):
+def transmit(env,node,observer):
     while True:
         yield env.timeout(random.expovariate(1.0/float(node.period)))
 
@@ -450,6 +450,7 @@ def transmit(env,node):
                 else:
                     node.packet.collided = 0
                 packetsAtBS.append(node)
+                observer.traffic = len(packetsAtBS)  #OBSERVE!!!!!!!!!!!!!!!!!!!!
                 node.packet.addTime = env.now
 
         yield env.timeout(node.packet.rectime)
@@ -473,20 +474,21 @@ def transmit(env,node):
         # can remove it
         if (node in packetsAtBS):
             packetsAtBS.remove(node)
+            observer.traffic = len(packetsAtBS) # OBSERVE!!!!!!!!!!!!!!!!!!!!
             # reset the packet
         node.packet.collided = 0
         node.packet.processed = 0
         node.packet.lost = False
 
-class ChannelUsage():
+class ChannelUsage(object):
     def __init__(self):
         #self.noTraffic = 0.0
         self._traffic = 0
         self.empty = False
         self.f_flag = 0.0
         self.e_flag = 0.0
-        self.accum_e
-        self.accum_f
+        self.accum_e = 0.0
+        self.accum_f = 0.0
 
     @property
     def traffic(self):
@@ -496,39 +498,16 @@ class ChannelUsage():
     def traffic(self, value):
         self._traffic = value
 
-        if self.traffic == 0 and not self.empty:
+        if self.traffic == 0.0 and not self.empty:
             self.empty = True
             self.e_flag = time.time()
             if (self.f_flag > 0.0):
                 self.accum_f += (time.time()) - self.f_flag
 
-        if self.traffic > 0 and self.empty:
+        if self.traffic > 0.0 and self.empty:
             self.empty = False
             self.f_flag = time.time()
-            self.accum_f += (time.time()) - self.f_flag
-
-
-
-
-
-def channel_usage():
-    e_flag = 0.0
-    f_flag = 0.0
-    accum_e
-    accum_f
-    empty = False
-    while True:
-        if (len(packetsAtBS) == 0 and not empty):
-            empty = True
-            e_flag = time.time()
-            if (f_flag > 0.0):
-                accum_f += (time.time()) - f_flag
-
-        if (len(packetsAtBS) > 0 and empty):
-            empty = False
-            f_flag = time.time()
-            accum_e += (time.time() - e_flag)
-
+            self.accum_e += (time.time()) - self.e_flag
 
 #
 # "main" program
@@ -611,13 +590,14 @@ if (graphics == 1):
 
 
 #env.process(channel_usage())
+observer = ChannelUsage()
 for i in range(0,nrNodes):
     # myNode takes period (in ms), base station id packetlen (in Bytes)
     # 1000000 = 16 min
     node = myNode(i,bsId,dutyCycle,20)
     print("--------------------------------------------------------------------------------------")
     nodes.append(node)
-    env.process(transmit(env,node))
+    env.process(transmit(env,node,observer))
 
 
 #prepare show
@@ -668,7 +648,8 @@ if (experiment == 7):
         print("SF", record, " DER: ", sfReceived[record-7], float(sfSent[record-7]))
         record += 1
     print ("SF Counts: ", sfCount)
-
+print ("Accumulted full time: ", observer.accum_f)
+print ("Accumulted empty time: ", observer.accum_e)
 
 
 # this can be done to keep graphics visible
