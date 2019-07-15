@@ -478,6 +478,58 @@ def transmit(env,node):
         node.packet.processed = 0
         node.packet.lost = False
 
+class ChannelUsage():
+    def __init__(self):
+        #self.noTraffic = 0.0
+        self._traffic = 0
+        self.empty = False
+        self.f_flag = 0.0
+        self.e_flag = 0.0
+        self.accum_e
+        self.accum_f
+
+    @property
+    def traffic(self):
+        return self._traffic
+
+    @traffic.setter
+    def traffic(self, value):
+        self._traffic = value
+
+        if self.traffic == 0 and not self.empty:
+            self.empty = True
+            self.e_flag = time.time()
+            if (self.f_flag > 0.0):
+                self.accum_f += (time.time()) - self.f_flag
+
+        if self.traffic > 0 and self.empty:
+            self.empty = False
+            self.f_flag = time.time()
+            self.accum_f += (time.time()) - self.f_flag
+
+
+
+
+
+def channel_usage():
+    e_flag = 0.0
+    f_flag = 0.0
+    accum_e
+    accum_f
+    empty = False
+    while True:
+        if (len(packetsAtBS) == 0 and not empty):
+            empty = True
+            e_flag = time.time()
+            if (f_flag > 0.0):
+                accum_f += (time.time()) - f_flag
+
+        if (len(packetsAtBS) > 0 and empty):
+            empty = False
+            f_flag = time.time()
+            accum_e += (time.time() - e_flag)
+
+
 #
 # "main" program
 #
@@ -558,6 +610,7 @@ if (graphics == 1):
     ax.add_artist(plt.Circle((bsx, bsy), maxDist, fill=False, color='green'))
 
 
+#env.process(channel_usage())
 for i in range(0,nrNodes):
     # myNode takes period (in ms), base station id packetlen (in Bytes)
     # 1000000 = 16 min
@@ -615,6 +668,7 @@ if (experiment == 7):
         print("SF", record, " DER: ", sfReceived[record-7], float(sfSent[record-7]))
         record += 1
     print ("SF Counts: ", sfCount)
+
 
 
 # this can be done to keep graphics visible

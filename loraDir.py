@@ -493,7 +493,6 @@ Lpl = Ptx - minsensi
 print "amin", minsensi, "Lpl", Lpl
 maxDist = d0*(math.e**((Lpl-Lpld0)/(10.0*gamma)))
 print "maxDist:", maxDist
-
 # base station placement
 bsx = maxDist+10
 bsy = maxDist+10
