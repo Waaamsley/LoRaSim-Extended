@@ -273,7 +273,7 @@ class myNode():
 
         self.packet = myPacket(self.nodeid, packetlen, self.dist)
         self.sent = 0
-        self.period = (self.packet.rectime * (100 / duty))
+        self.period = (self.packet.rectime * (100 / duty)) #DUTY CYCLE LINE
         print("avgsend: ", self.period, "||||airtime: ", self.packet.rectime)
 
         # graphics for node
@@ -641,10 +641,6 @@ if (experiment == 7):
     record = 7
     for stat in sfSent:
         print("SF", record, " DER: ", sfReceived[record-7]/float(sfSent[record-7]))
-        record += 1
-    print ("SF Counts: ", sfCount)
-    record = 7
-    for stat in sfSent:
         print("SF", record, " DER: ", sfReceived[record-7], float(sfSent[record-7]))
         record += 1
     print ("SF Counts: ", sfCount)
