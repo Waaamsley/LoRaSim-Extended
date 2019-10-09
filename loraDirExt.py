@@ -259,7 +259,7 @@ class myNode():
                             print "could not place new node, giving up"
                             exit(-1)
             else:
-                print "first node"
+                #print "first node"
                 self.x = posx
                 self.y = posy
                 found = 1
@@ -269,12 +269,13 @@ class myNode():
             self.dist = 10
         else:
             self.dist = np.sqrt((self.x-bsx)*(self.x-bsx)+(self.y-bsy)*(self.y-bsy))
-        print('node %d' %nodeid, "x", self.x, "y", self.y, "dist: ", self.dist)
+        #print('node %d' %nodeid, "x", self.x, "y", self.y, "dist: ", self.dist)
 
         self.packet = myPacket(self.nodeid, packetlen, self.dist)
+
         self.sent = 0
         self.period = (self.packet.rectime * (100 / duty)) #DUTY CYCLE LINE
-        print("avgsend: ", self.period, "||||airtime: ", self.packet.rectime)
+        #print("avgsend: ", self.period, "||||airtime: ", self.packet.rectime)
 
         # graphics for node
         global graphics
@@ -346,6 +347,12 @@ class myPacket():
                     split += 1
                 index += 1
 
+        if experiment == 8:
+            self.cr = 1
+            self.bw = 125
+            self.ch = random.randint(0, nrChannels - 1)
+            self.sf = random.randint(7, 12)
+
 
         # for experiment 3 find the best setting
         # OBS, some hardcoded values
@@ -353,7 +360,7 @@ class myPacket():
 
         # log-shadow
         Lpl = Lpld0 + 10*gamma*math.log10(distance/d0)
-        print "Lpl:", Lpl
+        #print "Lpl:", Lpl
         Prx = self.txpow - GL - Lpl
 
         if (experiment == 3) or (experiment == 5):
@@ -361,7 +368,7 @@ class myPacket():
             minsf = 0
             minbw = 0
 
-            print "Prx:", Prx
+            #print "Prx:", Prx
 
             for i in range(0,6):
                 for j in range(1,2):
@@ -382,7 +389,7 @@ class myPacket():
             if (minairtime == 9999):
                 print "does not reach base station"
                 exit(-1)
-            print "best sf:", minsf, " best bw: ", minbw, "best airtime:", minairtime
+            #print "best sf:", minsf, " best bw: ", minbw, "best airtime:", minairtime
             self.rectime = minairtime
             self.sf = minsf
             self.bw = minbw
@@ -412,10 +419,10 @@ class myPacket():
         else:
             self.freq = 860000000
 
-        print "channel", self.ch+1, "frequency" ,self.freq, "symTime ", self.symTime
-        print "bw", self.bw, "sf", self.sf, "cr", self.cr, "rssi", self.rssi
+        #print "channel", self.ch+1, "frequency" ,self.freq, "symTime ", self.symTime
+        #print "bw", self.bw, "sf", self.sf, "cr", self.cr, "rssi", self.rssi
         self.rectime = airtime(self.sf,self.cr,self.pl,self.bw)
-        print "rectime node ", self.nodeid, "  ", self.rectime
+        #print "rectime node ", self.nodeid, "  ", self.rectime
         # denote if packet is collided
         self.collided = 0
         self.processed = 0
@@ -522,15 +529,15 @@ if len(sys.argv) >= 6:
     nrChannels = int(sys.argv[5])
     if len(sys.argv) > 6:
         full_collision = bool(int(sys.argv[6]))
-    print ("Nodes:", nrNodes)
-    print ("Desired Duty Cycle:",dutyCycle)
-    print ("Experiment: ", experiment)
-    print ("Simtime: ", simtime)
-    print ("Channels: ", nrChannels)
-    print ("Full Collision: ", full_collision)
+    #print ("Nodes:", nrNodes)
+    #print ("Desired Duty Cycle:",dutyCycle)
+    #print ("Experiment: ", experiment)
+    #print ("Simtime: ", simtime)
+    #print ("Channels: ", nrChannels)
+    #print ("Full Collision: ", full_collision)
 else:
-    print ("usage: ./loraDir <nodes> <avgsend> <experiment> <simtime> [collision]")
-    print ("experiment 0 and 1 use 1 frequency only")
+    #print ("usage: ./loraDir <nodes> <avgsend> <experiment> <simtime> [collision]")
+    #print ("experiment 0 and 1 use 1 frequency only")
     exit(-1)
 
 
@@ -566,12 +573,14 @@ elif experiment == 2:
     minsensi = -112.0   # no experiments, so value from datasheet
 elif experiment in [3,5,6]:
     minsensi = np.amin(sensi) ## Experiment 3 can use any setting, so take minimum
-elif experiment == 7:
+elif experiment in  [7, 8]:
     minsensi = -136
 Lpl = Ptx - minsensi
-print ("amin", minsensi, "Lpl", Lpl)
+#print ("amin", minsensi, "Lpl", Lpl)
 maxDist = d0*(math.e**((Lpl-Lpld0)/(10.0*gamma)))
-print ("maxDist:", maxDist)
+if experiment in [7, 8]:
+    maxDist = 487.5
+#print ("maxDist:", maxDist)
 
 # base station placement
 bsx = maxDist+10
@@ -595,7 +604,7 @@ for i in range(0,nrNodes):
     # myNode takes period (in ms), base station id packetlen (in Bytes)
     # 1000000 = 16 min
     node = myNode(i,bsId,dutyCycle,20)
-    print("--------------------------------------------------------------------------------------")
+    #print("--------------------------------------------------------------------------------------")
     nodes.append(node)
     env.process(transmit(env,node,observer))
 
@@ -611,7 +620,7 @@ if (graphics == 1):
 env.run(until=simtime)
 
 # print stats and save into file
-print "nrCollisions ", nrCollisions
+#print "nrCollisions ", nrCollisions
 
 # compute energy
 # Transmit consumption in mA from -2 to +17 dBm
@@ -624,12 +633,12 @@ V = 3.0     # voltage XXX
 sent = sum(n.sent for n in nodes)
 energy = sum(node.packet.rectime * TX[int(node.packet.txpow)+2] * V * node.sent for node in nodes) / 1e6
 
-print "energy (in J): ", energy
-print "sent packets: ", sent
-print "collisions: ", nrCollisions
-print "received packets: ", nrReceived
-print "processed packets: ", nrProcessed
-print "lost packets: ", nrLost
+#print "energy (in J): ", energy
+#print "sent packets: ", sent
+#print "collisions: ", nrCollisions
+#print "received packets: ", nrReceived
+#print "processed packets: ", nrProcessed
+#print "lost packets: ", nrLost
 
 # data extraction rate
 der = (sent-nrCollisions)/float(sent)
@@ -644,8 +653,8 @@ if (experiment == 7):
         print("SF", record, " DER: ", sfReceived[record-7], float(sfSent[record-7]))
         record += 1
     print ("SF Counts: ", sfCount)
-print ("Accumulted full time: ", observer.accum_f)
-print ("Accumulted empty time: ", observer.accum_e)
+#print ("Accumulted full time: ", observer.accum_f)
+#print ("Accumulted empty time: ", observer.accum_e)
 
 
 # this can be done to keep graphics visible
@@ -655,7 +664,7 @@ if (graphics == 1):
 # save experiment data into a dat file that can be read by e.g. gnuplot
 # name of file would be:  exp0.dat for experiment 0
 fname = "exp" + str(experiment) + ".dat"
-print fname
+#print fname
 if os.path.isfile(fname):
     res = "\n" + str(nrNodes) + " " + str(nrCollisions) + " "  + str(sent) + " " + str(energy)
 else:
