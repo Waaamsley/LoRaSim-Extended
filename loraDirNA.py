@@ -17,7 +17,7 @@
 
 """
  SYNOPSIS:
-   ./loraDir.py <nodes> <avgsend> <experiment> <simtime> <channels> [collision]
+   ./loraDirNA.py <nodes> <avgsend> <experiment> <simtime> <channels> [collision]
  DESCRIPTION:
     nodes
         number of nodes to simulate
@@ -36,6 +36,8 @@
         5   similair to experiment 3, but also optimises the transmit power.
     simtime
         total running time in milliseconds
+    Channels
+        How many channels for nodes to be distributed across. Assumes even distribution.
     collision
         set to 1 to enable the full collision check, 0 to use a simplified check.
         With the simplified check, two messages collide when they arrive at the
@@ -56,6 +58,7 @@ import sys
 import matplotlib.pyplot as plt
 import os
 import time
+import fairSF
 
 # turn on/off graphics
 graphics = 0
@@ -347,6 +350,11 @@ class myPacket():
                     split += 1
                 index += 1
 
+        if experiment == 8:
+            self.cr = 1
+            self.bw = 125
+            self.ch = random.randint(0, nrChannels - 1)
+
 
         # for experiment 3 find the best setting
         # OBS, some hardcoded values
@@ -517,14 +525,14 @@ class ChannelUsage(object):
 # get arguments
 if len(sys.argv) >= 6:
     nrNodes = int(sys.argv[1])
-    dutyCycle = float(sys.argv[2])
+    avgSend = float(sys.argv[2])
     experiment = int(sys.argv[3])
     simtime = int(sys.argv[4])
     nrChannels = int(sys.argv[5])
     if len(sys.argv) > 6:
         full_collision = bool(int(sys.argv[6]))
     print ("Nodes:", nrNodes)
-    print ("Desired Duty Cycle:",dutyCycle)
+    print ("Average Send Time / Inter Packet Arrival Time:", avgSend)
     print ("Experiment: ", experiment)
     print ("Simtime: ", simtime)
     print ("Channels: ", nrChannels)
@@ -567,11 +575,13 @@ elif experiment == 2:
     minsensi = -112.0   # no experiments, so value from datasheet
 elif experiment in [3,5,6]:
     minsensi = np.amin(sensi) ## Experiment 3 can use any setting, so take minimum
-elif experiment == 7:
+elif experiment > 6:
     minsensi = -136
 Lpl = Ptx - minsensi
 print ("amin", minsensi, "Lpl", Lpl)
 maxDist = d0*(math.e**((Lpl-Lpld0)/(10.0*gamma)))
+if experiment > 6:
+    maxDist = 487.5
 print ("maxDist:", maxDist)
 
 # base station placement
@@ -592,10 +602,11 @@ if (graphics == 1):
 
 #env.process(channel_usage())
 observer = ChannelUsage()
+
 for i in range(0,nrNodes):
     # myNode takes period (in ms), base station id packetlen (in Bytes)
     # 1000000 = 16 min
-    node = myNode(i,bsId,dutyCycle,20)
+    node = myNode(i,bsId,avgSend,20)
     print("--------------------------------------------------------------------------------------")
     nodes.append(node)
     env.process(transmit(env,node,observer))
@@ -638,7 +649,7 @@ print "DER:", der
 der = (nrReceived)/float(sent)
 print "DER method 2:", der
 
-if (experiment == 7):
+if (experiment > 6):
     record = 7
     for stat in sfSent:
         print("SF", record, " DER: ", sfReceived[record-7]/float(sfSent[record-7]))
