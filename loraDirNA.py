@@ -581,7 +581,7 @@ Lpl = Ptx - minsensi
 print ("amin", minsensi, "Lpl", Lpl)
 maxDist = d0*(math.e**((Lpl-Lpld0)/(10.0*gamma)))
 if experiment > 6:
-    maxDist = 487.5
+    maxDist = 487.66
 print ("maxDist:", maxDist)
 
 # base station placement
@@ -602,7 +602,7 @@ if (graphics == 1):
 
 #env.process(channel_usage())
 observer = ChannelUsage()
-
+11
 for i in range(0,nrNodes):
     # myNode takes period (in ms), base station id packetlen (in Bytes)
     # 1000000 = 16 min
