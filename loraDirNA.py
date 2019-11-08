@@ -602,7 +602,7 @@ if (graphics == 1):
 
 #env.process(channel_usage())
 observer = ChannelUsage()
-11
+
 for i in range(0,nrNodes):
     # myNode takes period (in ms), base station id packetlen (in Bytes)
     # 1000000 = 16 min
