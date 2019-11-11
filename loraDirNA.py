@@ -17,7 +17,7 @@
 
 """
  SYNOPSIS:
-   ./loraDirNA.py <nodes> <avgsend> <experiment> <simtime> <channels> [collision]
+   ./loraDirNA.py <nodes> <avgsend> <experiment> <simtime> <channels> <collision>
  DESCRIPTION:
     nodes
         number of nodes to simulate
@@ -57,11 +57,10 @@ import math
 import sys
 import matplotlib.pyplot as plt
 import os
-import time
-import fairSF
+import networkSupport
 
 # turn on/off graphics
-graphics = 0
+graphics = 1
 
 # do the full collision check
 full_collision = False
@@ -236,42 +235,14 @@ class myNode():
         self.bs = bs
         self.x = 0
         self.y = 0
+        self.dist = 0
+        global nodes
 
         # this is very complex prodecure for placing nodes
         # and ensure minimum distance between each pair of nodes
-        found = 0
-        rounds = 0
-        global nodes
-        while (found == 0 and rounds < 100 and experiment != 7):
-            a = random.random()
-            b = random.random()
-            if b<a:
-                a,b = b,a
-            posx = b*maxDist*math.cos(2*math.pi*a/b)+bsx
-            posy = b*maxDist*math.sin(2*math.pi*a/b)+bsy
-            if len(nodes) > 0:
-                for index, n in enumerate(nodes):
-                    dist = np.sqrt(((abs(n.x-posx))**2)+((abs(n.y-posy))**2))
-                    if dist >= 10:
-                        found = 1
-                        self.x = posx
-                        self.y = posy
-                    else:
-                        rounds = rounds + 1
-                        if rounds == 100:
-                            print "could not place new node, giving up"
-                            exit(-1)
-            else:
-                print "first node"
-                self.x = posx
-                self.y = posy
-                found = 1
-        if (experiment == 7):
-            self.x = 10
-            self.y = 10
-            self.dist = 10
-        else:
-            self.dist = np.sqrt((self.x-bsx)*(self.x-bsx)+(self.y-bsy)*(self.y-bsy))
+        nodePlacer = networkSupport.nodePlacer(nodes)
+        self.x, self.y, self.dist = nodePlacer.placeNodes(maxDist, bsx, bsy, experiment)
+
         print('node %d' %nodeid, "x", self.x, "y", self.y, "dist: ", self.dist)
 
         self.packet = myPacket(self.nodeid, packetlen, self.dist)
@@ -489,35 +460,6 @@ def transmit(env,node,observer):
         node.packet.processed = 0
         node.packet.lost = False
 
-class ChannelUsage(object):
-    def __init__(self):
-        #self.noTraffic = 0.0
-        self._traffic = 0
-        self.empty = False
-        self.f_flag = 0.0
-        self.e_flag = 0.0
-        self.accum_e = 0.0
-        self.accum_f = 0.0
-
-    @property
-    def traffic(self):
-        return self._traffic
-
-    @traffic.setter
-    def traffic(self, value):
-        self._traffic = value
-
-        if self.traffic == 0.0 and not self.empty:
-            self.empty = True
-            self.e_flag = time.time()
-            if (self.f_flag > 0.0):
-                self.accum_f += (time.time()) - self.f_flag
-
-        if self.traffic > 0.0 and self.empty:
-            self.empty = False
-            self.f_flag = time.time()
-            self.accum_e += (time.time()) - self.e_flag
-
 #
 # "main" program
 #
@@ -529,8 +471,7 @@ if len(sys.argv) >= 6:
     experiment = int(sys.argv[3])
     simtime = int(sys.argv[4])
     nrChannels = int(sys.argv[5])
-    if len(sys.argv) > 6:
-        full_collision = bool(int(sys.argv[6]))
+    full_collision = bool(int(sys.argv[6]))
     print ("Nodes:", nrNodes)
     print ("Average Send Time / Inter Packet Arrival Time:", avgSend)
     print ("Experiment: ", experiment)
@@ -548,10 +489,11 @@ else:
 nodes = []
 packetsAtBS = []
 env = simpy.Environment()
+distFinder = networkSupport.maxDistFinder()
+observer = networkSupport.channelUsage()
 
 # maximum number of packets the BS can receive at the same time
 maxBSReceives = 999
-
 
 # max distance: 300m in city, 3000 m outside (5 km Utz experiment)
 # also more unit-disc like according to Utz
@@ -579,9 +521,7 @@ elif experiment > 6:
     minsensi = -136
 Lpl = Ptx - minsensi
 print ("amin", minsensi, "Lpl", Lpl)
-maxDist = d0*(math.e**((Lpl-Lpld0)/(10.0*gamma)))
-if experiment > 6:
-    maxDist = 487.66
+maxDist = distFinder.maxDistance((minsensi*-1) + Ptx)
 print ("maxDist:", maxDist)
 
 # base station placement
@@ -599,9 +539,6 @@ if (graphics == 1):
     ax.add_artist(plt.Circle((bsx, bsy), 3, fill=True, color='green'))
     ax.add_artist(plt.Circle((bsx, bsy), maxDist, fill=False, color='green'))
 
-
-#env.process(channel_usage())
-observer = ChannelUsage()
 
 for i in range(0,nrNodes):
     # myNode takes period (in ms), base station id packetlen (in Bytes)
@@ -666,15 +603,15 @@ if (graphics == 1):
 
 # save experiment data into a dat file that can be read by e.g. gnuplot
 # name of file would be:  exp0.dat for experiment 0
-fname = "exp" + str(experiment) + ".dat"
-print fname
-if os.path.isfile(fname):
-    res = "\n" + str(nrNodes) + " " + str(nrCollisions) + " "  + str(sent) + " " + str(energy)
-else:
-    res = "#nrNodes nrCollisions nrTransmissions OverallEnergy\n" + str(nrNodes) + " " + str(nrCollisions) + " "  + str(sent) + " " + str(energy)
-with open(fname, "a") as myfile:
-    myfile.write(res)
-myfile.close()
+#fname = "exp" + str(experiment) + ".dat"
+#print fname
+#if os.path.isfile(fname):
+#    res = "\n" + str(nrNodes) + " " + str(nrCollisions) + " "  + str(sent) + " " + str(energy)
+#else:
+#    res = "#nrNodes nrCollisions nrTransmissions OverallEnergy\n" + str(nrNodes) + " " + str(nrCollisions) + " "  + str(sent) + " " + str(energy)
+#with open(fname, "a") as myfile:
+#    myfile.write(res)
+#myfile.close()
 
 # with open('nodes.txt','w') as nfile:
 #     for n in nodes:
