@@ -155,6 +155,7 @@ class experiments():
         self.plen = plen
         self.GL = GL
         self.Lpl = Lpl
+        self.sfCounts = [0, 0, 0, 0, 0, 0]
 
     def logic(self, txpow, prx):
         sf = 0
@@ -182,6 +183,7 @@ class experiments():
         if self.experiment == 1:
             rectime = self.esti.airtime(sf, 4, self.plen, bw)
 
+        self.sfCounts[sf-7] += 1
         return sf, cr, bw, ch, freq, rectime, txPow, Prx
 
     def experimentOne(self):
@@ -210,7 +212,7 @@ class experiments():
                     minairtime = at
                     minsf = sf
                     minbw = bw
-                    minsensi = self.sensi[i, j]
+                    minsensi = self.sensi[i, 1]
         if (minairtime == 9999):
             print "does not reach base station"
             exit(-1)

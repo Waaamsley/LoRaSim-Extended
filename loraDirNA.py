@@ -28,7 +28,7 @@
         simulation is run. All nodes are configured with a fixed transmit power
         and a single transmit frequency, unless stated otherwise.
         1   use the settings with the the slowest datarate (SF12, BW125, CR4/8).
-        2   use the settings with the fastest data rate (SF6, BW500, CR4/5).
+        2   use the settings with the fastest data rate (SF7, BW500, CR4/5).
         3   optimise the setting per node based on the distance to the gateway.
         4   similair to experiment 3, but also optimises the transmit power.
         5   assign spreading factors to equal numbers of nodes, assumes even duty cycle.
@@ -83,7 +83,6 @@ sf12 = np.array([12,-136,-133,-130])
 
 sfSent = [0, 0, 0, 0, 0, 0]
 sfReceived = [0, 0, 0, 0, 0, 0]
-sfCount = [0, 0, 0, 0, 0, 0]
 
 #
 # check for collisions at base station
@@ -461,15 +460,15 @@ print "DER:", der
 der = (nrReceived)/float(sent)
 print "DER method 2:", der
 
-if (experiment > 6):
-    record = 7
-    for stat in sfSent:
-        print("SF", record, " DER: ", sfReceived[record-7]/float(sfSent[record-7]))
-        print("SF", record, " DER: ", sfReceived[record-7], float(sfSent[record-7]))
-        record += 1
-    print ("SF Counts: ", sfCount)
-print ("Accumulted full time: ", observer.accum_f)
-print ("Accumulted empty time: ", observer.accum_e)
+counter = 7
+for receivedStat, sentStat in zip(sfReceived, sfSent):
+    if float(receivedStat) > 0 and float(sentStat) > 0:
+        print("SF", counter, " DER: ", float(receivedStat)/float(sentStat), " Received/Sent Packets : ", float(receivedStat), float(sentStat))
+    counter += 1
+print ("SF Counts: ", experiLogic.sfCounts)
+totalTime = observer.accum_f + observer.accum_e
+print ("Accumulted full time: ", observer.accum_f, observer.accum_f/totalTime)
+print ("Accumulted empty time: ", observer.accum_e, observer.accum_e/totalTime)
 
 
 # this can be done to keep graphics visible
