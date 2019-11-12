@@ -147,52 +147,94 @@ class fairSF():
 
 class experiments():
 
-    def __init__(self, experiment):
-        self.experiment = experiments
-        self.sf = 0
-        self.cr = 0
-        self.bw = 0
-        self.ch = 0
+    def __init__(self, eXperiment, nrChannels, sensi, plen, GL, Lpl):
+        self.experiment = eXperiment
+        self.esti = estimator()
+        self.nrChannels = nrChannels
+        self.sensi = sensi
+        self.plen = plen
+        self.GL = GL
+        self.Lpl = Lpl
 
-        if experiment in [0, 1]:
-            self.experimentOne()
-        if experiment == 2:
-            self.experimentTwo()
-        if experiment in [3, 5]:
-            self.experimentThive()
-        if experiment == 4:
-            self.experimentFour()
-        if experiment == 6:
-            self.experimentSix()
-        if experiment == 7:
-            self.experimentSeven()
-        if experiment == 8:
-            self.experimentEight()
+    def logic(self, txpow, prx):
+        sf = 0
+        cr = 0
+        bw = 0
+        ch = random.randint(0, self.nrChannels - 1)
+        freq = 860000000 + (4000000 * ch)
+        rectime = 0
+        txPow = txpow
+        Prx = prx
+
+        if self.experiment == 1:
+            sf, cr, bw = self.experimentOne()
+        elif self.experiment == 2:
+            sf, cr, bw = self.experimentTwo()
+        elif self.experiment in [3, 4]:
+            sf, cr, bw, txPow, Prx = self.experimentThour(txPow, Prx)
+        elif self.experiment == 5:
+            sf, cr, bw = self.experimentFour()
+        else:
+            print("Invalid experiment!\nQuitting!")
+            quit()
+
+        rectime = self.esti.airtime(sf, 1, self.plen, bw)
+        if self.experiment == 1:
+            rectime = self.esti.airtime(sf, 4, self.plen, bw)
+
+        return sf, cr, bw, ch, freq, rectime, txPow, Prx
 
     def experimentOne(self):
-        self.sf = 0
+        return 12, 4, 125
 
     def experimentTwo(self):
-        self.sf = 0
+        return 7, 1, 125
 
-    def experimentThive(self):
-        self.sf = 0
+    def experimentThour(self, txPow, prx):
+        minairtime = 9999
+        minsf = 0
+        minbw = 0
+        minsensi = 0
+        sf = 0
+        bw = 125
+        cr = 1
+        txpow = txPow
+        Prx = prx
 
-    def experimentFour(self):
-        self.sf = 0
+        print "Prx:", Prx
+        for i in range(0, 6):
+            if (self.sensi[i, 1] < Prx):
+                sf = int(self.sensi[i, 0])
+                at = self.esti.airtime(sf, 1, self.plen, bw)
+                if at < minairtime:
+                    minairtime = at
+                    minsf = sf
+                    minbw = bw
+                    minsensi = self.sensi[i, j]
+        if (minairtime == 9999):
+            print "does not reach base station"
+            exit(-1)
+        print "best sf:", minsf, " best bw: ", minbw, "best airtime:", minairtime
+        sf = minsf
 
-    def experimentSix(self):
-        self.sf = 0
+        if self.experiment == 4:
+            # reduce the txpower if there's room left
+            txpow = max(2, txpow - math.floor(Prx - minsensi))
+            Prx = txpow - self.GL - self.Lpl
+            print 'minsesi {} best txpow {}'.format(minsensi, txpow)
 
-    def experimentSeven(self):
-        self.sf = 0
+        return sf, cr, bw, txpow, Prx
 
-    def experimentEight(self):
-        self.sf = 0
+    # Divide and Conquer!
+    def experimentFive(self):
+        # SF, CR, BW
+        return 12, 1, 125
 
 
-class estimator:
+class estimator():
 
+    # this function computes the airtime of a packet
+    # according to LoraDesignGuide_STD.pdf
     def airtime(self, sf, cr, pl, bw):
         H = 0  # implicit header disabled (H=0) or not (H=1)
         DE = 0  # low data rate optimization enabled (=1) or not (=0)

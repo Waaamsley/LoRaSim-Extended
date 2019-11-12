@@ -27,13 +27,12 @@
         experiment is an integer that determines with what radio settings the
         simulation is run. All nodes are configured with a fixed transmit power
         and a single transmit frequency, unless stated otherwise.
-        0   use the settings with the the slowest datarate (SF12, BW125, CR4/8).
-        1   similair to experiment 0, but use a random choice of 3 transmit
-            frequencies.
+        1   use the settings with the the slowest datarate (SF12, BW125, CR4/8).
         2   use the settings with the fastest data rate (SF6, BW500, CR4/5).
         3   optimise the setting per node based on the distance to the gateway.
-        4   use the settings as defined in LoRaWAN (SF12, BW125, CR4/5).
-        5   similair to experiment 3, but also optimises the transmit power.
+        4   similair to experiment 3, but also optimises the transmit power.
+        5   assign spreading factors to equal numbers of nodes, assumes even duty cycle.
+        6   Divide and Conquer
     simtime
         total running time in milliseconds
     Channels
@@ -202,41 +201,20 @@ def timingCollision(p1, p2):
     #print "saved by the preamble"
     return False
 
-# this function computes the airtime of a packet
-# according to LoraDesignGuide_STD.pdf
-#
-def airtime(sf,cr,pl,bw):
-    H = 0        # implicit header disabled (H=0) or not (H=1)
-    DE = 0       # low data rate optimization enabled (=1) or not (=0)
-    Npream = 8   # number of preamble symbol (12.25  from Utz paper)
-
-    if bw == 125 and sf in [11, 12]:
-        # low data rate optimization mandated for BW125 with SF11 and SF12
-        DE = 1
-    if sf == 6:
-        # can only have implicit header with SF6
-        H = 1
-
-    Tsym = (2.0**sf)/bw
-    Tpream = (Npream + 4.25)*Tsym
-    #print "sf", sf, " cr", cr, "pl", pl, "bw", bw
-    payloadSymbNB = 8 + max(math.ceil((8.0*pl-4.0*sf+28+16-20*H)/(4.0*(sf-2*DE)))*(cr+4),0)
-    Tpayload = payloadSymbNB * Tsym
-    return Tpream + Tpayload
-
 #
 # this function creates a node
 #
 class myNode():
-    def __init__(self, nodeid, bs, duty, packetlen):
+    def __init__(self, nodeid, bs, duty):
         global experiment
+        global nodes
+        global plen
         self.nodeid = nodeid
         self.period = 999999
         self.bs = bs
         self.x = 0
         self.y = 0
         self.dist = 0
-        global nodes
 
         # this is very complex prodecure for placing nodes
         # and ensure minimum distance between each pair of nodes
@@ -245,7 +223,7 @@ class myNode():
 
         print('node %d' %nodeid, "x", self.x, "y", self.y, "dist: ", self.dist)
 
-        self.packet = myPacket(self.nodeid, packetlen, self.dist)
+        self.packet = myPacket(self.nodeid, self.dist)
         self.sent = 0
         #self.period = (self.packet.rectime * (100 / duty))
         self.period = duty
@@ -262,7 +240,8 @@ class myNode():
 # it also sets all parameters, currently random
 #
 class myPacket():
-    def __init__(self, nodeid, plen, distance):
+    def __init__(self, nodeid, distance):
+        global experiLogic
         global experiment
         global Ptx
         global gamma
@@ -271,130 +250,24 @@ class myPacket():
         global Lpld0
         global GL
         global nrChannels
+        global plen
+
+        # log-shadow
+        Lpl = Lpld0 + 10 * gamma * math.log10(distance / d0)
+        print "Lpl:", Lpl
+        Prx = Ptx - GL - Lpl
 
         self.nodeid = nodeid
         self.txpow = Ptx
-        self.ch = 0
-
-        # randomize configuration values
-        self.sf = random.randint(7,12)
-        self.cr = random.randint(1,4)
-        self.bw = random.choice([125, 250, 500])
-
-        # for certain experiments override these
-        if experiment==1 or experiment == 0:
-            self.sf = 12
-            self.cr = 4
-            self.bw = 125
-
-        # for certain experiments override these
-        if experiment==2:
-            self.sf = 7
-            self.cr = 1
-            self.bw = 125
-        # lorawan
-        if experiment == 4:
-            self.sf = 12
-            self.cr = 1
-            self.bw = 125
-
-        if experiment == 6:
-            self.sf = 7
-            self.cr = 1
-            self.bw = 125
-
-        if experiment == 7:
-            self.cr = 1
-            self.bw = 125
-            self.ch = random.randint(0, nrChannels - 1)
-            global nrNodes
-            global sfCount
-            split = nrNodes/6
-            index = 0
-            while index < 6:
-                if sfCount[index] < split:
-                    sfCount[index] += 1
-                    self.sf = index + 7
-                    break
-                if index == 5:
-                    index = -1
-                    split += 1
-                index += 1
-
-        if experiment == 8:
-            self.cr = 1
-            self.bw = 125
-            self.ch = random.randint(0, nrChannels - 1)
-
-
-        # for experiment 3 find the best setting
-        # OBS, some hardcoded values
-        Prx = self.txpow  ## zero path loss by default
-
-        # log-shadow
-        Lpl = Lpld0 + 10*gamma*math.log10(distance/d0)
-        print "Lpl:", Lpl
-        Prx = self.txpow - GL - Lpl
-
-        if (experiment == 3) or (experiment == 5):
-            minairtime = 9999
-            minsf = 0
-            minbw = 0
-
-            print "Prx:", Prx
-
-            for i in range(0,6):
-                for j in range(1,2):
-                    if (sensi[i,j] < Prx):
-                        self.sf = int(sensi[i,0])
-                        if j==1:
-                            self.bw = 125
-                        elif j==2:
-                            self.bw = 250
-                        else:
-                            self.bw=500
-                        at = airtime(self.sf, 1, plen, self.bw)
-                        if at < minairtime:
-                            minairtime = at
-                            minsf = self.sf
-                            minbw = self.bw
-                            minsensi = sensi[i, j]
-            if (minairtime == 9999):
-                print "does not reach base station"
-                exit(-1)
-            print "best sf:", minsf, " best bw: ", minbw, "best airtime:", minairtime
-            self.rectime = minairtime
-            self.sf = minsf
-            self.bw = minbw
-            self.cr = 1
-
-            if experiment == 5:
-                # reduce the txpower if there's room left
-                self.txpow = max(2, self.txpow - math.floor(Prx - minsensi))
-                Prx = self.txpow - GL - Lpl
-                print 'minsesi {} best txpow {}'.format(minsensi, self.txpow)
-
-        # transmission range, needs update XXX
+        self.sf, self.cr, self.bw, self.ch, self.freq, self.rectime, self.txpow, Prx = experiLogic.logic(self.txpow, Prx)
         self.transRange = 150
         self.pl = plen
         self.symTime = (2.0**self.sf)/self.bw
         self.arriveTime = 0
         self.rssi = Prx
-        # frequencies: lower bound + number of 61 Hz steps
-        self.freq = 860000000 + random.randint(0,2622950)
-
-        # for certain experiments override these and
-        # choose some random frequences
-        if experiment == 1:
-            self.freq = random.choice([860000000, 864000000, 868000000])
-        elif experiment == 6:
-            self.freq = 860000000 + (4000000) * self.ch
-        else:
-            self.freq = 860000000
 
         print "channel", self.ch+1, "frequency" ,self.freq, "symTime ", self.symTime
         print "bw", self.bw, "sf", self.sf, "cr", self.cr, "rssi", self.rssi
-        self.rectime = airtime(self.sf,self.cr,self.pl,self.bw)
         print "rectime node ", self.nodeid, "  ", self.rectime
         # denote if packet is collided
         self.collided = 0
@@ -509,6 +382,7 @@ d0 = 40.0
 var = 0           # variance ignored for nows
 Lpld0 = 127.41
 GL = 0
+plen = 20
 
 sensi = np.array([sf7,sf8,sf9,sf10,sf11,sf12])
 if experiment in [0,1,4]:
@@ -540,10 +414,11 @@ if (graphics == 1):
     ax.add_artist(plt.Circle((bsx, bsy), maxDist, fill=False, color='green'))
 
 
+experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL, Lpl)
 for i in range(0,nrNodes):
     # myNode takes period (in ms), base station id packetlen (in Bytes)
     # 1000000 = 16 min
-    node = myNode(i,bsId,avgSend,20)
+    node = myNode(i,bsId,avgSend)
     print("--------------------------------------------------------------------------------------")
     nodes.append(node)
     env.process(transmit(env,node,observer))
