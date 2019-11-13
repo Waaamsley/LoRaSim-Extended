@@ -17,7 +17,7 @@
 
 """
  SYNOPSIS:
-   ./loraDirNA.py <nodes> <avgsend> <experiment> <simtime> <channels> <collision>
+   ./loraDirNA.py <nodes> <avgsend> <experiment> <simtime> <channels>
  DESCRIPTION:
     nodes
         number of nodes to simulate
@@ -31,8 +31,7 @@
         2   use the settings with the fastest data rate (SF7, BW500, CR4/5).
         3   optimise the setting per node based on the distance to the gateway.
         4   similair to experiment 3, but also optimises the transmit power.
-        5   assign spreading factors to equal numbers of nodes, assumes even duty cycle.
-        6   Divide and Conquer
+        5   Divide and Conquer
     simtime
         total running time in milliseconds
     Channels
@@ -108,8 +107,20 @@ def checkcollision(packet):
                #print ">> node {} (sf:{} bw:{} freq:{:.6e})".format(
                #    other.nodeid, other.packet.sf, other.packet.bw, other.packet.freq)
                # simple collision
-               if frequencyCollision(packet, other.packet) \
-                   and sfCollision(packet, other.packet):
+
+               """
+               if share channel and timingcol:
+                if powercol(p1.sf, p2.sf):
+                
+               """
+               if channelCollision(packet, other.packet) and timingCollision(packet, other.packet):
+                   collidedPackets = powerCollision(packet, other.packet)
+                   for p in collidedPackets:
+                        p.collided = 1
+                        if p == packet:
+                            col = 1
+            """
+               if channelCollision(packet, other.packet) and sfCollision(packet, other.packet):
                    if full_collision:
                        if timingCollision(packet, other.packet):
                            # check who collides in the power domain
@@ -127,28 +138,16 @@ def checkcollision(packet):
                        packet.collided = 1
                        other.packet.collided = 1  # other also got lost, if it wasn't lost already
                        col = 1
+            """
         return col
     return 0
 
-#
+
 # frequencyCollision, conditions
-#
-#        |f1-f2| <= 120 kHz if f1 or f2 has bw 500
-#        |f1-f2| <= 60 kHz if f1 or f2 has bw 250
-#        |f1-f2| <= 30 kHz if f1 or f2 has bw 125
-def frequencyCollision(p1,p2):
-    if (abs(p1.freq-p2.freq)<=120 and (p1.bw==500 or p2.freq==500)):
-        #print "frequency coll 500"
+def channelCollision(p1,p2):
+    # If packets share same channel, return True for collision.
+    if (p1.ch == p2.ch):
         return True
-    elif (abs(p1.freq-p2.freq)<=60 and (p1.bw==250 or p2.freq==250)):
-        #print "frequency coll 250"
-        return True
-    else:
-        if (abs(p1.freq-p2.freq)<=30):
-            #print "frequency coll 125"
-            return True
-        #else:
-    #print "no frequency coll"
     return False
 
 def sfCollision(p1, p2):
@@ -258,14 +257,15 @@ class myPacket():
 
         self.nodeid = nodeid
         self.txpow = Ptx
-        self.sf, self.cr, self.bw, self.ch, self.freq, self.rectime, self.txpow, Prx = experiLogic.logic(self.txpow, Prx)
+        self.sf, self.cr, self.bw, self.ch, self.rectime, self.txpow, Prx = experiLogic.logic(self.txpow, Prx)
         self.transRange = 150
         self.pl = plen
         self.symTime = (2.0**self.sf)/self.bw
         self.arriveTime = 0
         self.rssi = Prx
+        self.addTime = 0.0
 
-        print "channel", self.ch+1, "frequency" ,self.freq, "symTime ", self.symTime
+        print "channel", self.ch+1, "symTime ", self.symTime
         print "bw", self.bw, "sf", self.sf, "cr", self.cr, "rssi", self.rssi
         print "rectime node ", self.nodeid, "  ", self.rectime
         # denote if packet is collided
@@ -343,13 +343,11 @@ if len(sys.argv) >= 6:
     experiment = int(sys.argv[3])
     simtime = int(sys.argv[4])
     nrChannels = int(sys.argv[5])
-    full_collision = bool(int(sys.argv[6]))
     print ("Nodes:", nrNodes)
     print ("Average Send Time / Inter Packet Arrival Time:", avgSend)
     print ("Experiment: ", experiment)
     print ("Simtime: ", simtime)
     print ("Channels: ", nrChannels)
-    print ("Full Collision: ", full_collision)
 else:
     print ("usage: ./loraDir <nodes> <avgsend> <experiment> <simtime> [collision]")
     print ("experiment 0 and 1 use 1 frequency only")

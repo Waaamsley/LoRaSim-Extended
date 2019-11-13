@@ -162,7 +162,6 @@ class experiments():
         cr = 0
         bw = 0
         ch = random.randint(0, self.nrChannels - 1)
-        freq = 860000000 + (4000000 * ch)
         rectime = 0
         txPow = txpow
         Prx = prx
@@ -184,7 +183,7 @@ class experiments():
             rectime = self.esti.airtime(sf, 4, self.plen, bw)
 
         self.sfCounts[sf-7] += 1
-        return sf, cr, bw, ch, freq, rectime, txPow, Prx
+        return sf, cr, bw, ch, rectime, txPow, Prx
 
     def experimentOne(self):
         return 12, 4, 125
