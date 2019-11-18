@@ -33,10 +33,10 @@ class nodePlacer():
                     else:
                         rounds = rounds + 1
                         if rounds == 100:
-                            print "could not place new node, giving up"
+                            #print "could not place new node, giving up"
                             exit(-1)
             else:
-                print "first node"
+                #print "first node"
                 x = posx
                 y = posy
                 found = 1
@@ -202,7 +202,7 @@ class experiments():
         txpow = txPow
         Prx = prx
 
-        print "Prx:", Prx
+        #print "Prx:", Prx
         for i in range(0, 6):
             if (self.sensi[i, 1] < Prx):
                 sf = int(self.sensi[i, 0])
@@ -215,14 +215,14 @@ class experiments():
         if (minairtime == 9999):
             print "does not reach base station"
             exit(-1)
-        print "best sf:", minsf, " best bw: ", minbw, "best airtime:", minairtime
+        #print "best sf:", minsf, " best bw: ", minbw, "best airtime:", minairtime
         sf = minsf
 
         if self.experiment == 4:
             # reduce the txpower if there's room left
             txpow = max(2, txpow - math.floor(Prx - minsensi))
             Prx = txpow - self.GL - self.Lpl
-            print 'minsesi {} best txpow {}'.format(minsensi, txpow)
+            #print 'minsesi {} best txpow {}'.format(minsensi, txpow)
 
         return sf, cr, bw, txpow, Prx
 
@@ -250,7 +250,7 @@ class estimator():
 
         Tsym = (2.0 ** sf) / bw
         Tpream = (Npream + 4.25) * Tsym
-        print "sf", sf, " cr", cr, "pl", pl, "bw", bw
+        #print "sf", sf, " cr", cr, "pl", pl, "bw", bw
         payloadSymbNB = 8 + max(math.ceil((8.0 * pl - 4.0 * sf + 28 + 16 - 20 * H) / (4.0 * (sf - 2 * DE))) * (cr + 4),
                                 0)
         Tpayload = payloadSymbNB * Tsym

@@ -274,7 +274,8 @@ class myNode():
         self.packet = myPacket(self.nodeid, packetlen, self.dist)
 
         self.sent = 0
-        self.period = (self.packet.rectime * (100 / duty)) #DUTY CYCLE LINE
+        #self.period = (self.packet.rectime * (100 / duty)) #DUTY CYCLE LINE
+        self.period = duty
         #print("avgsend: ", self.period, "||||airtime: ", self.packet.rectime)
 
         # graphics for node
@@ -400,6 +401,9 @@ class myPacket():
                 self.txpow = max(2, self.txpow - math.floor(Prx - minsensi))
                 Prx = self.txpow - GL - Lpl
                 print 'minsesi {} best txpow {}'.format(minsensi, self.txpow)
+
+        if experiment != 7 :
+            sfCount[self.sf-7] += 1
 
         # transmission range, needs update XXX
         self.transRange = 150
@@ -578,7 +582,7 @@ elif experiment in  [7, 8]:
 Lpl = Ptx - minsensi
 #print ("amin", minsensi, "Lpl", Lpl)
 maxDist = d0*(math.e**((Lpl-Lpld0)/(10.0*gamma)))
-if experiment in [7, 8]:
+if experiment in [3, 5, 7, 8]:
     maxDist = 487.5
 #print ("maxDist:", maxDist)
 
@@ -646,13 +650,12 @@ print "DER:", der
 der = (nrReceived)/float(sent)
 print "DER method 2:", der
 
-if (experiment == 7):
-    record = 7
-    for stat in sfSent:
-        print("SF", record, " DER: ", sfReceived[record-7]/float(sfSent[record-7]))
-        print("SF", record, " DER: ", sfReceived[record-7], float(sfSent[record-7]))
-        record += 1
-    print ("SF Counts: ", sfCount)
+counter = 7
+for receivedStat, sentStat in zip(sfReceived, sfSent):
+    if float(receivedStat) > 0 and float(sentStat) > 0:
+        print("SF", counter, " DER: ", float(receivedStat)/float(sentStat), " Received/Sent Packets : ", float(receivedStat), float(sentStat))
+    counter += 1
+print ("SF Counts: ", sfCount)
 #print ("Accumulted full time: ", observer.accum_f)
 #print ("Accumulted empty time: ", observer.accum_e)
 

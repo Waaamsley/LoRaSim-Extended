@@ -80,6 +80,15 @@ sf10 = np.array([10,-132,-128,-125])
 sf11 = np.array([11,-133,-130,-128])
 sf12 = np.array([12,-136,-133,-130])
 
+# Arrays with dB differences for inter-SF interference
+sf7diff = np.array([-6, -8, -9, -9, -9, -9])
+sf8diff = np.array([-11, -6, -11, -12, -13, -13])
+sf9diff = np.array([-15, -13, -6, -13, -14, -15])
+sf10diff = np.array([-19, -18, -17, -6, -17, -18])
+sf11diff = np.array([-22, -22, -21, -20, -6, -20])
+sf12diff = np.array([-25, -25, -25, -24, -23, -6])
+sensiDiff = np.array([sf7diff, sf8diff, sf9diff, sf10diff, sf11diff, sf12diff])
+
 sfSent = [0, 0, 0, 0, 0, 0]
 sfReceived = [0, 0, 0, 0, 0, 0]
 
@@ -104,80 +113,37 @@ def checkcollision(packet):
         #     len(packetsAtBS))
         for other in packetsAtBS:
             if other.nodeid != packet.nodeid:
-               #print ">> node {} (sf:{} bw:{} freq:{:.6e})".format(
-               #    other.nodeid, other.packet.sf, other.packet.bw, other.packet.freq)
-               # simple collision
+                #print ">> node {} (sf:{} bw:{} freq:{:.6e})".format(
+                #    other.nodeid, other.packet.sf, other.packet.bw, other.packet.freq)
 
-               """
-               if share channel and timingcol:
-                if powercol(p1.sf, p2.sf):
-                
-               """
-               if channelCollision(packet, other.packet) and timingCollision(packet, other.packet):
-                   collidedPackets = powerCollision(packet, other.packet)
-                   for p in collidedPackets:
+                if timingCollision(packet, other.packet):
+                    collidedPackets = powerCollision(packet, other.packet)
+                    for p in collidedPackets:
                         p.collided = 1
                         if p == packet:
                             col = 1
-            """
-               if channelCollision(packet, other.packet) and sfCollision(packet, other.packet):
-                   if full_collision:
-                       if timingCollision(packet, other.packet):
-                           # check who collides in the power domain
-                           c = powerCollision(packet, other.packet)
-                           # mark all the collided packets
-                           # either this one, the other one, or both
-                           for p in c:
-                               p.collided = 1
-                               if p == packet:
-                                   col = 1
-                       else:
-                           # no timing collision, all fine
-                           pass
-                   else:
-                       packet.collided = 1
-                       other.packet.collided = 1  # other also got lost, if it wasn't lost already
-                       col = 1
-            """
+
         return col
     return 0
 
-
-# frequencyCollision, conditions
-def channelCollision(p1,p2):
-    # If packets share same channel, return True for collision.
-    if (p1.ch == p2.ch):
-        return True
-    return False
-
-def sfCollision(p1, p2):
-    if p1.sf == p2.sf:
-        #print "collision sf node {} and node {}".format(p1.nodeid, p2.nodeid)
-        # p2 may have been lost too, will be marked by other checks
-        return True
-    #print "no sf collision"
-    return False
-
 def powerCollision(p1, p2):
-    powerThreshold = 6 # dB
-    #print "pwr: node {0.nodeid} {0.rssi:3.2f} dBm node {1.nodeid} {1.rssi:3.2f} dBm; diff {2:3.2f} dBm".format(p1, p2, round(p1.rssi - p2.rssi,2))
-    if abs(p1.rssi - p2.rssi) < powerThreshold:
-        #print "collision pwr both node {} and node {}".format(p1.nodeid, p2.nodeid)
-        # packets are too close to each other, both collide
-        # return both packets as casualties
+    powerThreshold = sensiDiff[p1.sf-7][p2.sf-7] # dB
+
+    if p1.rssi - p2.rssi < powerThreshold:
+        # print ("p2 was significantly stronger than p1 and interfered.")
+        return(p1,)
+    elif p2.rssi - p1.rssi < powerThreshold:
+        # print ("p1 was significantly stronger than p2 and interfered.")
+        return(p2,)
+    elif (abs(p1.rssi - p2.rssi) < powerThreshold) and p1.sf == p2.sf:
+        # print("Both packets were on same channel and did not meet capture effect requirements.")
         return (p1, p2)
-    elif p1.rssi - p2.rssi < powerThreshold:
-        # p2 overpowered p1, return p1 as casualty
-       # print "collision pwr node {} overpowered node {}".format(p2.nodeid, p1.nodeid)
-        return (p1,)
-    #print "p1 wins, p2 lost"
-    # p2 was the weaker packet, return it as a casualty
-    return (p2,)
+    else:
+        # print("No collision")
+        return []
 
 def timingCollision(p1, p2):
-    # assuming p1 is the freshly arrived packet and this is the last check
-    # we've already determined that p1 is a weak packet, so the only
-    # way we can win is by being late enough (only the first n - 5 preamble symbols overlap)
+    # The only way we can win is by being late enough (only the first n - 5 preamble symbols overlap)
 
     # assuming 8 preamble symbols
     Npream = 8
@@ -219,13 +185,13 @@ class myNode():
         nodePlacer = networkSupport.nodePlacer(nodes)
         self.x, self.y, self.dist = nodePlacer.placeNodes(maxDist, bsx, bsy, experiment)
 
-        print('node %d' %nodeid, "x", self.x, "y", self.y, "dist: ", self.dist)
+        #print('node %d' %nodeid, "x", self.x, "y", self.y, "dist: ", self.dist)
 
         self.packet = myPacket(self.nodeid, self.dist)
         self.sent = 0
         #self.period = (self.packet.rectime * (100 / duty))
         self.period = duty
-        print("avgsend: ", self.period, "||||airtime: ", self.packet.rectime)
+        #print("avgsend: ", self.period, "||||airtime: ", self.packet.rectime)
 
         # graphics for node
         global graphics
@@ -252,7 +218,7 @@ class myPacket():
 
         # log-shadow
         Lpl = Lpld0 + 10 * gamma * math.log10(distance / d0)
-        print "Lpl:", Lpl
+        #print "Lpl:", Lpl
         Prx = Ptx - GL - Lpl
 
         self.nodeid = nodeid
@@ -265,9 +231,9 @@ class myPacket():
         self.rssi = Prx
         self.addTime = 0.0
 
-        print "channel", self.ch+1, "symTime ", self.symTime
-        print "bw", self.bw, "sf", self.sf, "cr", self.cr, "rssi", self.rssi
-        print "rectime node ", self.nodeid, "  ", self.rectime
+        #print "channel", self.ch+1, "symTime ", self.symTime
+        #print "bw", self.bw, "sf", self.sf, "cr", self.cr, "rssi", self.rssi
+        #print "rectime node ", self.nodeid, "  ", self.rectime
         # denote if packet is collided
         self.collided = 0
         self.processed = 0
@@ -416,7 +382,7 @@ for i in range(0,nrNodes):
     # myNode takes period (in ms), base station id packetlen (in Bytes)
     # 1000000 = 16 min
     node = myNode(i,bsId,avgSend)
-    print("--------------------------------------------------------------------------------------")
+    #print("--------------------------------------------------------------------------------------")
     nodes.append(node)
     env.process(transmit(env,node,observer))
 
