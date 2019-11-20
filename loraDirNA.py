@@ -59,6 +59,7 @@ import networkSupport
 
 # turn on/off graphics
 graphics = 1
+distributionType = "default basic"
 
 # do the full collision check
 full_collision = False
@@ -175,6 +176,7 @@ class myNode():
         global experiment
         global nodes
         global plen
+        global distributionType
         self.nodeid = nodeid
         self.period = 999999
         self.bs = bs
@@ -185,7 +187,7 @@ class myNode():
         # this is very complex prodecure for placing nodes
         # and ensure minimum distance between each pair of nodes
         nodePlacer = networkSupport.nodePlacer(nodes)
-        self.x, self.y, self.dist = nodePlacer.placeNode(maxDist, bsx, bsy)
+        self.x, self.y, self.dist = nodePlacer.logic(maxDist, bsx, bsy, distributionType)
 
         #print('node %d' %nodeid, "x", self.x, "y", self.y, "dist: ", self.dist)
 

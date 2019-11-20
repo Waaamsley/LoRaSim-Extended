@@ -14,24 +14,29 @@ class nodePlacer():
         dist = 0
         x = 0
         y = 0
-        if(distributionType == "default"):
-            dist, x, y = self.placeNode(maxDist, bsx, bsy)
-        elif(distributionType == "default basic"):
-            dist, x, y = self.placeNodeBasic(maxDist, bsx, bsy)
-        
+        if(distributionType == "uniform"):
+            dist, x, y = self.uniformPlace(maxDist, bsx, bsy)
+        elif(distributionType == "uniform basic"):
+            dist, x, y = self.uniformPlaceBasic(maxDist, bsx, bsy)
+        elif (distributionType == "even"):
+            dist, x, y = self.uniformPlaceBasic(maxDist, bsx, bsy)
 
-        return dist, x, y
-
-    def placeNodeBasic(self, maxDist, bsx, bsy):
+    def uniformPlaceBasic(self, maxDist, bsx, bsy):
         dist = 0
         x = 0
         y = 0
+        a = random.random()
+        b = random.random()
 
-
+        if b < a:
+            a, b = b, a
+        x = b * maxDist * math.cos(2 * math.pi * a / b) + bsx
+        y = b * maxDist * math.sin(2 * math.pi * a / b) + bsy
+        dist = np.sqrt((x-bsx)*(x-bsx)+(y-bsy)*(y-bsy))
 
         return x, y, dist
 
-    def placeNode(self, maxDist, bsx, bsy):
+    def uniformPlace(self, maxDist, bsx, bsy):
         found = 0
         rounds = 0
         x = 0.0
