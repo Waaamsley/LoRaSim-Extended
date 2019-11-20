@@ -81,12 +81,12 @@ sf11 = np.array([11,-133,-130,-128])
 sf12 = np.array([12,-136,-133,-130])
 
 # Arrays with dB differences for inter-SF interference
-sf7diff = np.array([-6, -8, -9, -9, -9, -9])
-sf8diff = np.array([-11, -6, -11, -12, -13, -13])
-sf9diff = np.array([-15, -13, -6, -13, -14, -15])
-sf10diff = np.array([-19, -18, -17, -6, -17, -18])
-sf11diff = np.array([-22, -22, -21, -20, -6, -20])
-sf12diff = np.array([-25, -25, -25, -24, -23, -6])
+sf7diff = np.array([6, -8, -9, -9, -9, -9])
+sf8diff = np.array([-11, 6, -11, -12, -13, -13])
+sf9diff = np.array([-15, -13, 6, -13, -14, -15])
+sf10diff = np.array([-19, -18, -17, 6, -17, -18])
+sf11diff = np.array([-22, -22, -21, -20, 6, -20])
+sf12diff = np.array([-25, -25, -25, -24, -23, 6])
 sensiDiff = np.array([sf7diff, sf8diff, sf9diff, sf10diff, sf11diff, sf12diff])
 
 sfSent = [0, 0, 0, 0, 0, 0]
@@ -127,20 +127,22 @@ def checkcollision(packet):
     return 0
 
 def powerCollision(p1, p2):
-    powerThreshold = sensiDiff[p1.sf-7][p2.sf-7] # dB
+    powerThreshold = sensiDiff[p1.sf-7][p2.sf-7]  # dB
 
-    if p1.rssi - p2.rssi < powerThreshold:
-        # print ("p2 was significantly stronger than p1 and interfered.")
-        return(p1,)
-    elif p2.rssi - p1.rssi < powerThreshold:
-        # print ("p1 was significantly stronger than p2 and interfered.")
-        return(p2,)
-    elif (abs(p1.rssi - p2.rssi) < powerThreshold) and p1.sf == p2.sf:
+    if (abs(p1.rssi - p2.rssi) < powerThreshold) and p1.sf == p2.sf:
         # print("Both packets were on same channel and did not meet capture effect requirements.")
         return (p1, p2)
-    else:
-        # print("No collision")
-        return []
+    elif p1.rssi - p2.rssi < powerThreshold:
+        # print ("p2 was significantly stronger than p1 and interfered.")
+        return(p1,)
+
+    powerThreshold = sensiDiff[p2.sf-7][p1.sf-7]  # dB
+
+    if p2.rssi - p1.rssi < powerThreshold:
+        # print ("p2 was significantly stronger than p1 and interfered.")
+        return (p2,)
+
+    return []
 
 def timingCollision(p1, p2):
     # The only way we can win is by being late enough (only the first n - 5 preamble symbols overlap)
@@ -183,7 +185,7 @@ class myNode():
         # this is very complex prodecure for placing nodes
         # and ensure minimum distance between each pair of nodes
         nodePlacer = networkSupport.nodePlacer(nodes)
-        self.x, self.y, self.dist = nodePlacer.placeNodes(maxDist, bsx, bsy, experiment)
+        self.x, self.y, self.dist = nodePlacer.placeNode(maxDist, bsx, bsy)
 
         #print('node %d' %nodeid, "x", self.x, "y", self.y, "dist: ", self.dist)
 

@@ -10,13 +10,34 @@ class nodePlacer():
         self.nodes = nodes
         return
 
-    def placeNodes(self, maxDist, bsx, bsy, experiment):
+    def logic(self, maxDist, bsx, bsy, distributionType):
+        dist = 0
+        x = 0
+        y = 0
+        if(distributionType == "default"):
+            dist, x, y = self.placeNode(maxDist, bsx, bsy)
+        elif(distributionType == "default basic"):
+            dist, x, y = self.placeNodeBasic(maxDist, bsx, bsy)
+        
+
+        return dist, x, y
+
+    def placeNodeBasic(self, maxDist, bsx, bsy):
+        dist = 0
+        x = 0
+        y = 0
+
+
+
+        return x, y, dist
+
+    def placeNode(self, maxDist, bsx, bsy):
         found = 0
         rounds = 0
         x = 0.0
         y = 0.0
 
-        while (found == 0 and rounds < 100 and experiment != 7):
+        while (found == 0 and rounds < 100):
             a = random.random()
             b = random.random()
             if b<a:
@@ -33,19 +54,13 @@ class nodePlacer():
                     else:
                         rounds = rounds + 1
                         if rounds == 100:
-                            #print "could not place new node, giving up"
+                            print("could not place new node, giving up")
                             exit(-1)
             else:
-                #print "first node"
                 x = posx
                 y = posy
                 found = 1
-        if (experiment == 7):
-            x = 10
-            y = 10
-            dist = 10
-        else:
-            dist = np.sqrt((x-bsx)*(x-bsx)+(y-bsy)*(y-bsy))
+        dist = np.sqrt((x-bsx)*(x-bsx)+(y-bsy)*(y-bsy))
 
         return x, y, dist
 
@@ -89,8 +104,6 @@ Can rearrange above to get:
 distance = d0 * 10**((Lpl-Lpld0)/10*2.08)
 Above equation can give maximum distance for a given receiver sensitivity + Tx Power.
 """
-
-#import numpy as np
 
 class maxDistFinder():
 
