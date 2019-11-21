@@ -59,7 +59,7 @@ import networkSupport
 
 # turn on/off graphics
 graphics = 1
-distributionType = "default basic"
+distributionType = "even"
 
 # do the full collision check
 full_collision = False

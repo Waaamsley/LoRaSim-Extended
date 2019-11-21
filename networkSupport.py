@@ -15,11 +15,41 @@ class nodePlacer():
         x = 0
         y = 0
         if(distributionType == "uniform"):
-            dist, x, y = self.uniformPlace(maxDist, bsx, bsy)
+            x, y, dist = self.uniformPlace(maxDist, bsx, bsy)
         elif(distributionType == "uniform basic"):
-            dist, x, y = self.uniformPlaceBasic(maxDist, bsx, bsy)
+            x, y, dist = self.uniformPlaceBasic(maxDist, bsx, bsy)
         elif (distributionType == "even"):
-            dist, x, y = self.uniformPlaceBasic(maxDist, bsx, bsy)
+            x, y, dist = self.evenPlace(maxDist, bsx, bsy)
+
+        print (x, y, dist)
+        return x, y, dist
+
+    def evenPlace(self, maxDist, bsx, bsy):
+        dist = 0
+        x = 0
+        y = 0
+        a = random.random()
+        b = random.random()
+        c = random.random()
+        d = random.random()
+
+        print(bsx, bsy, maxDist)
+        x = math.cos(2 * math.pi * a / b) #+ bsx
+        y = math.sin(2 * math.pi * a / b) #+ bsy
+        print (x, y)
+        quit()
+
+        if b < a:
+            a, b = b, a
+        x = (a *  2 * maxDist)
+        y = (b * 2 * maxDist)
+
+
+        dist = np.sqrt((x - bsx) * (x - bsx) + (y - bsy) * (y - bsy))
+
+
+
+        return x, y, dist
 
     def uniformPlaceBasic(self, maxDist, bsx, bsy):
         dist = 0
