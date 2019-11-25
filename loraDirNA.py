@@ -59,7 +59,7 @@ import networkSupport
 
 # turn on/off graphics
 graphics = 1
-distributionType = "even"
+distributionType = "ideal"
 
 # do the full collision check
 full_collision = False
@@ -80,6 +80,7 @@ sf9 = np.array([9,-129,-125,-122])
 sf10 = np.array([10,-132,-128,-125])
 sf11 = np.array([11,-133,-130,-128])
 sf12 = np.array([12,-136,-133,-130])
+sensi = np.array([sf7,sf8,sf9,sf10,sf11,sf12])
 
 # Arrays with dB differences for inter-SF interference
 sf7diff = np.array([6, -8, -9, -9, -9, -9])
@@ -174,9 +175,8 @@ def timingCollision(p1, p2):
 class myNode():
     def __init__(self, nodeid, bs, duty):
         global experiment
-        global nodes
         global plen
-        global distributionType
+        global nodePlacer
         self.nodeid = nodeid
         self.period = 999999
         self.bs = bs
@@ -184,10 +184,7 @@ class myNode():
         self.y = 0
         self.dist = 0
 
-        # this is very complex prodecure for placing nodes
-        # and ensure minimum distance between each pair of nodes
-        nodePlacer = networkSupport.nodePlacer(nodes)
-        self.x, self.y, self.dist = nodePlacer.logic(maxDist, bsx, bsy, distributionType)
+        self.x, self.y, self.dist = nodePlacer.logic(maxDist, bsx, bsy, nodeid)
 
         #print('node %d' %nodeid, "x", self.x, "y", self.y, "dist: ", self.dist)
 
@@ -210,7 +207,6 @@ class myNode():
 class myPacket():
     def __init__(self, nodeid, distance):
         global experiLogic
-        global experiment
         global Ptx
         global gamma
         global d0
@@ -351,7 +347,6 @@ Lpld0 = 127.41
 GL = 0
 plen = 20
 
-sensi = np.array([sf7,sf8,sf9,sf10,sf11,sf12])
 if experiment in [0,1,4]:
     minsensi = sensi[5,2]  # 5th row is SF12, 2nd column is BW125
 elif experiment == 2:
@@ -380,7 +375,7 @@ if (graphics == 1):
     ax.add_artist(plt.Circle((bsx, bsy), 3, fill=True, color='green'))
     ax.add_artist(plt.Circle((bsx, bsy), maxDist, fill=False, color='green'))
 
-
+nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi)
 experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL, Lpl)
 for i in range(0,nrNodes):
     # myNode takes period (in ms), base station id packetlen (in Bytes)

@@ -6,55 +6,61 @@ import time
 
 class nodePlacer():
 
-    def __init__(self, nodes):
+    def __init__(self, nodes, nrNodes, distributionType, sensi):
         self.nodes = nodes
+        self.nrNodes = nrNodes
+        self.distributionType = distributionType
+        self.sensi = sensi
+
+        if self.distributionType == "ideal":
+            fairSFGetter = fairSF(nrNodes, [7.0, 8.0, 9.0, 10.0, 11.0, 12.0])
+            self.sfCounts = fairSFGetter.getSFCounts()
+            print("what we should see: ", self.sfCounts)
+            self.distanceFinder = maxDistFinder()
         return
 
-    def logic(self, maxDist, bsx, bsy, distributionType):
-        dist = 0
+    def logic(self, maxDist, bsx, bsy, nodeid):
         x = 0
         y = 0
-        if(distributionType == "uniform"):
-            x, y, dist = self.uniformPlace(maxDist, bsx, bsy)
-        elif(distributionType == "uniform basic"):
-            x, y, dist = self.uniformPlaceBasic(maxDist, bsx, bsy)
-        elif (distributionType == "even"):
-            x, y, dist = self.evenPlace(maxDist, bsx, bsy)
+        dist = 0
 
-        print (x, y, dist)
+        if(self.distributionType == "uniform"):
+            x, y, dist = self.uniformPlace(maxDist, bsx, bsy,)
+        elif(self.distributionType == "uniform basic"):
+            x, y, dist = self.uniformPlaceBasic(maxDist, bsx, bsy)
+        elif(self.distributionType == "ideal"):
+            x, y, dist = self.idealPlace(bsx, bsy, nodeid)
+
         return x, y, dist
 
-    def evenPlace(self, maxDist, bsx, bsy):
-        dist = 0
+    def idealPlace(self, bsx, bsy, nodeid):
         x = 0
         y = 0
+        dist = 0
         a = random.random()
         b = random.random()
-        c = random.random()
-        d = random.random()
 
-        print(bsx, bsy, maxDist)
-        x = math.cos(2 * math.pi * a / b) #+ bsx
-        y = math.sin(2 * math.pi * a / b) #+ bsy
-        print (x, y)
-        quit()
+        region = 0
+        sum = 0
+        for i, sfCount in enumerate(self.sfCounts):
+            sum += sfCount
+            if nodeid <= sum:
+                region = i
+                break
+        # currently assuming static txPower of 14dB
+        rssi = 14 + (-1 * self.sensi[region, 1])
+        regionMaxDistance = self.distanceFinder.maxDistance(rssi)
 
-        if b < a:
-            a, b = b, a
-        x = (a *  2 * maxDist)
-        y = (b * 2 * maxDist)
-
-
+        x = b * regionMaxDistance * math.cos(2 * math.pi * a / b) + bsx
+        y = b * regionMaxDistance * math.sin(2 * math.pi * a / b) + bsy
         dist = np.sqrt((x - bsx) * (x - bsx) + (y - bsy) * (y - bsy))
-
-
 
         return x, y, dist
 
     def uniformPlaceBasic(self, maxDist, bsx, bsy):
-        dist = 0
         x = 0
         y = 0
+        dist = 0
         a = random.random()
         b = random.random()
 
@@ -71,6 +77,7 @@ class nodePlacer():
         rounds = 0
         x = 0.0
         y = 0.0
+        dist = 0
 
         while (found == 0 and rounds < 100):
             a = random.random()
@@ -152,45 +159,65 @@ class maxDistFinder():
     This methods finds whether a given nodes packets can reach the base-station.
     This method also returns the minimum viable spreading factor.
     """
-    def maxDistance(self, rssi):
-        distance = 40 * 10**((rssi-127.41)/20.8)
+    def maxDistance(self, maxLoss):
+        distance = 40 * 10**((maxLoss-127.41)/20.8)
 
         return distance
 
 
 class fairSF():
 
-    def __init__(self, nodeCount, sfList):
-        self.node_count = nodeCount
-        self.sf_list = sfList
+    def __init__(self, nrNodes, sfList):
+        self.nrNodes = nrNodes
+        self.sfList = sfList
+        self.baseResult = self.baseFunction()
         return
 
 
-    def base_function(self):
-        sum_result = 0.0
+    def baseFunction(self):
+        sumResult = 0.0
 
-        for sf in self.sf_list:
-            sum_result += sf/(2**sf)
+        for sf in self.sfList:
+            sumResult += sf/(2**sf)
 
-        return sum_result
+        return sumResult
+
+    def getSFCounts(self):
+        sfCounts = []
+        total = 0
+
+        sfPercentages = self.getPercentages()
+        for sfP in sfPercentages:
+            tempCount = int(round(sfP * self.nrNodes))
+            sfCounts.append(tempCount)
+            total += tempCount
+
+        difference = total - self.nrNodes
+        if difference != 0:
+            print("Round off error!!!!!: ", difference)
+            quit()
+        #if difference > 0:
+            #subtract nodes from regions
+        #elif difference < 0:
+            #add nodes to region
+
+        return sfCounts
+
+    def getPercentages(self):
+        sfPercentages = []
+
+        for sf in self.sfList:
+            sfPercentages.append(self.getPercentage(sf))
+
+        return sfPercentages
 
 
-    def get_percentages(self):
-        sf_percentages = []
+    def getPercentage(self, sf):
+        sfPercentage = 0.0
 
-        for sf in self.sf_list:
-            sf_percentages.append(self.get_percentage(sf))
+        sfPercentage =  (sf/(2**sf)) / self.baseResult
 
-        return sf_percentages
-
-
-    def get_percentage(self, sf):
-        sf_percentage = 0.0
-
-        sum_result = self.base_function()
-        sf_percentage =  (sf/(2**sf)) * sum_result
-
-        return sf_percentage
+        return sfPercentage
 
 
 class experiments():
@@ -252,7 +279,7 @@ class experiments():
 
         #print "Prx:", Prx
         for i in range(0, 6):
-            if (self.sensi[i, 1] < Prx):
+            if (self.sensi[i, 1] <= Prx):
                 sf = int(self.sensi[i, 0])
                 at = self.esti.airtime(sf, 1, self.plen, bw)
                 if at < minairtime:
