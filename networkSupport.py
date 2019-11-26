@@ -15,7 +15,6 @@ class nodePlacer():
         if self.distributionType == "ideal":
             fairSFGetter = fairSF(nrNodes, [7.0, 8.0, 9.0, 10.0, 11.0, 12.0])
             self.sfCounts = fairSFGetter.getSFCounts()
-            print("what we should see: ", self.sfCounts)
             self.distanceFinder = maxDistFinder()
         return
 
@@ -36,24 +35,33 @@ class nodePlacer():
     def idealPlace(self, bsx, bsy, nodeid):
         x = 0
         y = 0
-        dist = 0
-        a = random.random()
-        b = random.random()
-
+        dist = -1
         region = 0
         sum = 0
         for i, sfCount in enumerate(self.sfCounts):
             sum += sfCount
-            if nodeid <= sum:
+            if nodeid < sum:
                 region = i
                 break
+
         # currently assuming static txPower of 14dB
         rssi = 14 + (-1 * self.sensi[region, 1])
         regionMaxDistance = self.distanceFinder.maxDistance(rssi)
+        if region > 0:
+            minRssi = 14 + (-1 * self.sensi[region-1, 1])
+            regionMinDistance = self.distanceFinder.maxDistance(minRssi)
+        else:
+            regionMinDistance = 0
 
-        x = b * regionMaxDistance * math.cos(2 * math.pi * a / b) + bsx
-        y = b * regionMaxDistance * math.sin(2 * math.pi * a / b) + bsy
-        dist = np.sqrt((x - bsx) * (x - bsx) + (y - bsy) * (y - bsy))
+        # Very bad way to account for minimum allowed distance.
+        while dist < regionMinDistance or dist > regionMaxDistance:
+            a = random.random()
+            b = random.random()
+            if b < a:
+                a, b = b, a
+            x = b * regionMaxDistance * math.cos(2 * math.pi * a / b) + bsx
+            y = b * regionMaxDistance * math.sin(2 * math.pi * a / b) + bsy
+            dist = np.sqrt((x - bsx) * (x - bsx) + (y - bsy) * (y - bsy))
 
         return x, y, dist
 
@@ -187,14 +195,17 @@ class fairSF():
         total = 0
 
         sfPercentages = self.getPercentages()
+        beforeRound = []
         for sfP in sfPercentages:
             tempCount = int(round(sfP * self.nrNodes))
+            beforeRound.append(sfP * self.nrNodes)
             sfCounts.append(tempCount)
             total += tempCount
 
         difference = total - self.nrNodes
         if difference != 0:
-            print("Round off error!!!!!: ", difference)
+            print("Round off error!!!!! total - nrNodes Difference : ", difference)
+            print("before Round: ", beforeRound, "sfCounts: ", sfCounts, "\nnrNodes", self.nrNodes)
             quit()
         #if difference > 0:
             #subtract nodes from regions

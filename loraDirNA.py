@@ -17,7 +17,7 @@
 
 """
  SYNOPSIS:
-   ./loraDirNA.py <nodes> <avgsend> <experiment> <simtime> <channels>
+   ./loraDirNA.py <nodes> <avgsend> <experiment> <simtime> <channels> <full_collision>
  DESCRIPTION:
     nodes
         number of nodes to simulate
@@ -61,9 +61,6 @@ import networkSupport
 graphics = 1
 distributionType = "ideal"
 
-# do the full collision check
-full_collision = False
-
 # experiments:
 # 0: packet with longest airtime, aloha-style experiment
 # 0: one with 3 frequencies, 1 with 1 frequency
@@ -98,6 +95,7 @@ sfReceived = [0, 0, 0, 0, 0, 0]
 # check for collisions at base station
 # Note: called before a packet (or rather node) is inserted into the list
 def checkcollision(packet):
+    global fullCollision
     col = 0 # flag needed since there might be several collisions for packet
     processing = 0
     for i in range(0,len(packetsAtBS)):
@@ -117,13 +115,18 @@ def checkcollision(packet):
             if other.nodeid != packet.nodeid:
                 #print ">> node {} (sf:{} bw:{} freq:{:.6e})".format(
                 #    other.nodeid, other.packet.sf, other.packet.bw, other.packet.freq)
-
-                if timingCollision(packet, other.packet):
-                    collidedPackets = powerCollision(packet, other.packet)
-                    for p in collidedPackets:
-                        p.collided = 1
-                        if p == packet:
-                            col = 1
+                if fullCollision:
+                    if timingCollision(packet, other.packet):
+                        collidedPackets = powerCollision(packet, other.packet)
+                        for p in collidedPackets:
+                            p.collided = 1
+                            if p == packet:
+                                col = 1
+                else:
+                    if timingCollision(packet, other.packet) and other.packet.sf == packet.sf:
+                        other.collided = 1
+                        packet.collided = 1
+                        col = 1
 
         return col
     return 0
@@ -303,19 +306,21 @@ def transmit(env,node,observer):
 #
 
 # get arguments
-if len(sys.argv) >= 6:
+if len(sys.argv) == 7:
     nrNodes = int(sys.argv[1])
     avgSend = float(sys.argv[2])
     experiment = int(sys.argv[3])
     simtime = int(sys.argv[4])
     nrChannels = int(sys.argv[5])
+    fullCollision = int(sys.argv[6])
     print ("Nodes:", nrNodes)
     print ("Average Send Time / Inter Packet Arrival Time:", avgSend)
     print ("Experiment: ", experiment)
     print ("Simtime: ", simtime)
     print ("Channels: ", nrChannels)
+    print ("Full Collision: ", fullCollision)
 else:
-    print ("usage: ./loraDir <nodes> <avgsend> <experiment> <simtime> [collision]")
+    print ("usage: ./loraDir <nodes> <avgsend> <experiment> <simtime> <channels> <collision>")
     print ("experiment 0 and 1 use 1 frequency only")
     exit(-1)
 
@@ -379,7 +384,6 @@ nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi)
 experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL, Lpl)
 for i in range(0,nrNodes):
     # myNode takes period (in ms), base station id packetlen (in Bytes)
-    # 1000000 = 16 min
     node = myNode(i,bsId,avgSend)
     #print("--------------------------------------------------------------------------------------")
     nodes.append(node)
