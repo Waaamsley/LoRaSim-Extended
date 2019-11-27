@@ -90,6 +90,8 @@ sensiDiff = np.array([sf7diff, sf8diff, sf9diff, sf10diff, sf11diff, sf12diff])
 
 sfSent = [0, 0, 0, 0, 0, 0]
 sfReceived = [0, 0, 0, 0, 0, 0]
+sfLost = [0, 0, 0, 0, 0, 0]
+interferCount = [0, 0, 0, 0, 0, 0]
 
 #
 # check for collisions at base station
@@ -132,19 +134,22 @@ def checkcollision(packet):
     return 0
 
 def powerCollision(p1, p2):
+    global interferCount
     powerThreshold = sensiDiff[p1.sf-7][p2.sf-7]  # dB
 
-    if (abs(p1.rssi - p2.rssi) < powerThreshold) and p1.sf == p2.sf:
-        # print("Both packets were on same channel and did not meet capture effect requirements.")
+    if (abs(p1.rssi - p2.rssi) <= powerThreshold) and p1.sf == p2.sf:
+        #print ("Both packets were on same channel and did not meet capture effect requirements.", p1.sf, p2.sf, p1.rssi, p2.rssi, powerThreshold)
         return (p1, p2)
-    elif p1.rssi - p2.rssi < powerThreshold:
-        # print ("p2 was significantly stronger than p1 and interfered.")
+    elif p1.rssi - p2.rssi <= powerThreshold:
+        #print ("p2 was significantly stronger than p1 and interfered.", p1.sf, p2.sf, p1.rssi, p2.rssi, powerThreshold)
+        interferCount[p2.sf-7] += 1
         return(p1,)
 
     powerThreshold = sensiDiff[p2.sf-7][p1.sf-7]  # dB
 
-    if p2.rssi - p1.rssi < powerThreshold:
-        # print ("p2 was significantly stronger than p1 and interfered.")
+    if p2.rssi - p1.rssi <= powerThreshold:
+        #print ("p1 was significantly stronger than p2 and interfered.", p2.sf, p1.sf, p2.rssi, p1.rssi, powerThreshold)
+        interferCount[p1.sf - 7] += 1
         return (p2,)
 
     return []
@@ -226,7 +231,7 @@ class myPacket():
 
         self.nodeid = nodeid
         self.txpow = Ptx
-        self.sf, self.cr, self.bw, self.ch, self.rectime, self.txpow, Prx = experiLogic.logic(self.txpow, Prx)
+        self.sf, self.cr, self.bw, self.ch, self.rectime, self.txpow, Prx = experiLogic.logic(self.txpow, Prx, Lpl)
         self.transRange = 150
         self.pl = plen
         self.symTime = (2.0**self.sf)/self.bw
@@ -261,6 +266,7 @@ def transmit(env,node,observer):
         else:
             sensitivity = sensi[node.packet.sf - 7, [125,250,500].index(node.packet.bw) + 1]
             if node.packet.rssi < sensitivity:
+                print(node.nodeid)
                 #print "node {}: packet will be lost".format(node.nodeid)
                 node.packet.lost = True
             else:
@@ -278,7 +284,9 @@ def transmit(env,node,observer):
 
         if node.packet.lost:
             global nrLost
+            global sfLost
             nrLost += 1
+            sfLost[node.packet.sf-7] += 1
         if node.packet.collided == 1:
             global nrCollisions
             nrCollisions = nrCollisions +1
@@ -381,7 +389,7 @@ if (graphics == 1):
     ax.add_artist(plt.Circle((bsx, bsy), maxDist, fill=False, color='green'))
 
 nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi)
-experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL, Lpl)
+experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL)
 for i in range(0,nrNodes):
     # myNode takes period (in ms), base station id packetlen (in Bytes)
     node = myNode(i,bsId,avgSend)
@@ -428,9 +436,11 @@ der = (nrReceived)/float(sent)
 print "DER method 2:", der
 
 counter = 7
-for receivedStat, sentStat in zip(sfReceived, sfSent):
+for receivedStat, sentStat, lostStat, interferStat in zip(sfReceived, sfSent, sfLost, interferCount):
     if float(receivedStat) > 0 and float(sentStat) > 0:
-        print("SF", counter, " DER: ", float(receivedStat)/float(sentStat), " Received/Sent Packets : ", float(receivedStat), float(sentStat))
+        print("SF", counter, " DER: ", float(receivedStat)/float(sentStat), " Received/Sent/Lost Packets : ", float(receivedStat), float(sentStat), float(lostStat), float(interferStat))
+    else:
+        print ("SF", counter, "Exception:", " Received/Sent/Lost Packets : ", float(receivedStat), float(sentStat), float(lostStat), float(interferStat))
     counter += 1
 print ("SF Counts: ", experiLogic.sfCounts)
 totalTime = observer.accum_f + observer.accum_e

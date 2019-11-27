@@ -30,6 +30,9 @@ class nodePlacer():
         elif(self.distributionType == "ideal"):
             x, y, dist = self.idealPlace(bsx, bsy, nodeid)
 
+        if dist < 15.0:
+            print dist
+
         return x, y, dist
 
     def idealPlace(self, bsx, bsy, nodeid):
@@ -51,7 +54,7 @@ class nodePlacer():
             minRssi = 14 + (-1 * self.sensi[region-1, 1])
             regionMinDistance = self.distanceFinder.maxDistance(minRssi)
         else:
-            regionMinDistance = 0
+            regionMinDistance = 15 #0 number 15 introduces ma deadzone which is 12.64 metres
 
         # Very bad way to account for minimum allowed distance.
         while dist < regionMinDistance or dist > regionMaxDistance:
@@ -233,17 +236,16 @@ class fairSF():
 
 class experiments():
 
-    def __init__(self, eXperiment, nrChannels, sensi, plen, GL, Lpl):
+    def __init__(self, eXperiment, nrChannels, sensi, plen, GL):
         self.experiment = eXperiment
         self.esti = estimator()
         self.nrChannels = nrChannels
         self.sensi = sensi
         self.plen = plen
         self.GL = GL
-        self.Lpl = Lpl
         self.sfCounts = [0, 0, 0, 0, 0, 0]
 
-    def logic(self, txpow, prx):
+    def logic(self, txpow, prx, Lpl):
         sf = 0
         cr = 0
         bw = 0
@@ -257,7 +259,7 @@ class experiments():
         elif self.experiment == 2:
             sf, cr, bw = self.experimentTwo()
         elif self.experiment in [3, 4]:
-            sf, cr, bw, txPow, Prx = self.experimentThour(txPow, Prx)
+            sf, cr, bw, txPow, Prx = self.experimentThour(txPow, Prx, Lpl)
         elif self.experiment == 5:
             sf, cr, bw = self.experimentFour()
         else:
@@ -277,7 +279,7 @@ class experiments():
     def experimentTwo(self):
         return 7, 1, 125
 
-    def experimentThour(self, txPow, prx):
+    def experimentThour(self, txPow, prx, Lpl):
         minairtime = 9999
         minsf = 0
         minbw = 0
@@ -304,10 +306,11 @@ class experiments():
         #print "best sf:", minsf, " best bw: ", minbw, "best airtime:", minairtime
         sf = minsf
 
-        if self.experiment == 4:
-            # reduce the txpower if there's room left
+        if self.experiment == 4 and sf == 7:
+            # Reduce the txpower if there's room left
+            # Will also increase txpower if needed but this feature won't be used yet.
             txpow = max(2, txpow - math.floor(Prx - minsensi))
-            Prx = txpow - self.GL - self.Lpl
+            Prx = txpow - self.GL - Lpl
             #print 'minsesi {} best txpow {}'.format(minsensi, txpow)
 
         return sf, cr, bw, txpow, Prx
