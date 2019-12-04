@@ -244,6 +244,7 @@ class experiments():
         self.plen = plen
         self.GL = GL
         self.sfCounts = [0, 0, 0, 0, 0, 0]
+        self.powerControl = [7, 8, 9, 10, 11, 12]
 
     def logic(self, txpow, prx, Lpl):
         sf = 0
@@ -258,10 +259,14 @@ class experiments():
             sf, cr, bw = self.experimentOne()
         elif self.experiment == 2:
             sf, cr, bw = self.experimentTwo()
-        elif self.experiment in [3, 4]:
-            sf, cr, bw, txPow, Prx = self.experimentThour(txPow, Prx, Lpl)
-        elif self.experiment == 5:
-            sf, cr, bw = self.experimentFour()
+        elif self.experiment == 3:
+            f, cr, bw = self.experimentThree()
+        elif self.experiment in [4, 5]:
+            sf, cr, bw, txPow, Prx = self.experimentFourFive(txPow, Prx, Lpl)
+        elif self.experiment == 6:
+            sf, cr, bw = self.experimentSix()
+        elif self.experiment == 7:
+            self.experimentSeven()
         else:
             print("Invalid experiment!\nQuitting!")
             quit()
@@ -279,10 +284,11 @@ class experiments():
     def experimentTwo(self):
         return 7, 1, 125
 
-    def experimentThour(self, txPow, prx, Lpl):
+    def experimentThree(self):
+        return 12, 1, 125
+
+    def experimentFourFive(self, txPow, prx, Lpl):
         minairtime = 9999
-        minsf = 0
-        minbw = 0
         minsensi = 0
         sf = 0
         bw = 125
@@ -294,19 +300,14 @@ class experiments():
         for i in range(0, 6):
             if (self.sensi[i, 1] <= Prx):
                 sf = int(self.sensi[i, 0])
-                at = self.esti.airtime(sf, 1, self.plen, bw)
-                if at < minairtime:
-                    minairtime = at
-                    minsf = sf
-                    minbw = bw
-                    minsensi = self.sensi[i, 1]
+                minairtime = self.esti.airtime(sf, 1, self.plen, bw)
+                break
         if (minairtime == 9999):
             print "does not reach base station"
             exit(-1)
-        #print "best sf:", minsf, " best bw: ", minbw, "best airtime:", minairtime
-        sf = minsf
+        #print "best sf:", sf, " best bw: ", bw, "best airtime:", minairtime
 
-        if self.experiment == 4 and sf == 7:
+        if self.experiment == 5 and sf in self.powerControl:
             # Reduce the txpower if there's room left
             # Will also increase txpower if needed but this feature won't be used yet.
             txpow = max(2, txpow - math.floor(Prx - minsensi))
@@ -315,11 +316,18 @@ class experiments():
 
         return sf, cr, bw, txpow, Prx
 
-    # Divide and Conquer!
-    def experimentFive(self):
+    # Original inspiration for Divide & Conquer
+    def experimentSix(self):
+        sf = 0
+        bw = 125
+        cr = 1
+
         # SF, CR, BW
         return 12, 1, 125
 
+    def experimentSeven(self):
+
+        return 0
 
 class estimator():
 
