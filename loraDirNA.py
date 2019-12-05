@@ -231,7 +231,7 @@ class myPacket():
 
         self.nodeid = nodeid
         self.txpow = Ptx
-        self.sf, self.cr, self.bw, self.ch, self.rectime, self.txpow, Prx = experiLogic.logic(self.txpow, Prx, Lpl)
+        self.sf, self.cr, self.bw, self.ch, self.rectime, self.txpow, Prx = experiLogic.logic(Prx)
         self.transRange = 150
         self.pl = plen
         self.symTime = (2.0**self.sf)/self.bw
@@ -390,11 +390,13 @@ if (graphics == 1):
 
 nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi)
 experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL)
+powerLogic = networkSupport.powerControl(experiment, sensi, GL)
 for i in range(0,nrNodes):
     # myNode takes period (in ms), base station id packetlen (in Bytes)
     node = myNode(i,bsId,avgSend)
     #print("--------------------------------------------------------------------------------------")
     nodes.append(node)
+    powerLogic.logic(nodes)
     env.process(transmit(env,node,observer))
 
 

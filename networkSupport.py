@@ -246,13 +246,12 @@ class experiments():
         self.sfCounts = [0, 0, 0, 0, 0, 0]
         self.powerControl = [7, 8, 9, 10, 11, 12]
 
-    def logic(self, txpow, prx, Lpl):
+    def logic(self, prx):
         sf = 0
         cr = 0
         bw = 0
         ch = random.randint(0, self.nrChannels - 1)
         rectime = 0
-        txPow = txpow
         Prx = prx
 
         if self.experiment == 1:
@@ -262,7 +261,7 @@ class experiments():
         elif self.experiment == 3:
             f, cr, bw = self.experimentThree()
         elif self.experiment in [4, 5]:
-            sf, cr, bw, txPow, Prx = self.experimentFourFive(txPow, Prx, Lpl)
+            sf, cr, bw = self.experimentFourFive(Prx)
         elif self.experiment == 6:
             sf, cr, bw = self.experimentSix()
         elif self.experiment == 7:
@@ -276,7 +275,7 @@ class experiments():
             rectime = self.esti.airtime(sf, 4, self.plen, bw)
 
         self.sfCounts[sf-7] += 1
-        return sf, cr, bw, ch, rectime, txPow, Prx
+        return sf, cr, bw, ch, rectime
 
     def experimentOne(self):
         return 12, 4, 125
@@ -287,13 +286,12 @@ class experiments():
     def experimentThree(self):
         return 12, 1, 125
 
-    def experimentFourFive(self, txPow, prx, Lpl):
+    def experimentFourFive(self, prx):
         minairtime = 9999
         minsensi = 0
         sf = 0
         bw = 125
         cr = 1
-        txpow = txPow
         Prx = prx
 
         #print "Prx:", Prx
@@ -305,16 +303,9 @@ class experiments():
         if (minairtime == 9999):
             print "does not reach base station"
             exit(-1)
+
         #print "best sf:", sf, " best bw: ", bw, "best airtime:", minairtime
-
-        if self.experiment == 5 and sf in self.powerControl:
-            # Reduce the txpower if there's room left
-            # Will also increase txpower if needed but this feature won't be used yet.
-            txpow = max(2, txpow - math.floor(Prx - minsensi))
-            Prx = txpow - self.GL - Lpl
-            #print 'minsesi {} best txpow {}'.format(minsensi, txpow)
-
-        return sf, cr, bw, txpow, Prx
+        return sf, cr, bw
 
     # Original inspiration for Divide & Conquer
     def experimentSix(self):
@@ -325,9 +316,49 @@ class experiments():
         # SF, CR, BW
         return 12, 1, 125
 
+    #FADR - Fair Allocation Data Rate Algorithm
     def experimentSeven(self):
 
         return 0
+
+class powerControl():
+
+    def __init__(self, experiment, sensi, GL):
+        self.experiment = experiment
+        self.sensi = sensi
+        self.GL = GL
+
+    def logic(self, nodes):
+        if self.experiment == 5:
+            self.powerControlOne(nodes)
+        elif self.experiment == 6:
+            self.powerControlTwo(nodes)
+        elif self.experiment == 7:
+            self.powerControlThree(nodes)
+        else:
+            return
+
+    #will have to reset txpow, Prx, rssi
+    def powerControlOne(self, nodes):
+        for node in nodes:
+            minsensi = self.sensi[node.packet.sf - 7, 1]
+            Lpl = node.packet.Lpl
+
+            txpow = max(2, txpow - math.floor(Prx - minsensi))
+            Prx = txpow - self.GL - Lpl
+
+            node.packet.txpow = txpow
+            node.packet.Prx = Prx
+            node.packet.rssi = Prx
+
+    def powerControlTwo(self, nodes):
+        return
+
+    def powerControlThree(self, nodes):
+        return
+
+
+
 
 class estimator():
 
