@@ -59,7 +59,7 @@ import networkSupport
 
 # turn on/off graphics
 graphics = 1
-distributionType = "ideal"
+distributionType = "uniform"
 
 # experiments:
 # 0: packet with longest airtime, aloha-style experiment
@@ -225,18 +225,18 @@ class myPacket():
         global plen
 
         # log-shadow
-        Lpl = Lpld0 + 10 * gamma * math.log10(distance / d0)
+        self.Lpl = Lpld0 + 10 * gamma * math.log10(distance / d0)
         #print "Lpl:", Lpl
-        Prx = Ptx - GL - Lpl
+        self.Prx = Ptx - GL - Lpl
 
         self.nodeid = nodeid
         self.txpow = Ptx
-        self.sf, self.cr, self.bw, self.ch, self.rectime, self.txpow, Prx = experiLogic.logic(Prx)
+        self.sf, self.cr, self.bw, self.ch, self.rectime = experiLogic.logic(self.Prx)
         self.transRange = 150
         self.pl = plen
         self.symTime = (2.0**self.sf)/self.bw
         self.arriveTime = 0
-        self.rssi = Prx
+        self.rssi = self.Prx
         self.addTime = 0.0
 
         #print "channel", self.ch+1, "symTime ", self.symTime
@@ -396,7 +396,7 @@ for i in range(0,nrNodes):
     node = myNode(i,bsId,avgSend)
     #print("--------------------------------------------------------------------------------------")
     nodes.append(node)
-    powerLogic.logic(nodes)
+    #powerLogic.logic(nodes)
     env.process(transmit(env,node,observer))
 
 

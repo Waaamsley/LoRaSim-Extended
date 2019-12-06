@@ -288,7 +288,6 @@ class experiments():
 
     def experimentFourFive(self, prx):
         minairtime = 9999
-        minsensi = 0
         sf = 0
         bw = 125
         cr = 1
@@ -319,7 +318,7 @@ class experiments():
     #FADR - Fair Allocation Data Rate Algorithm
     def experimentSeven(self):
 
-        return 0
+        return 0, 0, 0
 
 class powerControl():
 
@@ -343,6 +342,8 @@ class powerControl():
         for node in nodes:
             minsensi = self.sensi[node.packet.sf - 7, 1]
             Lpl = node.packet.Lpl
+            txpow = node.packet.txpow
+            Prx = node.packet.Prx
 
             txpow = max(2, txpow - math.floor(Prx - minsensi))
             Prx = txpow - self.GL - Lpl
