@@ -17,7 +17,7 @@
 
 """
  SYNOPSIS:
-   ./loraDirNA.py <nodes> <avgsend> <experiment> <simtime> <channels> <full_collision>
+   ./loraDirNA.py <nodes> <avgsend> <experiment> <powerScheme> <simtime> <channels> <full_collision>
  DESCRIPTION:
     nodes
         number of nodes to simulate
@@ -32,6 +32,11 @@
         3   optimise the setting per node based on the distance to the gateway.
         4   similair to experiment 3, but also optimises the transmit power.
         5   Divide and Conquer
+    powerScheme
+        Which power control scheme to use
+        1 minimise all TP power as much as possible
+        2 FADR TP control
+        3 Mine?
     simtime
         total running time in milliseconds
     Channels
@@ -59,7 +64,7 @@ import networkSupport
 
 # turn on/off graphics
 graphics = 1
-distributionType = "uniform"
+distributionType = "ideal"
 
 # experiments:
 # 0: packet with longest airtime, aloha-style experiment
@@ -193,7 +198,6 @@ class myNode():
         self.dist = 0
 
         self.x, self.y, self.dist = nodePlacer.logic(maxDist, bsx, bsy, nodeid)
-
         #print('node %d' %nodeid, "x", self.x, "y", self.y, "dist: ", self.dist)
 
         self.packet = myPacket(self.nodeid, self.dist)
@@ -207,6 +211,9 @@ class myNode():
         if (graphics == 1):
             global ax
             ax.add_artist(plt.Circle((self.x, self.y), 2, fill=True, color='blue'))
+
+    def __lt__(self, other):
+        return self.packet.rssi > other.packet.rssi
 
 #
 # this function creates a packet (associated with a node)
@@ -226,8 +233,7 @@ class myPacket():
 
         # log-shadow
         self.Lpl = Lpld0 + 10 * gamma * math.log10(distance / d0)
-        #print "Lpl:", Lpl
-        self.Prx = Ptx - GL - Lpl
+        self.Prx = Ptx - GL - self.Lpl
 
         self.nodeid = nodeid
         self.txpow = Ptx
@@ -238,7 +244,6 @@ class myPacket():
         self.arriveTime = 0
         self.rssi = self.Prx
         self.addTime = 0.0
-
         #print "channel", self.ch+1, "symTime ", self.symTime
         #print "bw", self.bw, "sf", self.sf, "cr", self.cr, "rssi", self.rssi
         #print "rectime node ", self.nodeid, "  ", self.rectime
@@ -266,7 +271,7 @@ def transmit(env,node,observer):
         else:
             sensitivity = sensi[node.packet.sf - 7, [125,250,500].index(node.packet.bw) + 1]
             if node.packet.rssi < sensitivity:
-                print(node.nodeid)
+                print("node id: ", node.nodeid)
                 #print "node {}: packet will be lost".format(node.nodeid)
                 node.packet.lost = True
             else:
@@ -314,16 +319,18 @@ def transmit(env,node,observer):
 #
 
 # get arguments
-if len(sys.argv) == 7:
+if len(sys.argv) == 8:
     nrNodes = int(sys.argv[1])
     avgSend = float(sys.argv[2])
     experiment = int(sys.argv[3])
-    simtime = int(sys.argv[4])
-    nrChannels = int(sys.argv[5])
-    fullCollision = int(sys.argv[6])
+    powerScheme = int(sys.argv[4])
+    simtime = int(sys.argv[5])
+    nrChannels = int(sys.argv[6])
+    fullCollision = int(sys.argv[7])
     print ("Nodes:", nrNodes)
     print ("Average Send Time / Inter Packet Arrival Time:", avgSend)
     print ("Experiment: ", experiment)
+    print ("Power Control Scheme: ", powerScheme)
     print ("Simtime: ", simtime)
     print ("Channels: ", nrChannels)
     print ("Full Collision: ", fullCollision)
@@ -360,14 +367,10 @@ Lpld0 = 127.41
 GL = 0
 plen = 20
 
-if experiment in [0,1,4]:
-    minsensi = sensi[5,2]  # 5th row is SF12, 2nd column is BW125
-elif experiment == 2:
-    minsensi = -112.0   # no experiments, so value from datasheet
-elif experiment in [3,5,6]:
-    minsensi = np.amin(sensi) ## Experiment 3 can use any setting, so take minimum
-elif experiment > 6:
-    minsensi = -136
+if experiment == 2:
+    minsensi = sensi[0,1]
+else:
+    minsensi = np.amin(sensi)
 Lpl = Ptx - minsensi
 print ("amin", minsensi, "Lpl", Lpl)
 maxDist = distFinder.maxDistance((minsensi*-1) + Ptx)
@@ -390,13 +393,11 @@ if (graphics == 1):
 
 nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi)
 experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL)
-powerLogic = networkSupport.powerControl(experiment, sensi, GL)
+powerLogic = networkSupport.powerControl(powerScheme, sensi, sensiDiff, GL)
 for i in range(0,nrNodes):
     # myNode takes period (in ms), base station id packetlen (in Bytes)
     node = myNode(i,bsId,avgSend)
-    #print("--------------------------------------------------------------------------------------")
     nodes.append(node)
-    #powerLogic.logic(nodes)
     env.process(transmit(env,node,observer))
 
 
@@ -408,6 +409,8 @@ if (graphics == 1):
     plt.show()
 
 # start simulation
+powerLogic.logic(nodes)
+quit()
 env.run(until=simtime)
 
 # print stats and save into file
@@ -440,9 +443,9 @@ print "DER method 2:", der
 counter = 7
 for receivedStat, sentStat, lostStat, interferStat in zip(sfReceived, sfSent, sfLost, interferCount):
     if float(receivedStat) > 0 and float(sentStat) > 0:
-        print("SF", counter, " DER: ", float(receivedStat)/float(sentStat), " Received/Sent/Lost Packets : ", float(receivedStat), float(sentStat), float(lostStat), float(interferStat))
+        print("SF", counter, " DER: ", float(receivedStat)/float(sentStat), " Received/Sent/Lost Packets/Interfered : ", float(receivedStat), float(sentStat), float(lostStat), float(interferStat))
     else:
-        print ("SF", counter, "Exception:", " Received/Sent/Lost Packets : ", float(receivedStat), float(sentStat), float(lostStat), float(interferStat))
+        print ("SF", counter, "Exception:", " Received/Sent/Lost/Interefered Packets : ", float(receivedStat), float(sentStat), float(lostStat), float(interferStat))
     counter += 1
 print ("SF Counts: ", experiLogic.sfCounts)
 totalTime = observer.accum_f + observer.accum_e

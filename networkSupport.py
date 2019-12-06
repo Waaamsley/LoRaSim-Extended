@@ -2,6 +2,7 @@ import random
 import math
 import numpy as np
 import time
+import operator
 
 
 class nodePlacer():
@@ -29,9 +30,6 @@ class nodePlacer():
             x, y, dist = self.uniformPlaceBasic(maxDist, bsx, bsy)
         elif(self.distributionType == "ideal"):
             x, y, dist = self.idealPlace(bsx, bsy, nodeid)
-
-        if dist < 15.0:
-            print dist
 
         return x, y, dist
 
@@ -260,12 +258,12 @@ class experiments():
             sf, cr, bw = self.experimentTwo()
         elif self.experiment == 3:
             f, cr, bw = self.experimentThree()
-        elif self.experiment in [4, 5]:
-            sf, cr, bw = self.experimentFourFive(Prx)
+        elif self.experiment in [4]:
+            sf, cr, bw = self.experimentFour(Prx)
+        elif self.experiment == 5:
+            sf, cr, bw = self.experimentFive()
         elif self.experiment == 6:
-            sf, cr, bw = self.experimentSix()
-        elif self.experiment == 7:
-            self.experimentSeven()
+            self.experimentSix()
         else:
             print("Invalid experiment!\nQuitting!")
             quit()
@@ -286,14 +284,13 @@ class experiments():
     def experimentThree(self):
         return 12, 1, 125
 
-    def experimentFourFive(self, prx):
+    def experimentFour(self, prx):
         minairtime = 9999
         sf = 0
         bw = 125
         cr = 1
         Prx = prx
 
-        #print "Prx:", Prx
         for i in range(0, 6):
             if (self.sensi[i, 1] <= Prx):
                 sf = int(self.sensi[i, 0])
@@ -303,11 +300,10 @@ class experiments():
             print "does not reach base station"
             exit(-1)
 
-        #print "best sf:", sf, " best bw: ", bw, "best airtime:", minairtime
         return sf, cr, bw
 
     # Original inspiration for Divide & Conquer
-    def experimentSix(self):
+    def experimentFive(self):
         sf = 0
         bw = 125
         cr = 1
@@ -316,49 +312,74 @@ class experiments():
         return 12, 1, 125
 
     #FADR - Fair Allocation Data Rate Algorithm
-    def experimentSeven(self):
+    def experimentSix(self):
 
         return 0, 0, 0
 
 class powerControl():
 
-    def __init__(self, experiment, sensi, GL):
-        self.experiment = experiment
+    def __init__(self, powerScheme, sensi, sensiDiff, GL):
+        self.powerScheme = powerScheme
         self.sensi = sensi
+        self.sensiDiff = sensiDiff
         self.GL = GL
+        self.atrGet = operator.attrgetter
 
     def logic(self, nodes):
-        if self.experiment == 5:
-            self.powerControlOne(nodes)
-        elif self.experiment == 6:
-            self.powerControlTwo(nodes)
-        elif self.experiment == 7:
-            self.powerControlThree(nodes)
+        if self.powerScheme == 1:
+            self.powerOne(nodes)
+        elif self.powerScheme == 2:
+            self.powerTwo(nodes)
+        elif self.powerScheme == 3:
+            self.powerThree(nodes)
         else:
             return
 
     #will have to reset txpow, Prx, rssi
-    def powerControlOne(self, nodes):
+    def powerOne(self, nodes):
         for node in nodes:
             minsensi = self.sensi[node.packet.sf - 7, 1]
             Lpl = node.packet.Lpl
             txpow = node.packet.txpow
             Prx = node.packet.Prx
-
+            print txpow, Prx, minsensi, node.packet.sf, node.dist
             txpow = max(2, txpow - math.floor(Prx - minsensi))
             Prx = txpow - self.GL - Lpl
-
+            print txpow, Prx, minsensi, node.packet.sf, node.dist
+            print "------"
             node.packet.txpow = txpow
             node.packet.Prx = Prx
             node.packet.rssi = Prx
 
-    def powerControlTwo(self, nodes):
+    # FADR - Fair Adaptive Data Rate
+    # I have implemented their power control system
+    def powerTwo(self, nodes):
+        # First sort nodes by RSSI, done with __lt__ method on node class.
+        nodesSorted = nodes
+        nodesSorted.sort()
+        # get max/min RSSI and min CIR (inter SF collision?)
+        minRSSI = min(nodesSorted, key=self.atrGet('packet.rssi')).packet.rssi
+        maxRSSI = max(nodesSorted, key=self.atrGet('packet.rssi')).packet.rssi
+        minCIR = min(self.sensiDiff)
+        # Find range of power levels to use
+        powerLevels = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+        minPower = powerLevels.pop(0)
+        print minRSSI, maxRSSI
+        for i, powerLevel in enumerate(powerLevels):
+            maxPower = powerLevel
+            if (maxRSSI + minPower - minRSSI - maxPower) <= minCIR:
+                print "early break"
+                powerLevels = powerLevels[0, i]
+                break
+            elif powerLevel == max(powerLevels):
+                print "hit the end"
+                maxPower = powerLevels.pop()
+        print powerLevels
+
         return
 
-    def powerControlThree(self, nodes):
+    def powerThree(self, nodes):
         return
-
-
 
 
 class estimator():
