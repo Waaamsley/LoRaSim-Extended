@@ -257,7 +257,7 @@ class experiments():
         elif self.experiment == 2:
             sf, cr, bw = self.experimentTwo()
         elif self.experiment == 3:
-            f, cr, bw = self.experimentThree()
+            sf, cr, bw = self.experimentThree()
         elif self.experiment in [4]:
             sf, cr, bw = self.experimentFour(Prx)
         elif self.experiment == 5:
@@ -357,10 +357,12 @@ class powerControl():
         # First sort nodes by RSSI, done with __lt__ method on node class.
         nodesSorted = nodes
         nodesSorted.sort()
+
         # get max/min RSSI and min CIR (inter SF collision?)
         minRSSI = min(nodesSorted, key=self.atrGet('packet.rssi')).packet.rssi
         maxRSSI = max(nodesSorted, key=self.atrGet('packet.rssi')).packet.rssi
-        minCIR = min(self.sensiDiff)
+        minCIR = 8
+
         # Find range of power levels to use
         powerLevels = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
         minPower = powerLevels.pop(0)
@@ -368,14 +370,54 @@ class powerControl():
         for i, powerLevel in enumerate(powerLevels):
             maxPower = powerLevel
             if (maxRSSI + minPower - minRSSI - maxPower) <= minCIR:
-                print "early break"
                 powerLevels = powerLevels[0, i]
                 break
             elif powerLevel == max(powerLevels):
-                print "hit the end"
                 maxPower = powerLevels.pop()
-        print powerLevels
 
+        # Recalc MinRSSI, MaxRSSI
+        minRSSI = min(minRSSI + maxPower, maxRSSI + minPower)
+        maxRSSI = max(minRSSI + maxPower, maxRSSI + minPower)
+
+        # Assign minimum power and save minPowerIndex
+        for n in nodesSorted:
+            if n.packet.rssi + minPower > minRSSI:
+                minPowerIndex = i - 1
+                break
+            else:
+                n.packet.txpow = minPower
+                Prx = n.packet.txpow - self.GL - n.packet.Lpl
+                n.packet.Prx = Prx
+                n.packet.rssi = Prx
+
+        # Assign maximum power and save maxPowerIndex
+        for n in reversed(nodesSorted):
+            if n.packet.rssi + maxPower - minRSSI > minCIR:
+                maxPowerIndex = i - 1
+                break
+            else:
+                n.packet.txpow = maxPower
+                Prx = n.packet.txpow - self.GL - n.packet.Lpl
+                n.packet.Prx = Prx
+                n.packet.rssi = Prx
+
+        #Assign the reaming power levels to the inbetween nodes
+        tempIndex = minPowerIndex
+        maxNodeRssi = nodesSorted[maxPowerIndex].packet.rssi
+        for powerLevel in powerLevels:
+            tempNodeRssi = nodesSorted[tempIndex].packet.rssi
+            if tempNodeRssi + powerLevel - minRSSI <= minCIR \
+                and tempNodeRssi + powerLevel - maxNodeRssi - maxPower <= minCIR:
+                for i in range(tempIndex, maxPowerIndex):
+                    currNodeRssi = nodesSorted[i].packet.rssi
+                    if currNodeRssi + powerLevel - maxNodeRssi - maxPower > minCIR:
+                        tempIndex = i - 1
+                        break
+                    else:
+                        nodesSorted[i].packet.txpow = powerLevel
+                        Prx = n.packet.txpow - self.GL - n.packet.Lpl
+                        nodesSorted[i].packet.Prx = Prx
+                        nodesSorted[i].packet.rssi = Prx
         return
 
     def powerThree(self, nodes):
