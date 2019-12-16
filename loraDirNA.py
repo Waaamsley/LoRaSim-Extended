@@ -409,8 +409,15 @@ if (graphics == 1):
     plt.show()
 
 # start simulation
+nodesSorted = nodes
+nodesSorted.sort()
+for node in nodesSorted:
+    print node.packet.txpow, node.packet.rssi
+print "||||||||||||||_______-------______|||||||||||||||"
 powerLogic.logic(nodes)
-quit()
+for node in nodesSorted:
+    print node.packet.txpow, node.packet.rssi
+#quit()
 env.run(until=simtime)
 
 # print stats and save into file
@@ -443,9 +450,9 @@ print "DER method 2:", der
 counter = 7
 for receivedStat, sentStat, lostStat, interferStat in zip(sfReceived, sfSent, sfLost, interferCount):
     if float(receivedStat) > 0 and float(sentStat) > 0:
-        print("SF", counter, " DER: ", float(receivedStat)/float(sentStat), " Received/Sent/Lost Packets/Interfered : ", float(receivedStat), float(sentStat), float(lostStat), float(interferStat))
+        print("SF", counter, " DER: ", float(receivedStat)/float(sentStat), " Received/Sent/Lost Packets_Interfered : ", float(receivedStat), float(sentStat), float(lostStat), float(interferStat))
     else:
-        print ("SF", counter, "Exception:", " Received/Sent/Lost/Interefered Packets : ", float(receivedStat), float(sentStat), float(lostStat), float(interferStat))
+        print ("SF", counter, "Exception:", " Received/Sent/Lost_Interefered Packets : ", float(receivedStat), float(sentStat), float(lostStat), float(interferStat))
     counter += 1
 print ("SF Counts: ", experiLogic.sfCounts)
 totalTime = observer.accum_f + observer.accum_e

@@ -342,11 +342,8 @@ class powerControl():
             Lpl = node.packet.Lpl
             txpow = node.packet.txpow
             Prx = node.packet.Prx
-            print txpow, Prx, minsensi, node.packet.sf, node.dist
             txpow = max(2, txpow - math.floor(Prx - minsensi))
             Prx = txpow - self.GL - Lpl
-            print txpow, Prx, minsensi, node.packet.sf, node.dist
-            print "------"
             node.packet.txpow = txpow
             node.packet.Prx = Prx
             node.packet.rssi = Prx
