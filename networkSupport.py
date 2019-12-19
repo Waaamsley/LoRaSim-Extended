@@ -377,9 +377,10 @@ class powerControl():
         maxRSSI = max(minRSSI + maxPower, maxRSSI + minPower)
 
         # Assign minimum power and save minPowerIndex
-        for n in nodesSorted:
+        for i, n in enumerate(nodesSorted):
             if n.packet.rssi + minPower > minRSSI:
                 minPowerIndex = i - 1
+                print ("here", i)
                 break
             else:
                 n.packet.txpow = minPower
@@ -388,7 +389,7 @@ class powerControl():
                 n.packet.rssi = Prx
 
         # Assign maximum power and save maxPowerIndex
-        for n in reversed(nodesSorted):
+        for i, n in enumerate(reversed(nodesSorted)):
             if n.packet.rssi + maxPower - minRSSI > minCIR:
                 maxPowerIndex = i - 1
                 break

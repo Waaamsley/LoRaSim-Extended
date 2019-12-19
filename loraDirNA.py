@@ -96,6 +96,7 @@ sensiDiff = np.array([sf7diff, sf8diff, sf9diff, sf10diff, sf11diff, sf12diff])
 sfSent = [0, 0, 0, 0, 0, 0]
 sfReceived = [0, 0, 0, 0, 0, 0]
 sfLost = [0, 0, 0, 0, 0, 0]
+sfCollided = [0, 0, 0, 0, 0, 0]
 interferCount = [0, 0, 0, 0, 0, 0]
 
 #
@@ -294,7 +295,9 @@ def transmit(env,node,observer):
             sfLost[node.packet.sf-7] += 1
         if node.packet.collided == 1:
             global nrCollisions
+            global sfCollided
             nrCollisions = nrCollisions +1
+            sfCollided[node.packet.sf-7] += 1
         if node.packet.collided == 0 and not node.packet.lost:
             global nrReceived
             global sfReceived
@@ -411,12 +414,13 @@ if (graphics == 1):
 # start simulation
 nodesSorted = nodes
 nodesSorted.sort()
-for node in nodesSorted:
-    print node.packet.txpow, node.packet.rssi
+for i, node in enumerate(nodesSorted):
+    print i, node.packet.txpow, node.packet.rssi
 print "||||||||||||||_______-------______|||||||||||||||"
 powerLogic.logic(nodes)
-for node in nodesSorted:
-    print node.packet.txpow, node.packet.rssi
+for i, node in enumerate(nodesSorted):
+    print i, node.packet.txpow, node.packet.rssi
+
 #quit()
 env.run(until=simtime)
 
@@ -448,11 +452,11 @@ der = (nrReceived)/float(sent)
 print "DER method 2:", der
 
 counter = 7
-for receivedStat, sentStat, lostStat, interferStat in zip(sfReceived, sfSent, sfLost, interferCount):
+for receivedStat, sentStat, lostStat, collideStat, interferStat in zip(sfReceived, sfSent, sfLost, sfCollided, interferCount):
     if float(receivedStat) > 0 and float(sentStat) > 0:
-        print("SF", counter, " DER: ", float(receivedStat)/float(sentStat), " Received/Sent/Lost Packets_Interfered : ", float(receivedStat), float(sentStat), float(lostStat), float(interferStat))
+        print("SF", counter, " DER: ", float(receivedStat)/float(sentStat), " Received/Sent/Lost/Collided/Interfered Packets: ", float(receivedStat), float(sentStat), float(lostStat), float(collideStat), float(interferStat))
     else:
-        print ("SF", counter, "Exception:", " Received/Sent/Lost_Interefered Packets : ", float(receivedStat), float(sentStat), float(lostStat), float(interferStat))
+        print ("SF", counter, "Exception:", " Received/Sent/Lost/Collided/Interefered Packets : ", float(receivedStat), float(sentStat), float(lostStat), float(collideStat), float(interferStat))
     counter += 1
 print ("SF Counts: ", experiLogic.sfCounts)
 totalTime = observer.accum_f + observer.accum_e
