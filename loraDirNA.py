@@ -29,9 +29,10 @@
         and a single transmit frequency, unless stated otherwise.
         1   use the settings with the the slowest datarate (SF12, BW125, CR4/8).
         2   use the settings with the fastest data rate (SF7, BW500, CR4/5).
-        3   optimise the setting per node based on the distance to the gateway.
-        4   similair to experiment 3, but also optimises the transmit power.
-        5   Divide and Conquer
+        3   use the default specified settings.
+        4   optimise the setting per node based on the distance to the gateway.
+        5   similair to experiment 3, but also optimises the transmit power.
+        6   Divide and Conquer
     powerScheme
         Which power control scheme to use
         1 minimise all TP power as much as possible
