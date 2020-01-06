@@ -258,7 +258,7 @@ class experiments():
             sf, cr, bw = self.experimentTwo()
         elif self.experiment == 3:
             sf, cr, bw = self.experimentThree()
-        elif self.experiment in [4]:
+        elif self.experiment == 4:
             sf, cr, bw = self.experimentFour(Prx)
         elif self.experiment == 5:
             sf, cr, bw = self.experimentFive()
@@ -367,7 +367,7 @@ class powerControl():
         for i, powerLevel in enumerate(powerLevels):
             maxPower = powerLevel
             if (maxRSSI + minPower - minRSSI - maxPower) <= minCIR:
-                powerLevels = powerLevels[0, i]
+                powerLevels = powerLevels[0: i]
                 break
             elif powerLevel == max(powerLevels):
                 maxPower = powerLevels.pop()
