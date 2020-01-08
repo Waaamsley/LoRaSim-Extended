@@ -7,11 +7,12 @@ import operator
 
 class nodePlacer():
 
-    def __init__(self, nodes, nrNodes, distributionType, sensi):
+    def __init__(self, nodes, nrNodes, distributionType, sensi, Ptx):
         self.nodes = nodes
         self.nrNodes = nrNodes
         self.distributionType = distributionType
         self.sensi = sensi
+        self.Ptx = Ptx
 
         if self.distributionType == "ideal":
             fairSFGetter = fairSF(nrNodes, [7.0, 8.0, 9.0, 10.0, 11.0, 12.0])
@@ -46,10 +47,10 @@ class nodePlacer():
                 break
 
         # currently assuming static txPower of 14dB
-        rssi = 14 + (-1 * self.sensi[region, 1])
+        rssi = self.Ptx + (-1 * self.sensi[region, 1])
         regionMaxDistance = self.distanceFinder.maxDistance(rssi)
         if region > 0:
-            minRssi = 14 + (-1 * self.sensi[region-1, 1])
+            minRssi = self.Ptx + (-1 * self.sensi[region-1, 1])
             regionMinDistance = self.distanceFinder.maxDistance(minRssi)
         else:
             regionMinDistance = 15 #0 number 15 introduces ma deadzone which is 12.64 metres
@@ -419,6 +420,12 @@ class powerControl():
         return
 
     def powerThree(self, nodes):
+        # First sort nodes by RSSI, done with __lt__ method on node class.
+        nodesSorted = nodes
+        nodesSorted.sort()
+
+
+
         return
 
 
