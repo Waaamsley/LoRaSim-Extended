@@ -67,14 +67,6 @@ import networkSupport
 graphics = 1
 distributionType = "ideal"
 
-# experiments:
-# 0: packet with longest airtime, aloha-style experiment
-# 0: one with 3 frequencies, 1 with 1 frequency
-# 2: with shortest packets, still aloha-style
-# 3: with shortest possible packets depending on distance
-
-
-
 # this is an array with measured values for sensitivity
 # see paper, Table 3
 sf7 = np.array([7,-123,-120,-116])
@@ -184,6 +176,21 @@ def timingCollision(p1, p2):
     #print "saved by the preamble"
     return False
 
+
+# Creates a list of nodes.
+def createNodes():
+    global nodes
+    global nrNodes
+    global bsId
+    global avgSend
+    global env
+    global observer
+
+    for i in range(0, nrNodes):
+        node = myNode(i, bsId, avgSend)
+        nodes.append(node)
+        env.process(transmit(env,node,observer))
+
 #
 # this function creates a node
 #
@@ -192,6 +199,7 @@ class myNode():
         global experiment
         global plen
         global nodePlacer
+        global Ptx
         self.nodeid = nodeid
         self.period = 999999
         self.bs = bs
@@ -199,7 +207,7 @@ class myNode():
         self.y = 0
         self.dist = 0
 
-        self.x, self.y, self.dist = nodePlacer.logic(maxDist, bsx, bsy, nodeid)
+        self.x, self.y, self.dist = nodePlacer.logic(maxDist, bsx, bsy, nodeid, Ptx)
         #print('node %d' %nodeid, "x", self.x, "y", self.y, "dist: ", self.dist)
 
         self.packet = myPacket(self.nodeid, self.dist)
@@ -351,6 +359,9 @@ packetsAtBS = []
 env = simpy.Environment()
 distFinder = networkSupport.maxDistFinder()
 observer = networkSupport.channelUsage()
+nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi)
+experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL)
+powerLogic = networkSupport.powerControl(powerScheme, sensi, sensiDiff, GL)
 
 # maximum number of packets the BS can receive at the same time
 maxBSReceives = 999
@@ -395,15 +406,8 @@ if (graphics == 1):
     ax.add_artist(plt.Circle((bsx, bsy), 3, fill=True, color='green'))
     ax.add_artist(plt.Circle((bsx, bsy), maxDist, fill=False, color='green'))
 
-nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi)
-experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL)
-powerLogic = networkSupport.powerControl(powerScheme, sensi, sensiDiff, GL)
-for i in range(0,nrNodes):
-    # myNode takes period (in ms), base station id packetlen (in Bytes)
-    node = myNode(i,bsId,avgSend)
-    nodes.append(node)
-    env.process(transmit(env,node,observer))
-
+# Creates a list of nodes and their packets
+createNodes()
 
 #prepare show
 if (graphics == 1):
@@ -415,12 +419,12 @@ if (graphics == 1):
 # start simulation
 nodesSorted = nodes
 nodesSorted.sort()
-for i, node in enumerate(nodesSorted):
-    print i, node.packet.txpow, node.packet.rssi
-print "||||||||||||||_______-------______|||||||||||||||"
+#for i, node in enumerate(nodesSorted):
+#    print i, node.packet.txpow, node.packet.rssi
+#print "||||||||||||||_______-------______|||||||||||||||"
 powerLogic.logic(nodes)
-for i, node in enumerate(nodesSorted):
-    print i, node.packet.txpow, node.packet.rssi
+#for i, node in enumerate(nodesSorted):
+#    print i, node.packet.txpow, node.packet.rssi
 
 #quit()
 env.run(until=simtime)

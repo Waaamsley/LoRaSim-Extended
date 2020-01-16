@@ -424,8 +424,35 @@ class powerControl():
         nodesSorted = nodes
         nodesSorted.sort()
 
+        start = 0
+        while True:
+            # Get last node with SF8.
+            J = None
+            Ji = 0
+            lateri = 0
+            for i, n in enumerate(nodesSorted, start):
+                # Get first sf8 node for later.
+                if n.packet.sf == 8 and nodesSorted[i-1].packet.sf == 7:
+                    lateri = i
+                # Main point of this for loop is to get last sf8 node.
+                if n.packet.sf == 9:
+                    Ji = i-1
+                    break
+            j = nodesSorted[start]
+            J = nodesSorted[Ji]
+            start += 1
+            # break condition for loop.
+            cir = 0 # need to address
+            if 2 + j.packet.Lpl > 14 + J.packet.Lpl + cir:
+                break
 
-
+        # Assign power levels
+        J = nodesSorted[lateri]
+        for i, n in enumerate(nodesSorted, start):
+            if n.packet.sf == 7:
+                break
+            else:
+                break
         return
 
 
