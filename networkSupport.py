@@ -427,24 +427,22 @@ class powerControl():
 
         start = 0
         while True:
-            # Get last node with SF8.
-            J = None
-            Ji = 0
-            lateri = 0
+            firstSF8 = 0
+            lastSF8 = 0
             for i, n in enumerate(nodesSorted, start):
                 # Get first sf8 node for later.
                 if n.packet.sf == 7: #and nodesSorted[-1].packet.sf == 8
-                    lateri = i-1
+                    firstSF8 = i-1
                     break
                 # Main point of this for loop is to get last sf8 node.
-                if n.packet.sf == 8 and nodesSorted[i+1].packet.sf == 9:
-                    Ji = i
+                if n.packet.sf == 8 and nodesSorted[i-1].packet.sf == 9:
+                    lastSF8 = i
             start += 1
-            j = nodesSorted[start*-1]
-            J = nodesSorted[Ji]
-            # break condition for loop.
-            cir = 0 # need to address
-            if 2 + j.packet.Lpl > 14 + J.packet.Lpl + cir:
+
+            nodeA = nodesSorted[start*-1]
+            nodeB = nodesSorted[lastSF8]
+            cir = self.sensidiff[nodeB.packet.sf-7][nodeA.packet.sf-7]
+            if 2 + nodeA.packet.Lpl > 14 + nodeB.packet.Lpl + cir:
                 break
             print ("HEREEEEE, power allocation was not viable.")
             quit()
@@ -452,10 +450,11 @@ class powerControl():
             # Will have to do the replacement phase (or do i?)
 
         # Assign power levels
-        J = nodesSorted[lateri]
+        nodeA = nodesSorted[firstSF8]
         for i, n in enumerate(nodesSorted, start):
             txpow = n.packet.txpow
             if n.packet.sf == 7:
+                
                 """
                 txpow = max(2, txpow - math.floor(Prx - minsensi))
                 nodesSorted[i].packet.txpow = txpow
