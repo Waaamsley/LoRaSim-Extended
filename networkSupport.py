@@ -450,20 +450,18 @@ class powerControl():
             # Will have to do the replacement phase (or do i?)
 
         # Assign power levels
-        nodeA = nodesSorted[firstSF8]
         for i, n in enumerate(nodesSorted, start):
             txpow = n.packet.txpow
             if n.packet.sf == 7:
-                
-                """
-                txpow = max(2, txpow - math.floor(Prx - minsensi))
-                nodesSorted[i].packet.txpow = txpow
+                nodeA = nodesSorted[firstSF8]
+                txpow = txpow - nodeA.packet.rssi - n.packet.rssi - cir
+                n.packet.txpow = txpow
                 Prx = n.packet.txpow - self.GL - n.packet.Lpl
-                nodesSorted[i].packet.Prx = Prx
-                nodesSorted[i].packet.rssi = Prx
-                """
-                break
+                n.packet.Prx = Prx
+                n.packet.rssi = Prx
             else:
+                nodeA = nodesSorted[start*-1]
+                
                 break
         return
 
