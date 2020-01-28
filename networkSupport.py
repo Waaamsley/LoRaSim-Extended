@@ -451,18 +451,17 @@ class powerControl():
 
         # Assign power levels
         for i, n in enumerate(nodesSorted, start):
-            txpow = n.packet.txpow
             if n.packet.sf == 7:
                 nodeA = nodesSorted[firstSF8]
-                txpow = txpow - nodeA.packet.rssi - n.packet.rssi - cir
-                n.packet.txpow = txpow
-                Prx = n.packet.txpow - self.GL - n.packet.Lpl
-                n.packet.Prx = Prx
-                n.packet.rssi = Prx
+                cir = self.sensidiff[n.packet.sf - 7][nodeA.packet.sf - 7]
             else:
                 nodeA = nodesSorted[start*-1]
-                
-                break
+                cir = self.sensidiff[n.packet.sf - 7][nodeA.packet.sf - 7]
+            txpow = txpow - nodeA.packet.rssi - n.packet.rssi - cir
+            n.packet.txpow = txpow
+            Prx = n.packet.txpow - self.GL - n.packet.Lpl
+            n.packet.Prx = Prx
+            n.packet.rssi = Prx
         return
 
 
