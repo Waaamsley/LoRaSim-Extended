@@ -207,7 +207,7 @@ class myNode():
         self.y = 0
         self.dist = 0
 
-        self.x, self.y, self.dist = nodePlacer.logic(maxDist, bsx, bsy, nodeid, Ptx)
+        self.x, self.y, self.dist = nodePlacer.logic(maxDist, bsx, bsy, nodeid)
         #print('node %d' %nodeid, "x", self.x, "y", self.y, "dist: ", self.dist)
 
         self.packet = myPacket(self.nodeid, self.dist)
@@ -357,11 +357,6 @@ else:
 nodes = []
 packetsAtBS = []
 env = simpy.Environment()
-distFinder = networkSupport.maxDistFinder()
-observer = networkSupport.channelUsage()
-nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi)
-experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL)
-powerLogic = networkSupport.powerControl(powerScheme, sensi, sensiDiff, GL)
 
 # maximum number of packets the BS can receive at the same time
 maxBSReceives = 999
@@ -381,6 +376,11 @@ var = 0           # variance ignored for nows
 Lpld0 = 127.41
 GL = 0
 plen = 20
+distFinder = networkSupport.maxDistFinder()
+observer = networkSupport.channelUsage()
+nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi, Ptx)
+experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL)
+powerLogic = networkSupport.powerControl(powerScheme, sensi, sensiDiff, GL)
 
 if experiment == 2:
     minsensi = sensi[0,1]
@@ -423,6 +423,7 @@ nodesSorted.sort()
 #    print i, node.packet.txpow, node.packet.rssi
 #print "||||||||||||||_______-------______|||||||||||||||"
 powerLogic.logic(nodes)
+quit()
 #for i, node in enumerate(nodesSorted):
 #    print i, node.packet.txpow, node.packet.rssi
 

@@ -26,7 +26,7 @@ class nodePlacer():
         dist = 0
 
         if(self.distributionType == "uniform"):
-            x, y, dist = self.uniformPlace(maxDist, bsx, bsy,)
+            x, y, dist = self.uniformPlace(maxDist, bsx, bsy)
         elif(self.distributionType == "uniform basic"):
             x, y, dist = self.uniformPlaceBasic(maxDist, bsx, bsy)
         elif(self.distributionType == "ideal"):
@@ -414,7 +414,7 @@ class powerControl():
                         break
                     else:
                         nodesSorted[i].packet.txpow = powerLevel
-                        Prx = n.packet.txpow - self.GL - n.packet.Lpl
+                        Prx = math.ceil(n.packet.txpow - self.GL - n.packet.Lpl)
                         nodesSorted[i].packet.Prx = Prx
                         nodesSorted[i].packet.rssi = Prx
         return
@@ -441,27 +441,43 @@ class powerControl():
 
             nodeA = nodesSorted[start*-1]
             nodeB = nodesSorted[lastSF8]
-            cir = self.sensidiff[nodeB.packet.sf-7][nodeA.packet.sf-7]
-            if 2 + nodeA.packet.Lpl > 14 + nodeB.packet.Lpl + cir:
+            cir = self.sensiDiff[nodeB.packet.sf-7][nodeA.packet.sf-7]
+            if 2 - nodeA.packet.Lpl - (14 - nodeB.packet.Lpl) < abs(cir):
                 break
+            print nodeA.packet.Lpl, nodeB.packet.Lpl, cir
             print ("HEREEEEE, power allocation was not viable.")
+            print (2 - nodeA.packet.Lpl, 14 - nodeB.packet.Lpl, cir)
             quit()
             # Need to reapply spreading factors
             # Will have to do the replacement phase (or do i?)
 
         # Assign power levels
         for i, n in enumerate(nodesSorted, start):
+            txpow = n.packet.txpow
             if n.packet.sf == 7:
                 nodeA = nodesSorted[firstSF8]
-                cir = self.sensidiff[n.packet.sf - 7][nodeA.packet.sf - 7]
+                cir = self.sensiDiff[n.packet.sf - 7][nodeA.packet.sf - 7]
+                if n.packet.rssi > nodeA.packet.rssi:
+                    txpow = 2
+                else:
+                    difference = nodeA.packet.rssi - n.packet.rssi
+                    # cir is negative value.
+                    cirdiff = difference + cir
+                    txpow = max(2, txpow + cirdiff)
             else:
                 nodeA = nodesSorted[start*-1]
-                cir = self.sensidiff[n.packet.sf - 7][nodeA.packet.sf - 7]
-            txpow = txpow - nodeA.packet.rssi - n.packet.rssi - cir
+                if n.packet.rssi > nodeA.packet.rssi:
+                    txpow = 2
+                else:
+                    difference = nodeA.packet.rssi - n.packet.rssi
+                    # cir is negative value.
+                    cirdiff = difference + cir
+                    txpow = max(2, txpow + cirdiff)
             n.packet.txpow = txpow
             Prx = n.packet.txpow - self.GL - n.packet.Lpl
             n.packet.Prx = Prx
             n.packet.rssi = Prx
+            #print "testing:", n.packet.sf, cir, txpow, Prx
         return
 
 
