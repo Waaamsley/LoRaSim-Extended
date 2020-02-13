@@ -1,0 +1,10 @@
+nodes:
+avgsend:
+experiment:
+power_scheme:
+simulation_time:
+channels:
+full_collison:
+graphics:
+distribution_type:
+baseTx
