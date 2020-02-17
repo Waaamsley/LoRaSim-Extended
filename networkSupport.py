@@ -5,36 +5,48 @@ import time
 import operator
 
 
-class nodePlacer():
+class nodePlacer:
 
-    def __init__(self, nodes, nrNodes, distributionType, sensi, Ptx):
+    def __init__(self, nodes, nrnodes, distributiontype, sensi, ptx):
         self.nodes = nodes
-        self.nrNodes = nrNodes
-        self.distributionType = distributionType
+        self.nrNodes = nrnodes
+        self.distributionType = distributiontype
         self.sensi = sensi
-        self.Ptx = Ptx
+        self.Ptx = ptx
 
         if self.distributionType == "ideal":
-            fairSFGetter = fairSF(nrNodes, [7.0, 8.0, 9.0, 10.0, 11.0, 12.0])
-            self.sfCounts = fairSFGetter.getSFCounts()
+            fair_sf_getter = fairSF(self.nrNodes, [7.0, 8.0, 9.0, 10.0, 11.0, 12.0])
+            self.sfCounts = fair_sf_getter.get_sf_counts()
             self.distanceFinder = maxDistFinder()
         return
 
-    def logic(self, maxDist, bsx, bsy, nodeid):
+    @staticmethod
+    def base_math(dist, bsx, bsy):
+        a = random.random()
+        b = random.random()
+        if b < a:
+            a, b = b, a
+        x = b * dist * math.cos(2 * math.pi * a / b) + bsx
+        y = b * dist * math.sin(2 * math.pi * a / b) + bsy
+        dist = np.sqrt((x - bsx) * (x - bsx) + (y - bsy) * (y - bsy))
+
+        return x, y, dist
+
+    def logic(self, maxdist, bsx, bsy, nodeid):
         x = 0
         y = 0
         dist = 0
 
-        if(self.distributionType == "uniform"):
-            x, y, dist = self.uniformPlace(maxDist, bsx, bsy)
-        elif(self.distributionType == "uniform basic"):
-            x, y, dist = self.uniformPlaceBasic(maxDist, bsx, bsy)
-        elif(self.distributionType == "ideal"):
-            x, y, dist = self.idealPlace(bsx, bsy, nodeid)
+        if self.distributionType == "uniform":
+            x, y, dist = self.uniform_place(maxdist, bsx, bsy)
+        elif self.distributionType == "uniform basic":
+            x, y, dist = self.uniform_place_basic(maxdist, bsx, bsy)
+        elif self.distributionType == "ideal":
+            x, y, dist = self.ideal_place(bsx, bsy, nodeid)
 
         return x, y, dist
 
-    def idealPlace(self, bsx, bsy, nodeid):
+    def ideal_place(self, bsx, bsy, nodeid):
         x = 0
         y = 0
         dist = -1
@@ -48,57 +60,35 @@ class nodePlacer():
 
         # currently assuming static txPower of 14dB
         rssi = self.Ptx + (-1 * self.sensi[region, 1])
-        regionMaxDistance = self.distanceFinder.maxDistance(rssi)
+        region_max_distance = self.distanceFinder.max_distance(rssi)
         if region > 0:
-            minRssi = self.Ptx + (-1 * self.sensi[region-1, 1])
-            regionMinDistance = self.distanceFinder.maxDistance(minRssi)
+            min_rssi = self.Ptx + (-1 * self.sensi[region - 1, 1])
+            region_min_distance = self.distanceFinder.max_distance(min_rssi)
         else:
-            regionMinDistance = 15 #0 number 15 introduces ma deadzone which is 12.64 metres
+            region_min_distance = 15  # 0 number 15 introduces ma deadzone which is 12.64 metres
 
         # Very bad way to account for minimum allowed distance.
-        while dist < regionMinDistance or dist > regionMaxDistance:
-            a = random.random()
-            b = random.random()
-            if b < a:
-                a, b = b, a
-            x = b * regionMaxDistance * math.cos(2 * math.pi * a / b) + bsx
-            y = b * regionMaxDistance * math.sin(2 * math.pi * a / b) + bsy
-            dist = np.sqrt((x - bsx) * (x - bsx) + (y - bsy) * (y - bsy))
+        while dist < region_min_distance or dist > region_max_distance:
+            x, y, dist = self.base_math(region_max_distance, bsx, bsy)
 
         return x, y, dist
 
-    def uniformPlaceBasic(self, maxDist, bsx, bsy):
-        x = 0
-        y = 0
-        dist = 0
-        a = random.random()
-        b = random.random()
-
-        if b < a:
-            a, b = b, a
-        x = b * maxDist * math.cos(2 * math.pi * a / b) + bsx
-        y = b * maxDist * math.sin(2 * math.pi * a / b) + bsy
-        dist = np.sqrt((x-bsx)*(x-bsx)+(y-bsy)*(y-bsy))
+    def uniform_place_basic(self, max_dist, bsx, bsy):
+        x, y, dist = self.base_math(max_dist, bsx, bsy)
 
         return x, y, dist
 
-    def uniformPlace(self, maxDist, bsx, bsy):
+    def uniform_place(self, max_dist, bsx, bsy):
         found = 0
         rounds = 0
         x = 0.0
         y = 0.0
-        dist = 0
 
-        while (found == 0 and rounds < 100):
-            a = random.random()
-            b = random.random()
-            if b<a:
-                a,b = b,a
-            posx = b*maxDist*math.cos(2*math.pi*a/b)+bsx
-            posy = b*maxDist*math.sin(2*math.pi*a/b)+bsy
+        while found == 0 and rounds < 100:
+            posx, posy, dist = self.base_math(max_dist, bsx, bsy)
             if len(self.nodes) > 0:
                 for index, n in enumerate(self.nodes):
-                    dist = np.sqrt(((abs(n.x-posx))**2)+((abs(n.y-posy))**2))
+                    dist = np.sqrt(((abs(n.x - posx)) ** 2) + ((abs(n.y - posy)) ** 2))
                     if dist >= 10:
                         found = 1
                         x = posx
@@ -112,14 +102,14 @@ class nodePlacer():
                 x = posx
                 y = posy
                 found = 1
-        dist = np.sqrt((x-bsx)*(x-bsx)+(y-bsy)*(y-bsy))
+        dist = np.sqrt((x - bsx) * (x - bsx) + (y - bsy) * (y - bsy))
 
         return x, y, dist
 
 
 class channelUsage(object):
     def __init__(self):
-        #self.noTraffic = 0.0
+        # self.noTraffic = 0.0
         self._traffic = 0
         self.empty = False
         self.f_flag = 0.0
@@ -138,7 +128,7 @@ class channelUsage(object):
         if self.traffic == 0.0 and not self.empty:
             self.empty = True
             self.e_flag = time.time()
-            if (self.f_flag > 0.0):
+            if self.f_flag > 0.0:
                 self.accum_f += (time.time()) - self.f_flag
 
         if self.traffic > 0.0 and self.empty:
@@ -157,11 +147,12 @@ distance = d0 * 10**((Lpl-Lpld0)/10*2.08)
 Above equation can give maximum distance for a given receiver sensitivity + Tx Power.
 """
 
-class maxDistFinder():
 
+class maxDistFinder:
     """
     Initialisation method
     """
+
     def __init__(self):
         return
 
@@ -169,79 +160,78 @@ class maxDistFinder():
     This methods finds whether a given nodes packets can reach the base-station.
     This method also returns the minimum viable spreading factor.
     """
-    def maxDistance(self, maxLoss):
-        distance = 40 * 10**((maxLoss-127.41)/20.8)
+
+    @staticmethod
+    def max_distance(max_loss):
+        distance = 40 * 10 ** ((max_loss - 127.41) / 20.8)
 
         return distance
 
 
-class fairSF():
+class fairSF:
 
-    def __init__(self, nrNodes, sfList):
-        self.nrNodes = nrNodes
-        self.sfList = sfList
-        self.baseResult = self.baseFunction()
+    def __init__(self, nr_nodes, sf_list):
+        self.nrNodes = nr_nodes
+        self.sfList = sf_list
+        self.baseResult = self.base_function
         return
 
-
-    def baseFunction(self):
-        sumResult = 0.0
+    @property
+    def base_function(self):
+        sum_result = 0.0
 
         for sf in self.sfList:
-            sumResult += sf/(2**sf)
+            sum_result += sf / (2 ** sf)
 
-        return sumResult
+        return sum_result
 
-    def getSFCounts(self):
-        sfCounts = []
+    def get_sf_counts(self):
+        sf_counts = []
         total = 0
 
-        sfPercentages = self.getPercentages()
-        beforeRound = []
-        for sfP in sfPercentages:
-            tempCount = int(round(sfP * self.nrNodes))
-            beforeRound.append(sfP * self.nrNodes)
-            sfCounts.append(tempCount)
-            total += tempCount
+        sf_percentages = self.get_percentages()
+        before_round = []
+        for sfP in sf_percentages:
+            temp_count = int(round(sfP * self.nrNodes))
+            before_round.append(sfP * self.nrNodes)
+            sf_counts.append(temp_count)
+            total += temp_count
 
         difference = total - self.nrNodes
         if difference != 0:
             print("Round off error!!!!! total - nrNodes Difference : ", difference)
-            print("before Round: ", beforeRound, "sfCounts: ", sfCounts, "\nnrNodes", self.nrNodes)
+            print("before Round: ", before_round, "sfCounts: ", sf_counts, "\nnrNodes", self.nrNodes)
             quit()
-        #if difference > 0:
-            #subtract nodes from regions
-        #elif difference < 0:
-            #add nodes to region
+        # if difference > 0:
+        # subtract nodes from regions
+        # elif difference < 0:
+        # add nodes to region
 
-        return sfCounts
+        return sf_counts
 
-    def getPercentages(self):
-        sfPercentages = []
+    def get_percentages(self):
+        sf_percentages = []
 
         for sf in self.sfList:
-            sfPercentages.append(self.getPercentage(sf))
+            sf_percentages.append(self.get_percentage(sf))
 
-        return sfPercentages
+        return sf_percentages
 
+    def get_percentage(self, sf):
+        sf_percentage = (sf / (2 ** sf)) / self.baseResult
 
-    def getPercentage(self, sf):
-        sfPercentage = 0.0
-
-        sfPercentage =  (sf/(2**sf)) / self.baseResult
-
-        return sfPercentage
+        return sf_percentage
 
 
-class experiments():
+class experiments:
 
-    def __init__(self, eXperiment, nrChannels, sensi, plen, GL):
-        self.experiment = eXperiment
+    def __init__(self, xperiment, nr_channels, sensi, plen, gl):
+        self.experiment = xperiment
         self.esti = estimator()
-        self.nrChannels = nrChannels
+        self.nrChannels = nr_channels
         self.sensi = sensi
         self.plen = plen
-        self.GL = GL
+        self.GL = gl
         self.sfCounts = [0, 0, 0, 0, 0, 0]
         self.powerControl = [7, 8, 9, 10, 11, 12]
 
@@ -250,21 +240,15 @@ class experiments():
         cr = 0
         bw = 0
         ch = random.randint(0, self.nrChannels - 1)
-        rectime = 0
-        Prx = prx
 
         if self.experiment == 1:
-            sf, cr, bw = self.experimentOne()
+            sf, cr, bw = self.experiment_one()
         elif self.experiment == 2:
-            sf, cr, bw = self.experimentTwo()
+            sf, cr, bw = self.experiment_two()
         elif self.experiment == 3:
-            sf, cr, bw = self.experimentThree()
+            sf, cr, bw = self.experiment_three()
         elif self.experiment == 4:
-            sf, cr, bw = self.experimentFour(Prx)
-        elif self.experiment == 5:
-            sf, cr, bw = self.experimentFive()
-        elif self.experiment == 6:
-            self.experimentSix()
+            sf, cr, bw = self.experiment_four(prx)
         else:
             print("Invalid experiment!\nQuitting!")
             quit()
@@ -273,244 +257,242 @@ class experiments():
         if self.experiment == 1:
             rectime = self.esti.airtime(sf, 4, self.plen, bw)
 
-        self.sfCounts[sf-7] += 1
+        self.sfCounts[sf - 7] += 1
         return sf, cr, bw, ch, rectime
 
-    def experimentOne(self):
+    @staticmethod
+    def experiment_one():
         return 12, 4, 125
 
-    def experimentTwo(self):
+    @staticmethod
+    def experiment_two():
         return 7, 1, 125
 
-    def experimentThree(self):
+    @staticmethod
+    def experiment_three():
         return 12, 1, 125
 
-    def experimentFour(self, prx):
+    def experiment_four(self, prx):
         minairtime = 9999
         sf = 0
         bw = 125
         cr = 1
-        Prx = prx
 
         for i in range(0, 6):
-            if (self.sensi[i, 1] <= Prx):
+            if self.sensi[i, 1] <= prx:
                 sf = int(self.sensi[i, 0])
                 minairtime = self.esti.airtime(sf, 1, self.plen, bw)
                 break
-        if (minairtime == 9999):
+        if minairtime == 9999:
             print "does not reach base station"
             exit(-1)
 
         return sf, cr, bw
 
-    # Original inspiration for Divide & Conquer
-    def experimentFive(self):
-        sf = 0
-        bw = 125
-        cr = 1
 
-        # SF, CR, BW
-        return 12, 1, 125
+class powerControl:
 
-    #FADR - Fair Allocation Data Rate Algorithm
-    def experimentSix(self):
-
-        return 0, 0, 0
-
-class powerControl():
-
-    def __init__(self, powerScheme, sensi, sensiDiff, GL):
-        self.powerScheme = powerScheme
+    def __init__(self, power_scheme, sensi, sensi_diff, gl):
+        self.powerScheme = power_scheme
         self.sensi = sensi
-        self.sensiDiff = sensiDiff
-        self.GL = GL
+        self.sensiDiff = sensi_diff
+        self.GL = gl
         self.atrGet = operator.attrgetter
 
     def logic(self, nodes):
         if self.powerScheme == 1:
-            self.powerOne(nodes)
+            self.power_one(nodes)
         elif self.powerScheme == 2:
-            self.powerTwo(nodes)
+            self.power_two(nodes)
         elif self.powerScheme == 3:
-            self.powerThree(nodes)
+            self.power_three(nodes)
         else:
             return
 
-    #will have to reset txpow, Prx, rssi
-    def powerOne(self, nodes):
+    # will have to reset txpow, Prx, rssi
+    def power_one(self, nodes):
         for node in nodes:
             minsensi = self.sensi[node.packet.sf - 7, 1]
-            Lpl = node.packet.Lpl
+            lpl = node.packet.Lpl
             txpow = node.packet.txpow
-            Prx = node.packet.Prx
-            txpow = max(2, txpow - math.floor(Prx - minsensi))
-            Prx = txpow - self.GL - Lpl
+            prx = node.packet.prx
+            txpow = max(2, txpow - math.floor(prx - minsensi))
+            prx = txpow - self.GL - lpl
             node.packet.txpow = txpow
-            node.packet.Prx = Prx
-            node.packet.rssi = Prx
+            node.packet.prx = prx
+            node.packet.rssi = prx
 
     # FADR - Fair Adaptive Data Rate
     # I have implemented their power control system
-    def powerTwo(self, nodes):
+    def power_two(self, nodes):
         # First sort nodes by RSSI, done with __lt__ method on node class.
-        nodesSorted = nodes
-        nodesSorted.sort()
+        nodes_sorted = nodes
+        nodes_sorted.sort()
 
         # get max/min RSSI and min CIR (inter SF collision?)
-        minRSSI = min(nodesSorted, key=self.atrGet('packet.rssi')).packet.rssi
-        maxRSSI = max(nodesSorted, key=self.atrGet('packet.rssi')).packet.rssi
-        minCIR = 8
+        min_rssi = min(nodes_sorted, key=self.atrGet('packet.rssi')).packet.rssi
+        max_rssi = max(nodes_sorted, key=self.atrGet('packet.rssi')).packet.rssi
+        min_cir = 8
 
         # Find range of power levels to use
-        powerLevels = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-        minPower = powerLevels.pop(0)
-        print minRSSI, maxRSSI
-        for i, powerLevel in enumerate(powerLevels):
-            maxPower = powerLevel
-            if (maxRSSI + minPower - minRSSI - maxPower) <= minCIR:
-                powerLevels = powerLevels[0: i]
+        power_levels = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+        min_power = power_levels.pop(0)
+        max_power = None
+        print min_rssi, max_rssi
+        for i, power_level in enumerate(power_levels):
+            max_power = power_level
+            if (max_rssi + min_power - min_rssi - max_power) <= min_cir:
+                power_levels = power_levels[0: i]
                 break
-            elif powerLevel == max(powerLevels):
-                maxPower = powerLevels.pop()
+            elif power_level == max(power_levels):
+                max_power = power_levels.pop()
 
-        # Recalc MinRSSI, MaxRSSI
-        minRSSI = min(minRSSI + maxPower, maxRSSI + minPower)
-        maxRSSI = max(minRSSI + maxPower, maxRSSI + minPower)
+        # Recalc min_rssi, max_rssi
+        min_rssi = min(min_rssi + max_power, max_rssi + min_power)
+        # max_rssi = max(min_rssi + max_power, max_rssi + min_power). Need to revisit why this is calced.
 
         # Assign minimum power and save minPowerIndex
-        for i, n in enumerate(nodesSorted):
-            if n.packet.rssi + minPower > minRSSI:
-                minPowerIndex = i - 1
+        min_power_index = None
+        for i, n in enumerate(nodes_sorted):
+            if n.packet.rssi + min_power > min_rssi:
+                min_power_index = i - 1
                 print ("here", i)
                 break
             else:
-                n.packet.txpow = minPower
-                Prx = n.packet.txpow - self.GL - n.packet.Lpl
-                n.packet.Prx = Prx
-                n.packet.rssi = Prx
+                n.packet.txpow = min_power
+                prx = n.packet.txpow - self.GL - n.packet.Lpl
+                n.packet.prx = prx
+                n.packet.rssi = prx
 
         # Assign maximum power and save maxPowerIndex
-        for i, n in enumerate(reversed(nodesSorted)):
-            if n.packet.rssi + maxPower - minRSSI > minCIR:
-                maxPowerIndex = i - 1
+        max_power_index = None
+        for i, n in enumerate(reversed(nodes_sorted)):
+            if n.packet.rssi + max_power - min_rssi > min_cir:
+                max_power_index = i - 1
                 break
             else:
-                n.packet.txpow = maxPower
-                Prx = n.packet.txpow - self.GL - n.packet.Lpl
-                n.packet.Prx = Prx
-                n.packet.rssi = Prx
+                n.packet.txpow = max_power
+                prx = n.packet.txpow - self.GL - n.packet.Lpl
+                n.packet.prx = prx
+                n.packet.rssi = prx
 
-        #Assign the reaming power levels to the inbetween nodes
-        tempIndex = minPowerIndex
-        maxNodeRssi = nodesSorted[maxPowerIndex].packet.rssi
-        for powerLevel in powerLevels:
-            tempNodeRssi = nodesSorted[tempIndex].packet.rssi
-            if tempNodeRssi + powerLevel - minRSSI <= minCIR \
-                and tempNodeRssi + powerLevel - maxNodeRssi - maxPower <= minCIR:
-                for i in range(tempIndex, maxPowerIndex):
-                    currNodeRssi = nodesSorted[i].packet.rssi
-                    if currNodeRssi + powerLevel - maxNodeRssi - maxPower > minCIR:
-                        tempIndex = i - 1
+        # Assign the reaming power levels to the inbetween nodes
+        temp_index = min_power_index
+        max_node_rssi = nodes_sorted[max_power_index].packet.rssi
+        for power_level in power_levels:
+            temp_node_rssi = nodes_sorted[temp_index].packet.rssi
+            if temp_node_rssi + power_level - min_rssi <= min_cir \
+                    and temp_node_rssi + power_level - max_node_rssi - max_power <= min_cir:
+                for i in range(temp_index, max_power_index):
+                    curr_node_rssi = nodes_sorted[i].packet.rssi
+                    if curr_node_rssi + power_level - max_node_rssi - max_power > min_cir:
+                        temp_index = i - 1
                         break
                     else:
-                        nodesSorted[i].packet.txpow = powerLevel
-                        Prx = math.ceil(n.packet.txpow - self.GL - n.packet.Lpl)
-                        nodesSorted[i].packet.Prx = Prx
-                        nodesSorted[i].packet.rssi = Prx
+                        nodes_sorted[i].packet.txpow = power_level
+                        prx = math.ceil(nodes_sorted[i].packet.txpow - self.GL - nodes_sorted[i].packet.Lpl)
+                        nodes_sorted[i].packet.prx = prx
+                        nodes_sorted[i].packet.rssi = prx
         return
 
-    def powerThree(self, nodes):
+    def power_three(self, nodes):
         # First sort nodes by RSSI, done with __lt__ method on node class.
-        nodesSorted = nodes
-        nodesSorted.sort()
-        nodesSorted.reverse()
+        nodes_sorted = nodes
+        nodes_sorted.sort()
+        nodes_sorted.reverse()
 
         start = 0
         while True:
-            firstSF8 = 0
-            lastSF8 = 0
-            for i, n in enumerate(nodesSorted, start):
+            first_sf8 = 0
+            last_sf8 = 0
+            for i, n in enumerate(nodes_sorted, start):
                 # Get first sf8 node for later.
-                if n.packet.sf == 7: #and nodesSorted[-1].packet.sf == 8
-                    firstSF8 = i-1
+                if n.packet.sf == 7:  # and nodesSorted[-1].packet.sf == 8
+                    first_sf8 = i - 1
                     break
                 # Main point of this for loop is to get last sf8 node.
-                if n.packet.sf == 8 and nodesSorted[i-1].packet.sf == 9:
-                    lastSF8 = i
+                if n.packet.sf == 8 and nodes_sorted[i - 1].packet.sf == 9:
+                    last_sf8 = i
             start += 1
 
-            nodeA = nodesSorted[start*-1]
-            nodeB = nodesSorted[lastSF8]
-            cir = self.sensiDiff[nodeB.packet.sf-7][nodeA.packet.sf-7]
-            if 2 - nodeA.packet.Lpl - (14 - nodeB.packet.Lpl) < abs(cir):
+            node_a = nodes_sorted[start * -1]
+            node_b = nodes_sorted[last_sf8]
+            cir = self.sensiDiff[node_a.packet.sf - 7][node_a.packet.sf - 7]
+            if 2 - node_a.packet.Lpl - (14 - node_b.packet.Lpl) < abs(cir):
                 break
-            print nodeA.packet.Lpl, nodeB.packet.Lpl, cir
+            print node_a.packet.Lpl, node_b.packet.Lpl, cir
             print ("HEREEEEE, power allocation was not viable.")
-            print (2 - nodeA.packet.Lpl, 14 - nodeB.packet.Lpl, cir)
+            print (2 - node_a.packet.Lpl, 14 - node_b.packet.Lpl, cir)
             quit()
             # Need to reapply spreading factors
             # Will have to do the replacement phase (or do i?)
 
         # Assign power levels
-        for i, n in enumerate(nodesSorted, start):
+        for i, n in enumerate(nodes_sorted, start):
             txpow = n.packet.txpow
             if n.packet.sf == 7:
-                nodeA = nodesSorted[firstSF8]
-                cir = self.sensiDiff[n.packet.sf - 7][nodeA.packet.sf - 7]
-                if n.packet.rssi > nodeA.packet.rssi:
+                node_a = nodes_sorted[first_sf8]
+                cir = self.sensiDiff[n.packet.sf - 7][node_a.packet.sf - 7]
+                if n.packet.rssi > node_a.packet.rssi:
                     txpow = 2
                 else:
-                    difference = nodeA.packet.rssi - n.packet.rssi
+                    difference = node_a.packet.rssi - n.packet.rssi
                     # cir is negative value.
                     cirdiff = difference + cir
                     txpow = max(2, txpow + cirdiff)
             else:
-                nodeA = nodesSorted[start*-1]
-                if n.packet.rssi > nodeA.packet.rssi:
+                node_a = nodes_sorted[start * -1]
+                if n.packet.rssi > node_a.packet.rssi:
                     txpow = 2
                 else:
-                    difference = nodeA.packet.rssi - n.packet.rssi
+                    difference = node_a.packet.rssi - n.packet.rssi
                     # cir is negative value.
                     cirdiff = difference + cir
                     txpow = max(2, txpow + cirdiff)
             n.packet.txpow = txpow
-            Prx = n.packet.txpow - self.GL - n.packet.Lpl
-            n.packet.Prx = Prx
-            n.packet.rssi = Prx
-            #print "testing:", n.packet.sf, cir, txpow, Prx
+            prx = n.packet.txpow - self.GL - n.packet.Lpl
+            n.packet.prx = prx
+            n.packet.rssi = prx
+            # print "testing:", n.packet.sf, cir, txpow, Prx
         return
 
 
-class estimator():
+class estimator:
 
     # this function computes the airtime of a packet
     # according to LoraDesignGuide_STD.pdf
-    def airtime(self, sf, cr, pl, bw):
-        H = 0  # implicit header disabled (H=0) or not (H=1)
-        DE = 0  # low data rate optimization enabled (=1) or not (=0)
-        Npream = 8  # number of preamble symbol (12.25  from Utz paper)
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def airtime(sf, cr, pl, bw):
+        h = 0  # implicit header disabled (H=0) or not (H=1)
+        de = 0  # low data rate optimization enabled (=1) or not (=0)
+        n_pream = 8  # number of preamble symbol (12.25  from Utz paper)
 
         if bw == 125 and sf in [11, 12]:
             # low data rate optimization mandated for BW125 with SF11 and SF12
-            DE = 1
+            de = 1
         if sf == 6:
             # can only have implicit header with SF6
-            H = 1
+            h = 1
 
-        Tsym = (2.0 ** sf) / bw
-        Tpream = (Npream + 4.25) * Tsym
-        #print "sf", sf, " cr", cr, "pl", pl, "bw", bw
-        payloadSymbNB = 8 + max(math.ceil((8.0 * pl - 4.0 * sf + 28 + 16 - 20 * H) / (4.0 * (sf - 2 * DE))) * (cr + 4),
-                                0)
-        Tpayload = payloadSymbNB * Tsym
-        return Tpream + Tpayload
+        t_sym = (2.0 ** sf) / bw
+        t_pream = (n_pream + 4.25) * t_sym
+        # print "sf", sf, " cr", cr, "pl", pl, "bw", bw
+        payload_symb_nb = 8 + max(math.ceil((8.0 * pl - 4.0 * sf + 28 + 16 - 20 * h)
+                                            / (4.0 * (sf - 2 * de))) * (cr + 4), 0)
+        t_payload = payload_symb_nb * t_sym
+        return t_pream + t_payload
 
-    def chirpTime(self, sf, bw):
-        chirpyTime = (2 ** sf) / bw
-        return chirpyTime
+    @staticmethod
+    def chirp_time(sf, bw):
+        chirpy_time = (2 ** sf) / bw
+        return chirpy_time
 
     # Okumura-Hata path loss model.
-    def hataUrban(self, sensi):
-        pathLoss = 17.5 - sensi
-        d = 10 ** ((pathLoss - 124.76) / 35.22)
+    @staticmethod
+    def hata_urban(sensi):
+        path_loss = 17.5 - sensi
+        d = 10 ** ((path_loss - 124.76) / 35.22)
         print(d)

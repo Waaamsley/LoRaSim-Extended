@@ -242,16 +242,16 @@ class myPacket:
 
         # log-shadow
         self.Lpl = Lpld0 + 10 * gamma * math.log10(distance / d0)
-        self.Prx = Ptx - GL - self.Lpl
+        self.prx = Ptx - GL - self.Lpl
 
         self.nodeid = nodeid
         self.txpow = Ptx
-        self.sf, self.cr, self.bw, self.ch, self.rectime = experiLogic.logic(self.Prx)
+        self.sf, self.cr, self.bw, self.ch, self.rectime = experiLogic.logic(self.prx)
         self.transRange = 150
         self.pl = plen
         self.symTime = (2.0 ** self.sf) / self.bw
         self.arriveTime = 0
-        self.rssi = self.Prx
+        self.rssi = self.prx
         self.addTime = 0.0
         # print "channel", self.ch+1, "symTime ", self.symTime
         # print "bw", self.bw, "sf", self.sf, "cr", self.cr, "rssi", self.rssi
@@ -356,7 +356,7 @@ nrChannels = int(inputs[5])
 fullCollision = int(inputs[6])
 graphics = int(inputs[7])
 distributionType = inputs[8]
-Ptx = inputs[9]
+Ptx = int(inputs[9])
 print ("Nodes:", nrNodes)
 print ("Average Send Time / Inter Packet Arrival Time:", avgSend)
 print ("Experiment: ", experiment)
@@ -404,7 +404,7 @@ else:
     minsensi = np.amin(sensi)
 Lpl = Ptx - minsensi
 print ("amin", minsensi, "Lpl", Lpl)
-maxDist = distFinder.maxDistance((minsensi * -1) + max(TxPowers))
+maxDist = distFinder.max_distance((minsensi * -1) + max(TxPowers))
 print ("maxDist:", maxDist)
 
 # base station placement
