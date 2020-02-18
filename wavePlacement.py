@@ -53,4 +53,5 @@ def option_two(region_counts, modifier, avg):
 
 #option_one(sf_counts, mod)
 print("-----------------------------------")
+print("testing a change in files to then commit.")
 option_two(sf_counts, mod, average_nodes_region)
