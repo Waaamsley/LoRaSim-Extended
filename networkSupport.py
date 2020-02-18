@@ -7,17 +7,17 @@ import operator
 
 class nodePlacer:
 
-    def __init__(self, nodes, nrnodes, distributiontype, sensi, ptx):
+    def __init__(self, nodes, nrnodes, distributiontype, sensi, ptx, placement):
         self.nodes = nodes
         self.nrNodes = nrnodes
         self.distributionType = distributiontype
         self.sensi = sensi
         self.Ptx = ptx
+        self.sfCounts = placement
+        self.distanceFinder = maxDistFinder()
+        # fair_sf_getter = fairSF(self.nrNodes, [7.0, 8.0, 9.0, 10.0, 11.0, 12.0])
+        # self.sfCounts = fair_sf_getter.get_sf_counts()
 
-        if self.distributionType == "ideal":
-            fair_sf_getter = fairSF(self.nrNodes, [7.0, 8.0, 9.0, 10.0, 11.0, 12.0])
-            self.sfCounts = fair_sf_getter.get_sf_counts()
-            self.distanceFinder = maxDistFinder()
         return
 
     @staticmethod
@@ -41,12 +41,12 @@ class nodePlacer:
             x, y, dist = self.uniform_place(maxdist, bsx, bsy)
         elif self.distributionType == "uniform basic":
             x, y, dist = self.uniform_place_basic(maxdist, bsx, bsy)
-        elif self.distributionType == "ideal":
-            x, y, dist = self.ideal_place(bsx, bsy, nodeid)
+        elif self.distributionType == "controlled":
+            x, y, dist = self.controlled_place(bsx, bsy, nodeid)
 
         return x, y, dist
 
-    def ideal_place(self, bsx, bsy, nodeid):
+    def controlled_place(self, bsx, bsy, nodeid):
         x = 0
         y = 0
         dist = -1
@@ -105,122 +105,6 @@ class nodePlacer:
         dist = np.sqrt((x - bsx) * (x - bsx) + (y - bsy) * (y - bsy))
 
         return x, y, dist
-
-
-class channelUsage(object):
-    def __init__(self):
-        # self.noTraffic = 0.0
-        self._traffic = 0
-        self.empty = False
-        self.f_flag = 0.0
-        self.e_flag = 0.0
-        self.accum_e = 0.0
-        self.accum_f = 0.0
-
-    @property
-    def traffic(self):
-        return self._traffic
-
-    @traffic.setter
-    def traffic(self, value):
-        self._traffic = value
-
-        if self.traffic == 0.0 and not self.empty:
-            self.empty = True
-            self.e_flag = time.time()
-            if self.f_flag > 0.0:
-                self.accum_f += (time.time()) - self.f_flag
-
-        if self.traffic > 0.0 and self.empty:
-            self.empty = False
-            self.f_flag = time.time()
-            self.accum_e += (time.time()) - self.e_flag
-
-
-"""
-Testing LoRaSims path loss function to find the maximum distances for each SF.
-needed functions and supporting information:
-
-Lpl = Lpld0 + 10*gamma*math.log10(distance/d0)
-Can rearrange above to get:
-distance = d0 * 10**((Lpl-Lpld0)/10*2.08)
-Above equation can give maximum distance for a given receiver sensitivity + Tx Power.
-"""
-
-
-class maxDistFinder:
-    """
-    Initialisation method
-    """
-
-    def __init__(self):
-        return
-
-    """
-    This methods finds whether a given nodes packets can reach the base-station.
-    This method also returns the minimum viable spreading factor.
-    """
-
-    @staticmethod
-    def max_distance(max_loss):
-        distance = 40 * 10 ** ((max_loss - 127.41) / 20.8)
-
-        return distance
-
-
-class fairSF:
-
-    def __init__(self, nr_nodes, sf_list):
-        self.nrNodes = nr_nodes
-        self.sfList = sf_list
-        self.baseResult = self.base_function
-        return
-
-    @property
-    def base_function(self):
-        sum_result = 0.0
-
-        for sf in self.sfList:
-            sum_result += sf / (2 ** sf)
-
-        return sum_result
-
-    def get_sf_counts(self):
-        sf_counts = []
-        total = 0
-
-        sf_percentages = self.get_percentages()
-        before_round = []
-        for sfP in sf_percentages:
-            temp_count = int(round(sfP * self.nrNodes))
-            before_round.append(sfP * self.nrNodes)
-            sf_counts.append(temp_count)
-            total += temp_count
-
-        difference = total - self.nrNodes
-        if difference != 0:
-            print("Round off error!!!!! total - nrNodes Difference : ", difference)
-            print("before Round: ", before_round, "sfCounts: ", sf_counts, "\nnrNodes", self.nrNodes)
-            quit()
-        # if difference > 0:
-        # subtract nodes from regions
-        # elif difference < 0:
-        # add nodes to region
-
-        return sf_counts
-
-    def get_percentages(self):
-        sf_percentages = []
-
-        for sf in self.sfList:
-            sf_percentages.append(self.get_percentage(sf))
-
-        return sf_percentages
-
-    def get_percentage(self, sf):
-        sf_percentage = (sf / (2 ** sf)) / self.baseResult
-
-        return sf_percentage
 
 
 class experiments:
@@ -455,6 +339,122 @@ class powerControl:
             n.packet.rssi = prx
             # print "testing:", n.packet.sf, cir, txpow, Prx
         return
+
+
+class channelUsage(object):
+    def __init__(self):
+        # self.noTraffic = 0.0
+        self._traffic = 0
+        self.empty = False
+        self.f_flag = 0.0
+        self.e_flag = 0.0
+        self.accum_e = 0.0
+        self.accum_f = 0.0
+
+    @property
+    def traffic(self):
+        return self._traffic
+
+    @traffic.setter
+    def traffic(self, value):
+        self._traffic = value
+
+        if self.traffic == 0.0 and not self.empty:
+            self.empty = True
+            self.e_flag = time.time()
+            if self.f_flag > 0.0:
+                self.accum_f += (time.time()) - self.f_flag
+
+        if self.traffic > 0.0 and self.empty:
+            self.empty = False
+            self.f_flag = time.time()
+            self.accum_e += (time.time()) - self.e_flag
+
+
+"""
+Testing LoRaSims path loss function to find the maximum distances for each SF.
+needed functions and supporting information:
+
+Lpl = Lpld0 + 10*gamma*math.log10(distance/d0)
+Can rearrange above to get:
+distance = d0 * 10**((Lpl-Lpld0)/10*2.08)
+Above equation can give maximum distance for a given receiver sensitivity + Tx Power.
+"""
+
+
+class maxDistFinder:
+    """
+    Initialisation method
+    """
+
+    def __init__(self):
+        return
+
+    """
+    This methods finds whether a given nodes packets can reach the base-station.
+    This method also returns the minimum viable spreading factor.
+    """
+
+    @staticmethod
+    def max_distance(max_loss):
+        distance = 40 * 10 ** ((max_loss - 127.41) / 20.8)
+
+        return distance
+
+
+class fairSF:
+
+    def __init__(self, nr_nodes, sf_list):
+        self.nrNodes = nr_nodes
+        self.sfList = sf_list
+        self.baseResult = self.base_function
+        return
+
+    @property
+    def base_function(self):
+        sum_result = 0.0
+
+        for sf in self.sfList:
+            sum_result += sf / (2 ** sf)
+
+        return sum_result
+
+    def get_sf_counts(self):
+        sf_counts = []
+        total = 0
+
+        sf_percentages = self.get_percentages()
+        before_round = []
+        for sfP in sf_percentages:
+            temp_count = int(round(sfP * self.nrNodes))
+            before_round.append(sfP * self.nrNodes)
+            sf_counts.append(temp_count)
+            total += temp_count
+
+        difference = total - self.nrNodes
+        if difference != 0:
+            print("Round off error!!!!! total - nrNodes Difference : ", difference)
+            print("before Round: ", before_round, "sfCounts: ", sf_counts, "\nnrNodes", self.nrNodes)
+            quit()
+        # if difference > 0:
+        # subtract nodes from regions
+        # elif difference < 0:
+        # add nodes to region
+
+        return sf_counts
+
+    def get_percentages(self):
+        sf_percentages = []
+
+        for sf in self.sfList:
+            sf_percentages.append(self.get_percentage(sf))
+
+        return sf_percentages
+
+    def get_percentage(self, sf):
+        sf_percentage = (sf / (2 ** sf)) / self.baseResult
+
+        return sf_percentage
 
 
 class estimator:

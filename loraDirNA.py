@@ -369,124 +369,137 @@ print ("Distribution Type: ", distributionType)
 print ("Base Tx Power: ", Ptx)
 
 # global stuff
-# Rnd = random.seed(12345)
-nodes = []
-packetsAtBS = []
-env = simpy.Environment()
+# Can do a while loop from here to end to repeat simulations.
+sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
+fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
+sf_counts = fair_sf_getter.get_sf_counts()
+end_counts = sf_counts.reverse()
+while_count = 0
 
-# maximum number of packets the BS can receive at the same time
-maxBSReceives = 999
+while sf_counts != end_counts and while_count != 5:
+    if while_count == 5:
+        while_count = 0
+        temp = sf_counts
+        for z, item in enumerate(temp):
+            change = math.ceil(item*0.1)
 
-# max distance: 300m in city, 3000 m outside (5 km Utz experiment)
-# also more unit-disc like according to Utz
-bsId = 1
-nrCollisions = 0
-nrReceived = 0
-nrProcessed = 0
-nrLost = 0
+    nodes = []
+    packetsAtBS = []
+    env = simpy.Environment()
+    # max distance: 300m in city, 3000 m outside (5 km Utz experiment)
+    # also more unit-disc like according to Utz
+    bsId = 1
+    nrCollisions = 0
+    nrReceived = 0
+    nrProcessed = 0
+    nrLost = 0
 
-gamma = 2.08
-d0 = 40.0
-var = 0  # variance ignored for nows
-Lpld0 = 127.41
-GL = 0
-plen = 20
-distFinder = networkSupport.maxDistFinder()
-observer = networkSupport.channelUsage()
-nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi, Ptx)
-experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL)
-powerLogic = networkSupport.powerControl(powerScheme, sensi, sensiDiff, GL)
-transmitter = myTransmitter(env, observer)
+    # maximum number of packets the BS can receive at the same time
+    maxBSReceives = 999
 
-if experiment == 2:
-    minsensi = sensi[0, 1]
-else:
-    minsensi = np.amin(sensi)
-Lpl = Ptx - minsensi
-print ("amin", minsensi, "Lpl", Lpl)
-maxDist = distFinder.max_distance((minsensi * -1) + max(TxPowers))
-print ("maxDist:", maxDist)
+    gamma = 2.08
+    d0 = 40.0
+    var = 0  # variance ignored for nows
+    Lpld0 = 127.41
+    GL = 0
+    plen = 20
+    distFinder = networkSupport.maxDistFinder()
+    observer = networkSupport.channelUsage()
+    nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi, Ptx, [])
+    experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL)
+    powerLogic = networkSupport.powerControl(powerScheme, sensi, sensiDiff, GL)
+    transmitter = myTransmitter(env, observer)
 
-# base station placement
-bsx = maxDist + 10
-bsy = maxDist + 10
-xmax = bsx + maxDist + 20
-ymax = bsy + maxDist + 20
-
-# prepare graphics and add sink
-if graphics == 1:
-    plt.ion()
-    plt.figure()
-    ax = plt.gcf().gca()
-    # XXX should be base station position
-    ax.add_artist(plt.Circle((bsx, bsy), 3, fill=True, color='green'))
-    ax.add_artist(plt.Circle((bsx, bsy), maxDist, fill=False, color='green'))
-
-# Creates a list of nodes and their packets
-create_nodes()
-
-# prepare show
-if graphics == 1:
-    plt.xlim([0, xmax])
-    plt.ylim([0, ymax])
-    plt.draw()
-    plt.show()
-
-# start simulation
-nodesSorted = nodes
-nodesSorted.sort()
-# for i, node in enumerate(nodesSorted):
-#    print i, node.packet.txpow, node.packet.rssi
-# print "||||||||||||||_______-------______|||||||||||||||"
-powerLogic.logic(nodes)
-# for i, node in enumerate(nodesSorted):
-#    print i, node.packet.txpow, node.packet.rssi
-
-# quit()
-env.run(until=simtime)
-
-# print stats and save into file
-print "nrCollisions ", nrCollisions
-
-# compute energy
-# Transmit consumption in mA from -2 to +17 dBm
-TX = [22, 22, 22, 23,  # RFO/PA0: -2..1
-      24, 24, 24, 25, 25, 25, 25, 26, 31, 32, 34, 35, 44,  # PA_BOOST/PA1: 2..14
-      82, 85, 90,  # PA_BOOST/PA1: 15..17
-      105, 115, 125]  # PA_BOOST/PA1+PA2: 18..20
-# mA = 90    # current draw for TX = 17 dBm
-V = 3.0  # voltage XXX
-sent = sum(n.sent for n in nodes)
-energy = sum(node.packet.rectime * TX[int(node.packet.txpow) + 2] * V * node.sent for node in nodes) / 1e6
-
-print "energy (in J): ", energy
-print "sent packets: ", sent
-print "collisions: ", nrCollisions
-print "received packets: ", nrReceived
-print "processed packets: ", nrProcessed
-print "lost packets: ", nrLost
-
-# data extraction rate
-der = (sent - nrCollisions) / float(sent)
-print "DER:", der
-der = nrReceived / float(sent)
-print "DER method 2:", der
-
-counter = 7
-for receivedStat, sentStat, lostStat, collideStat, interferStat in zip(sfReceived, sfSent, sfLost, sfCollided,
-                                                                       interferCount):
-    if float(receivedStat) > 0 and float(sentStat) > 0:
-        print("SF", counter, " DER: ", float(receivedStat) / float(sentStat),
-              " Received/Sent/Lost/Collided/Interfered Packets: ", float(receivedStat), float(sentStat),
-              float(lostStat), float(collideStat), float(interferStat))
+    if experiment == 2:
+        minsensi = sensi[0, 1]
     else:
-        print ("SF", counter, "Exception:", " Received/Sent/Lost/Collided/Interefered Packets : ", float(receivedStat),
-               float(sentStat), float(lostStat), float(collideStat), float(interferStat))
-    counter += 1
-print ("SF Counts: ", experiLogic.sfCounts)
-totalTime = observer.accum_f + observer.accum_e
-print ("Accumulted full time: ", observer.accum_f, observer.accum_f / totalTime)
-print ("Accumulted empty time: ", observer.accum_e, observer.accum_e / totalTime)
+        minsensi = np.amin(sensi)
+    Lpl = Ptx - minsensi
+    print ("amin", minsensi, "Lpl", Lpl)
+    maxDist = distFinder.max_distance((minsensi * -1) + max(TxPowers))
+    print ("maxDist:", maxDist)
+
+    # base station placement
+    bsx = maxDist + 10
+    bsy = maxDist + 10
+    xmax = bsx + maxDist + 20
+    ymax = bsy + maxDist + 20
+
+    # prepare graphics and add sink
+    if graphics == 1:
+        plt.ion()
+        plt.figure()
+        ax = plt.gcf().gca()
+        # XXX should be base station position
+        ax.add_artist(plt.Circle((bsx, bsy), 3, fill=True, color='green'))
+        ax.add_artist(plt.Circle((bsx, bsy), maxDist, fill=False, color='green'))
+
+    # Creates a list of nodes and their packets
+    create_nodes()
+
+    # prepare show
+    if graphics == 1:
+        plt.xlim([0, xmax])
+        plt.ylim([0, ymax])
+        plt.draw()
+        plt.show()
+
+    # start simulation
+    nodesSorted = nodes
+    nodesSorted.sort()
+    # for i, node in enumerate(nodesSorted):
+    #    print i, node.packet.txpow, node.packet.rssi
+    # print "||||||||||||||_______-------______|||||||||||||||"
+    powerLogic.logic(nodes)
+    # for i, node in enumerate(nodesSorted):
+    #    print i, node.packet.txpow, node.packet.rssi
+
+    # quit()
+    env.run(until=simtime)
+
+    # print stats and save into file
+    print "nrCollisions ", nrCollisions
+
+    # compute energy
+    # Transmit consumption in mA from -2 to +17 dBm
+    TX = [22, 22, 22, 23,  # RFO/PA0: -2..1
+          24, 24, 24, 25, 25, 25, 25, 26, 31, 32, 34, 35, 44,  # PA_BOOST/PA1: 2..14
+          82, 85, 90,  # PA_BOOST/PA1: 15..17
+          105, 115, 125]  # PA_BOOST/PA1+PA2: 18..20
+    V = 3.0  # voltage XXX
+    sent = sum(n.sent for n in nodes)
+    energy = sum(node.packet.rectime * TX[int(node.packet.txpow) + 2] * V * node.sent for node in nodes) / 1e6
+
+    print "energy (in J): ", energy
+    print "sent packets: ", sent
+    print "collisions: ", nrCollisions
+    print "received packets: ", nrReceived
+    print "processed packets: ", nrProcessed
+    print "lost packets: ", nrLost
+
+    # data extraction rate
+    der = (sent - nrCollisions) / float(sent)
+    print "DER:", der
+    der = nrReceived / float(sent)
+    print "DER method 2:", der
+
+    counter = 7
+    for receivedStat, sentStat, lostStat, collideStat, interferStat in zip(sfReceived, sfSent, sfLost, sfCollided,
+                                                                           interferCount):
+        if float(receivedStat) > 0 and float(sentStat) > 0:
+            print("SF", counter, " DER: ", float(receivedStat) / float(sentStat),
+                  " Received/Sent/Lost/Collided/Interfered Packets: ", float(receivedStat), float(sentStat),
+                  float(lostStat), float(collideStat), float(interferStat))
+        else:
+            print ("SF", counter, "Exception:", " Received/Sent/Lost/Collided/Interefered Packets : ",
+                   float(receivedStat), float(sentStat), float(lostStat), float(collideStat), float(interferStat))
+        counter += 1
+    print ("SF Counts: ", experiLogic.sfCounts)
+    totalTime = observer.accum_f + observer.accum_e
+    print ("Accumulted full time: ", observer.accum_f, observer.accum_f / totalTime)
+    print ("Accumulted empty time: ", observer.accum_e, observer.accum_e / totalTime)
+
+    while_count += 1
 
 # this can be done to keep graphics visible
 if graphics == 1:
