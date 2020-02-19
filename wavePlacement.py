@@ -40,18 +40,19 @@ def option_two(region_counts, modifier, avg):
         change = item * modifier
         changes.append(change)
 
-    for i in range(0, 6):
-        print i, temp
+    print temp
+    for i in range(0, 10):
         for j, item in enumerate(changes):
-            temp[j] += -1 * item
+            temp[j] -= item
+        print i+1, temp
 
-    for i in range(0, 6):
-        print i, temp
+    changes.reverse()
+    for i in range(0, 10):
         for j, item in enumerate(changes):
             temp[j] += item
+        print i+11, temp
 
 
 #option_one(sf_counts, mod)
 print("-----------------------------------")
-print("testing a change in files to then commit.")
 option_two(sf_counts, mod, average_nodes_region)

@@ -373,15 +373,21 @@ print ("Base Tx Power: ", Ptx)
 sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
 sf_counts = fair_sf_getter.get_sf_counts()
-end_counts = sf_counts.reverse()
-while_count = 0
+placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
+configurations = placementGenerator.wave_placement()
+results = open("results.txt", "a")
+results.write("----------------------------------------------------------------\n")
+results.write("----------------------------------------------------------------\n")
 
-while sf_counts != end_counts and while_count != 5:
-    if while_count == 5:
-        while_count = 0
-        temp = sf_counts
-        for z, item in enumerate(temp):
-            change = math.ceil(item*0.1)
+repetition = 0  # Going to do 5 repititions
+config_rep = 0  # max configurations of 20
+while config_rep < 21:
+    if repetition == 5:
+        repetition = 0
+        config_rep += 1
+    curr_config = configurations[config_rep]
+    results.write("Configuration: " + str(config_rep+1) + ". Repetition: " + str(repetition+1) \
+                  + ". Region Counts: " + str(curr_config) + "\n")
 
     nodes = []
     packetsAtBS = []
@@ -405,7 +411,7 @@ while sf_counts != end_counts and while_count != 5:
     plen = 20
     distFinder = networkSupport.maxDistFinder()
     observer = networkSupport.channelUsage()
-    nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi, Ptx, [])
+    nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi, Ptx, curr_config)
     experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL)
     powerLogic = networkSupport.powerControl(powerScheme, sensi, sensiDiff, GL)
     transmitter = myTransmitter(env, observer)
@@ -415,9 +421,9 @@ while sf_counts != end_counts and while_count != 5:
     else:
         minsensi = np.amin(sensi)
     Lpl = Ptx - minsensi
-    print ("amin", minsensi, "Lpl", Lpl)
+    # print ("amin", minsensi, "Lpl", Lpl)
     maxDist = distFinder.max_distance((minsensi * -1) + max(TxPowers))
-    print ("maxDist:", maxDist)
+    results.write("maxDist: " + str(maxDist) + "\n")
 
     # base station placement
     bsx = maxDist + 10
@@ -458,7 +464,7 @@ while sf_counts != end_counts and while_count != 5:
     env.run(until=simtime)
 
     # print stats and save into file
-    print "nrCollisions ", nrCollisions
+    results.write("nrCollisions: " + str(nrCollisions) + "\n")
 
     # compute energy
     # Transmit consumption in mA from -2 to +17 dBm
@@ -470,24 +476,24 @@ while sf_counts != end_counts and while_count != 5:
     sent = sum(n.sent for n in nodes)
     energy = sum(node.packet.rectime * TX[int(node.packet.txpow) + 2] * V * node.sent for node in nodes) / 1e6
 
-    print "energy (in J): ", energy
-    print "sent packets: ", sent
-    print "collisions: ", nrCollisions
-    print "received packets: ", nrReceived
-    print "processed packets: ", nrProcessed
-    print "lost packets: ", nrLost
+    results.write("energy (in J): " + str(energy) + "\n")
+    results.write("sent packets: " + str(sent) + "\n")
+    results.write("collisions: " + str(nrCollisions) + "\n")
+    results.write("received packets: " + str(nrReceived) + "\n")
+    results.write("processed packets: " + str(nrProcessed) + "\n")
+    results.write("lost packets: " + str(nrLost) + "\n")
 
     # data extraction rate
     der = (sent - nrCollisions) / float(sent)
-    print "DER:", der
+    results.write("sent - nrCollisions. DER: " + str(der) + "\n")
     der = nrReceived / float(sent)
-    print "DER method 2:", der
+    results.write("nrReceived / sent. DER method 2: " + str(der) + "\n")
 
     counter = 7
     for receivedStat, sentStat, lostStat, collideStat, interferStat in zip(sfReceived, sfSent, sfLost, sfCollided,
                                                                            interferCount):
         if float(receivedStat) > 0 and float(sentStat) > 0:
-            print("SF", counter, " DER: ", float(receivedStat) / float(sentStat),
+            results.write("SF" + str(counter) + " DER: " + str(float(receivedStat) / float(sentStat)) +
                   " Received/Sent/Lost/Collided/Interfered Packets: ", float(receivedStat), float(sentStat),
                   float(lostStat), float(collideStat), float(interferStat))
         else:
@@ -499,8 +505,9 @@ while sf_counts != end_counts and while_count != 5:
     print ("Accumulted full time: ", observer.accum_f, observer.accum_f / totalTime)
     print ("Accumulted empty time: ", observer.accum_e, observer.accum_e / totalTime)
 
-    while_count += 1
+    repetition += 1
 
+results.close()
 # this can be done to keep graphics visible
 if graphics == 1:
     raw_input('Press Enter to continue ...')

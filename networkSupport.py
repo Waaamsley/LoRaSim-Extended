@@ -5,6 +5,45 @@ import time
 import operator
 
 
+class placementGenerator:
+
+    def __init__(self, nr_nodes, region_counts):
+        self.nr_nodes = nr_nodes
+        self.region_counts = region_counts
+        self.modifier = 0.1
+
+    def wave_placement(self):
+        configurations = []
+        avg = self.nr_nodes/len(self.region_counts)
+
+        differences = []
+        for j in range(0, 6):
+            difference = self.region_counts[j] - avg
+            differences.append(difference)
+
+        changes = []
+        for item in differences:
+            change = item * self.modifier
+            changes.append(change)
+
+        configurations.append(self.region_counts)
+        for i in range(0, 10):
+            temp = list(configurations[-1])
+            for j, item in enumerate(changes):
+                temp[j] -= item
+                #temp[j] = round(temp[j] - item)
+            configurations.append(temp)
+
+        changes.reverse()
+        for i in range(0, 10):
+            temp = list(configurations[-1])
+            for j, item in enumerate(changes):
+                temp[j] += item
+                #temp[j] = round(temp[j] + item)
+            configurations.append(temp)
+
+        return configurations
+
 class nodePlacer:
 
     def __init__(self, nodes, nrnodes, distributiontype, sensi, ptx, placement):
@@ -50,13 +89,15 @@ class nodePlacer:
         x = 0
         y = 0
         dist = -1
-        region = 0
+        region = -1
         sum = 0
         for i, sfCount in enumerate(self.sfCounts):
             sum += sfCount
             if nodeid < sum:
                 region = i
                 break
+        if region == -1:
+            region = len(self.sfCounts-1)
 
         # currently assuming static txPower of 14dB
         rssi = self.Ptx + (-1 * self.sensi[region, 1])
