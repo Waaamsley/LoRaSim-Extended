@@ -182,7 +182,6 @@ def timing_collision(p1, p2):
 
 # Creates a list of nodes.
 def create_nodes():
-
     for i in range(0, nrNodes):
         node = myNode(i, bsId, avgSend)
         nodes.append(node)
@@ -386,7 +385,7 @@ while config_rep < 21:
         repetition = 0
         config_rep += 1
     curr_config = configurations[config_rep]
-    results.write("Configuration: " + str(config_rep+1) + ". Repetition: " + str(repetition+1) \
+    results.write("Configuration: " + str(config_rep + 1) + ". Repetition: " + str(repetition + 1)
                   + ". Region Counts: " + str(curr_config) + "\n")
 
     nodes = []
@@ -494,16 +493,18 @@ while config_rep < 21:
                                                                            interferCount):
         if float(receivedStat) > 0 and float(sentStat) > 0:
             results.write("SF" + str(counter) + " DER: " + str(float(receivedStat) / float(sentStat)) +
-                  " Received/Sent/Lost/Collided/Interfered Packets: ", float(receivedStat), float(sentStat),
-                  float(lostStat), float(collideStat), float(interferStat))
+                          " Received/Sent/Lost/Collided/Interfered Packets: " + str(float(receivedStat)) + "/"
+                          + str(float(sentStat)) + "/" + str(float(lostStat)) + "/"
+                          + str(float(collideStat)) + "/" + str(float(interferStat)) + "\n")
         else:
-            print ("SF", counter, "Exception:", " Received/Sent/Lost/Collided/Interefered Packets : ",
-                   float(receivedStat), float(sentStat), float(lostStat), float(collideStat), float(interferStat))
+            results.write("SF" + str(counter) + "Exception: Received/Sent/Lost/Collided/Interefered Packets : " +
+                          str(float(receivedStat)) + "/" + str(float(sentStat)) + "/" + str(float(lostStat)) + "/"
+                          + str(float(collideStat)) + "/" + str(float(interferStat)) + "\n")
         counter += 1
-    print ("SF Counts: ", experiLogic.sfCounts)
+    results.write("SF Counts: " + str(experiLogic.sfCounts))
     totalTime = observer.accum_f + observer.accum_e
-    print ("Accumulted full time: ", observer.accum_f, observer.accum_f / totalTime)
-    print ("Accumulted empty time: ", observer.accum_e, observer.accum_e / totalTime)
+    results.write("Accumulted full time: " + str(observer.accum_f) + ", " + str(observer.accum_f / totalTime) + "%" + "\n")
+    results.write("Accumulted empty time: " + str(observer.accum_e) + ", " +  str(observer.accum_e / totalTime) + "%" + "\n")
 
     repetition += 1
 
