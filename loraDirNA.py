@@ -285,7 +285,7 @@ class myTransmitter:
             else:
                 sensitivity = sensi[node.packet.sf - 7, [125, 250, 500].index(node.packet.bw) + 1]
                 if node.packet.rssi < sensitivity:
-                    print("node id: ", node.nodeid)
+                    # print("node id: ", node.nodeid)
                     # print "node {}: packet will be lost".format(node.nodeid)
                     node.packet.lost = True
                 else:
@@ -296,7 +296,7 @@ class myTransmitter:
                     else:
                         node.packet.collided = 0
                     packetsAtBS.append(node)
-                    self.observer.traffic = len(packetsAtBS)  # OBSERVE!!!!!!!!!!!!!!!!!!!!
+                    self.observer.traffic = len(packetsAtBS)
                     node.packet.addTime = env.now
 
             yield env.timeout(node.packet.rectime)
@@ -324,7 +324,7 @@ class myTransmitter:
             # can remove it
             if node in packetsAtBS:
                 packetsAtBS.remove(node)
-                self.observer.traffic = len(packetsAtBS)  # OBSERVE!!!!!!!!!!!!!!!!!!!!
+                self.observer.traffic = len(packetsAtBS)
                 # reset the packet
             node.packet.collided = 0
             node.packet.processed = 0
