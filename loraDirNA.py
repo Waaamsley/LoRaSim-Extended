@@ -239,25 +239,39 @@ class myPacket:
         global nrChannels
         global plen
 
-        # log-shadow
+        # Phase One.
         self.Lpl = Lpld0 + 10 * gamma * math.log10(distance / d0)
-        self.prx = Ptx - GL - self.Lpl
-
         self.nodeid = nodeid
-        self.txpow = Ptx
-        self.sf, self.cr, self.bw, self.ch, self.rectime = experiLogic.logic(self.prx)
-        self.transRange = 150
         self.pl = plen
-        self.symTime = (2.0 ** self.sf) / self.bw
-        self.arriveTime = 0
-        self.rssi = self.prx
         self.addTime = 0.0
-        # print "channel", self.ch+1, "symTime ", self.symTime
-        # print "bw", self.bw, "sf", self.sf, "cr", self.cr, "rssi", self.rssi
-        # print "rectime node ", self.nodeid, "  ", self.rectime
-        # denote if packet is collided
         self.collided = 0
         self.processed = 0
+
+        # Phase Two.
+        self.sf = 0
+        self.cr = 0
+        self.bw = 0
+        self.ch = 0
+        self.rectime = 0
+        self.symTime = 0
+
+        # Phase Three.
+        self.txpow = 14  # Default.
+        self.rssi = 0
+
+    def phase_two(self, sf, cr, bw, ch, rectime):
+        self.sf = sf
+        self.cr = cr
+        self.bw = bw
+        self.ch = ch
+        self.rectime = rectime
+        self.symTime = (2.0 ** self.sf) / self.bw
+        return
+
+    def phase_three(self, txpow):
+        self.txpow = txpow
+        self.rssi = self.txpow - GL - self.Lpl
+        return
 
 
 #
@@ -380,7 +394,7 @@ results.write("----------------------------------------------------------------\
 
 repetition = 0  # Going to do 5 repititions
 config_rep = 0  # max configurations of 20
-while config_rep < 21:
+while config_rep < len(configurations):
     if repetition == 5:
         repetition = 0
         config_rep += 1
@@ -441,6 +455,7 @@ while config_rep < 21:
 
     # Creates a list of nodes and their packets
     create_nodes()
+    experiLogic.logic(nodes)
 
     # prepare show
     if graphics == 1:
@@ -503,8 +518,10 @@ while config_rep < 21:
         counter += 1
     results.write("SF Counts: " + str(experiLogic.sfCounts))
     totalTime = observer.accum_f + observer.accum_e
-    results.write("Accumulted full time: " + str(observer.accum_f) + ", " + str(observer.accum_f / totalTime) + "%" + "\n")
-    results.write("Accumulted empty time: " + str(observer.accum_e) + ", " +  str(observer.accum_e / totalTime) + "%" + "\n")
+    results.write("Accumulted full time: " + str(observer.accum_f) + ", " + str(observer.accum_f / totalTime)
+                  + "%" + "\n")
+    results.write("Accumulted empty time: " + str(observer.accum_e) + ", " + str(observer.accum_e / totalTime)
+                  + "%" + "\n")
 
     repetition += 1
 

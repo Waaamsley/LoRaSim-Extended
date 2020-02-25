@@ -14,7 +14,7 @@ class placementGenerator:
 
     def wave_placement(self):
         configurations = []
-        avg = self.nr_nodes/len(self.region_counts)
+        avg = self.nr_nodes / len(self.region_counts)
 
         differences = []
         for j in range(0, 6):
@@ -31,7 +31,7 @@ class placementGenerator:
             temp = list(configurations[-1])
             for j, item in enumerate(changes):
                 temp[j] -= item
-                #temp[j] = round(temp[j] - item)
+                # temp[j] = round(temp[j] - item)
             configurations.append(temp)
 
         changes.reverse()
@@ -39,10 +39,11 @@ class placementGenerator:
             temp = list(configurations[-1])
             for j, item in enumerate(changes):
                 temp[j] += item
-                #temp[j] = round(temp[j] + item)
+                # temp[j] = round(temp[j] + item)
             configurations.append(temp)
 
         return configurations
+
 
 class nodePlacer:
 
@@ -97,7 +98,7 @@ class nodePlacer:
                 region = i
                 break
         if region == -1:
-            region = len(self.sfCounts-1)
+            region = len(self.sfCounts - 1)
 
         # currently assuming static txPower of 14dB
         rssi = self.Ptx + (-1 * self.sensi[region, 1])
@@ -158,36 +159,26 @@ class experiments:
         self.plen = plen
         self.GL = gl
         self.sfCounts = [0, 0, 0, 0, 0, 0]
-        self.powerControl = [7, 8, 9, 10, 11, 12]
 
-    def logic(self, prx):
-        sf = 0
-        cr = 0
-        bw = 0
-        ch = random.randint(0, self.nrChannels - 1)
-
+    def logic(self, nodes):
         if self.experiment == 1:
-            sf, cr, bw = self.experiment_one()
+            self.experiment_one(nodes)
         elif self.experiment == 2:
             sf, cr, bw = self.experiment_two()
         elif self.experiment == 3:
             sf, cr, bw = self.experiment_three()
         elif self.experiment == 4:
-            sf, cr, bw = self.experiment_four(prx)
+            sf, cr, bw = self.experiment_four()
         else:
             print("Invalid experiment!\nQuitting!")
             quit()
 
-        rectime = self.esti.airtime(sf, 1, self.plen, bw)
-        if self.experiment == 1:
-            rectime = self.esti.airtime(sf, 4, self.plen, bw)
-
-        self.sfCounts[sf - 7] += 1
-        return sf, cr, bw, ch, rectime
-
-    @staticmethod
-    def experiment_one():
-        return 12, 4, 125
+    def experiment_one(self, nodes):
+        for node in nodes:
+            ch = random.randint(0, self.nrChannels - 1)
+            rectime = self.esti.airtime(12, 4, self.plen, 125)
+            node.packet.phase_two(12, 4, 125, ch, rectime)
+            self.sfCounts[12 - 7] += 1
 
     @staticmethod
     def experiment_two():
@@ -213,6 +204,9 @@ class experiments:
             exit(-1)
 
         return sf, cr, bw
+
+    def experiment_five(self):
+        return
 
 
 class powerControl:
