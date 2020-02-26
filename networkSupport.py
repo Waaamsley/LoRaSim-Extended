@@ -151,59 +151,53 @@ class nodePlacer:
 
 class experiments:
 
-    def __init__(self, xperiment, nr_channels, sensi, plen, gl):
+    def __init__(self, xperiment, nr_channels, sensi, plen, gl, ptx):
         self.experiment = xperiment
         self.esti = estimator()
         self.nrChannels = nr_channels
         self.sensi = sensi
         self.plen = plen
         self.GL = gl
+        self.ptx = ptx
         self.sfCounts = [0, 0, 0, 0, 0, 0]
 
     def logic(self, nodes):
         if self.experiment == 1:
-            self.experiment_one(nodes)
+            self.basic_experiment(nodes, 12, 4, 125)
         elif self.experiment == 2:
-            sf, cr, bw = self.experiment_two()
+            self.basic_experiment(nodes, 7, 1, 125)
         elif self.experiment == 3:
-            sf, cr, bw = self.experiment_three()
+            self.basic_experiment(nodes, 12, 1, 125)
         elif self.experiment == 4:
-            sf, cr, bw = self.experiment_four()
+            self.experiment_four(nodes)
         else:
             print("Invalid experiment!\nQuitting!")
             quit()
 
-    def experiment_one(self, nodes):
+    def basic_experiment(self, nodes, sf, cr, bw):
         for node in nodes:
             ch = random.randint(0, self.nrChannels - 1)
-            rectime = self.esti.airtime(12, 4, self.plen, 125)
-            node.packet.phase_two(12, 4, 125, ch, rectime)
-            self.sfCounts[12 - 7] += 1
+            rectime = self.esti.airtime(sf, cr, self.plen, bw)
+            node.packet.phase_two(sf, cr, bw, ch, rectime)
+            self.sfCounts[sf - 7] += 1
 
-    @staticmethod
-    def experiment_two():
-        return 7, 1, 125
+    def experiment_four(self, nodes):
+        for node in nodes:
+            ch = random.randint(0, self.nrChannels - 1)
+            minairtime = 9999
+            sf = 0
 
-    @staticmethod
-    def experiment_three():
-        return 12, 1, 125
+            for i in range(0, 6):
+                if self.sensi[i, 1] <= (self.ptx - self.GL - node.packet.Lpl):
+                    sf = int(self.sensi[i, 0])
+                    minairtime = self.esti.airtime(sf, 1, self.plen, 125)
+                    break
+            if minairtime == 9999:
+                print "does not reach base station"
+                exit(-1)
 
-    def experiment_four(self, prx):
-        minairtime = 9999
-        sf = 0
-        bw = 125
-        cr = 1
-
-        for i in range(0, 6):
-            if self.sensi[i, 1] <= prx:
-                sf = int(self.sensi[i, 0])
-                minairtime = self.esti.airtime(sf, 1, self.plen, bw)
-                break
-        if minairtime == 9999:
-            print "does not reach base station"
-            exit(-1)
-
-        return sf, cr, bw
+            rectime = self.esti.airtime(sf, 1, self.plen, 125)
+            node.packet.phase_two(sf, 1, 125, ch, rectime)
 
     def experiment_five(self):
         return

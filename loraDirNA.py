@@ -229,7 +229,6 @@ class myNode:
 #
 class myPacket:
     def __init__(self, nodeid, distance):
-        global experiLogic
         global Ptx
         global gamma
         global d0
@@ -425,7 +424,7 @@ while config_rep < len(configurations):
     distFinder = networkSupport.maxDistFinder()
     observer = networkSupport.channelUsage()
     nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi, Ptx, curr_config)
-    experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL)
+    experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL, Ptx)
     powerLogic = networkSupport.powerControl(powerScheme, sensi, sensiDiff, GL)
     transmitter = myTransmitter(env, observer)
 
