@@ -161,7 +161,7 @@ class experiments:
         self.ptx = ptx
         self.sfCounts = [0, 0, 0, 0, 0, 0]
 
-    def logic(self, nodes):
+    def logic(self, nodes, ideal, truth):
         if self.experiment == 1:
             self.basic_experiment(nodes, 12, 4, 125)
         elif self.experiment == 2:
@@ -169,7 +169,7 @@ class experiments:
         elif self.experiment == 3:
             self.basic_experiment(nodes, 12, 1, 125)
         elif self.experiment == 4:
-            self.experiment_four(nodes)
+            self.experiment_four(nodes, ideal, truth)
         else:
             print("Invalid experiment!\nQuitting!")
             quit()
@@ -181,7 +181,7 @@ class experiments:
             node.packet.phase_two(sf, cr, bw, ch, rectime)
             self.sfCounts[sf - 7] += 1
 
-    def experiment_four(self, nodes):
+    def experiment_four(self, nodes, ideal, truth):
         for node in nodes:
             ch = random.randint(0, self.nrChannels - 1)
             minairtime = 9999
@@ -199,7 +199,13 @@ class experiments:
             rectime = self.esti.airtime(sf, 1, self.plen, 125)
             node.packet.phase_two(sf, 1, 125, ch, rectime)
 
-    def experiment_five(self):
+    def experiment_five(self, ideal, truth):
+        actual = []
+
+        for a, b in zip(ideal, truth):
+            if b < a:
+                =
+
         return
 
 

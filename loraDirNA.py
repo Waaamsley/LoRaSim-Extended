@@ -393,6 +393,7 @@ results.write("----------------------------------------------------------------\
 
 repetition = 0  # Going to do 5 repititions
 config_rep = 0  # max configurations of 20
+figure_count = 0
 while config_rep < len(configurations):
     if repetition == 5:
         repetition = 0
@@ -446,7 +447,8 @@ while config_rep < len(configurations):
     # prepare graphics and add sink
     if graphics == 1:
         plt.ion()
-        plt.figure()
+        figure_count += 1
+        plt.figure(figure_count)
         ax = plt.gcf().gca()
         # XXX should be base station position
         ax.add_artist(plt.Circle((bsx, bsy), 3, fill=True, color='green'))
@@ -454,14 +456,13 @@ while config_rep < len(configurations):
 
     # Creates a list of nodes and their packets
     create_nodes()
-    experiLogic.logic(nodes)
+    experiLogic.logic(nodes, sf_counts, curr_config)
 
     # prepare show
     if graphics == 1:
         plt.xlim([0, xmax])
         plt.ylim([0, ymax])
         plt.draw()
-        plt.show()
 
     # start simulation
     nodesSorted = nodes
@@ -523,11 +524,11 @@ while config_rep < len(configurations):
                   + "%" + "\n")
 
     repetition += 1
-    break
 
 results.close()
 # this can be done to keep graphics visible
 if graphics == 1:
+    plt.show()
     raw_input('Press Enter to continue ...')
 
 # save experiment data into a dat file that can be read by e.g. gnuplot
