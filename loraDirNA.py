@@ -523,6 +523,7 @@ while config_rep < len(configurations):
                   + "%" + "\n")
 
     repetition += 1
+    break
 
 results.close()
 # this can be done to keep graphics visible

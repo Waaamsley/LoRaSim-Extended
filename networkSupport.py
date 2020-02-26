@@ -221,7 +221,8 @@ class powerControl:
         elif self.powerScheme == 3:
             self.power_three(nodes)
         else:
-            return
+            for node in nodes:
+                node.packet.phase_three(self.ptx)
 
     def power_one(self, nodes):
         for node in nodes:
