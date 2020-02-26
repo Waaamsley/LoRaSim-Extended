@@ -425,7 +425,7 @@ while config_rep < len(configurations):
     observer = networkSupport.channelUsage()
     nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi, Ptx, curr_config)
     experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL, Ptx)
-    powerLogic = networkSupport.powerControl(powerScheme, sensi, sensiDiff, GL)
+    powerLogic = networkSupport.powerControl(powerScheme, sensi, sensiDiff, GL, Ptx)
     transmitter = myTransmitter(env, observer)
 
     if experiment == 2:

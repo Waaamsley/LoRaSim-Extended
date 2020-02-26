@@ -205,11 +205,12 @@ class experiments:
 
 class powerControl:
 
-    def __init__(self, power_scheme, sensi, sensi_diff, gl):
+    def __init__(self, power_scheme, sensi, sensi_diff, gl, ptx):
         self.powerScheme = power_scheme
         self.sensi = sensi
         self.sensiDiff = sensi_diff
         self.GL = gl
+        self.ptx = ptx
         self.atrGet = operator.attrgetter
 
     def logic(self, nodes):
@@ -222,18 +223,11 @@ class powerControl:
         else:
             return
 
-    # will have to reset txpow, Prx, rssi
     def power_one(self, nodes):
         for node in nodes:
             minsensi = self.sensi[node.packet.sf - 7, 1]
-            lpl = node.packet.Lpl
-            txpow = node.packet.txpow
-            prx = node.packet.prx
-            txpow = max(2, txpow - math.floor(prx - minsensi))
-            prx = txpow - self.GL - lpl
-            node.packet.txpow = txpow
-            node.packet.prx = prx
-            node.packet.rssi = prx
+            txpow = max(2, self.ptx - math.floor((self.ptx - node.packet.Lpl) - minsensi))
+            node.packet.phase_three(txpow)
 
     # FADR - Fair Adaptive Data Rate
     # I have implemented their power control system
@@ -272,10 +266,7 @@ class powerControl:
                 print ("here", i)
                 break
             else:
-                n.packet.txpow = min_power
-                prx = n.packet.txpow - self.GL - n.packet.Lpl
-                n.packet.prx = prx
-                n.packet.rssi = prx
+                n.packet.phase_three(min_power)
 
         # Assign maximum power and save maxPowerIndex
         max_power_index = None
@@ -284,10 +275,7 @@ class powerControl:
                 max_power_index = i - 1
                 break
             else:
-                n.packet.txpow = max_power
-                prx = n.packet.txpow - self.GL - n.packet.Lpl
-                n.packet.prx = prx
-                n.packet.rssi = prx
+                n.packet.phase_three(max_power)
 
         # Assign the reaming power levels to the inbetween nodes
         temp_index = min_power_index
@@ -302,10 +290,7 @@ class powerControl:
                         temp_index = i - 1
                         break
                     else:
-                        nodes_sorted[i].packet.txpow = power_level
-                        prx = math.ceil(nodes_sorted[i].packet.txpow - self.GL - nodes_sorted[i].packet.Lpl)
-                        nodes_sorted[i].packet.prx = prx
-                        nodes_sorted[i].packet.rssi = prx
+                        n.packet.phase_three(power_level)
         return
 
     def power_three(self, nodes):
@@ -342,7 +327,7 @@ class powerControl:
 
         # Assign power levels
         for i, n in enumerate(nodes_sorted, start):
-            txpow = n.packet.txpow
+            txpow = self.ptx
             if n.packet.sf == 7:
                 node_a = nodes_sorted[first_sf8]
                 cir = self.sensiDiff[n.packet.sf - 7][node_a.packet.sf - 7]
@@ -362,10 +347,7 @@ class powerControl:
                     # cir is negative value.
                     cirdiff = difference + cir
                     txpow = max(2, txpow + cirdiff)
-            n.packet.txpow = txpow
-            prx = n.packet.txpow - self.GL - n.packet.Lpl
-            n.packet.prx = prx
-            n.packet.rssi = prx
+            n.packet.phase_three(txpow)
             # print "testing:", n.packet.sf, cir, txpow, Prx
         return
 
