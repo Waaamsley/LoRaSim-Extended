@@ -169,7 +169,12 @@ class experiments:
         elif self.experiment == 3:
             self.basic_experiment(nodes, 12, 1, 125)
         elif self.experiment == 4:
-            self.experiment_four(nodes, ideal, truth)
+            self.experiment_four(nodes)
+        elif self.experiment == 5:
+            complete = False
+            new_ideal = []
+            while not complete:
+                complete, ideal2 = self.experiment_five(nodes, ideal, new_ideal, truth)
         else:
             print("Invalid experiment!\nQuitting!")
             quit()
@@ -181,7 +186,7 @@ class experiments:
             node.packet.phase_two(sf, cr, bw, ch, rectime)
             self.sfCounts[sf - 7] += 1
 
-    def experiment_four(self, nodes, ideal, truth):
+    def experiment_four(self, nodes):
         for node in nodes:
             ch = random.randint(0, self.nrChannels - 1)
             minairtime = 9999
@@ -199,14 +204,20 @@ class experiments:
             rectime = self.esti.airtime(sf, 1, self.plen, 125)
             node.packet.phase_two(sf, 1, 125, ch, rectime)
 
-    def experiment_five(self, ideal, truth):
+    def experiment_five(self, ideal, new_ideal, truth):
         actual = []
+        for i, a, b in enumerate(zip(ideal, truth)):
+            if a <= b:
+                actual.append(a)
+            elif i > 0:
+                # need to do a conversion and compare to previous region.
+                # if comparison shows that doing a recalc is good. do we restart this method with a new ideal?
+                # can use equation for ideal node numbers to get conversion rates?
+                return False, ideal
+            else:
+                actual.append(b)
 
-        for a, b in zip(ideal, truth):
-            if b < a:
-                =
-
-        return
+        return True, ideal
 
 
 class powerControl:
@@ -458,7 +469,6 @@ class fairSF:
         # subtract nodes from regions
         # elif difference < 0:
         # add nodes to region
-
         return sf_counts
 
     def get_percentages(self):
