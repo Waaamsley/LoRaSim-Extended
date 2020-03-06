@@ -172,9 +172,9 @@ class experiments:
             self.experiment_four(nodes)
         elif self.experiment == 5:
             complete = False
-            new_ideal = []
+            actual = []
             while not complete:
-                complete, ideal2 = self.experiment_five(nodes, ideal, new_ideal, truth)
+                complete = self.experiment_five(nodes, ideal, actual, truth)
         else:
             print("Invalid experiment!\nQuitting!")
             quit()
@@ -204,20 +204,28 @@ class experiments:
             rectime = self.esti.airtime(sf, 1, self.plen, 125)
             node.packet.phase_two(sf, 1, 125, ch, rectime)
 
-    def experiment_five(self, ideal, new_ideal, truth):
-        actual = []
-        for i, a, b in enumerate(zip(ideal, truth)):
-            if a <= b:
-                actual.append(a)
+    def experiment_five(self, ideal, actual, truth):
+        for i, ideal_num, true_num in enumerate(zip(ideal, truth)):
+            if ideal_num <= true_num:
+                truth[i+1] += (true_num-ideal_num)
+                truth[i] = ideal_num
+                actual.append(ideal_num)
             elif i > 0:
-                # need to do a conversion and compare to previous region.
-                # if comparison shows that doing a recalc is good. do we restart this method with a new ideal?
-                # can use equation for ideal node numbers to get conversion rates?
+                # need to do conversion then possible recalc.
+                ratio = true_num/ideal_num
+                equivalent = ratio * ideal[i-1]
+                if equivalent < ideal[i-1]:
+                    # conversion has shown it is good to subcat & recalculate.
+                else:
+                    actual.append(true_num)
+                    # need to recalculate anyway? is above just a special side recalculation?
+
                 return False, ideal
             else:
-                actual.append(b)
+                actual.append(true_num)
+                # need to recalculate to redistribute the later nodes and get more correct ideals.
 
-        return True, ideal
+        return True
 
 
 class powerControl:
