@@ -55,8 +55,6 @@ class nodePlacer:
         self.Ptx = ptx
         self.sfCounts = placement
         self.distanceFinder = maxDistFinder()
-        # fair_sf_getter = fairSF(self.nrNodes, [7.0, 8.0, 9.0, 10.0, 11.0, 12.0])
-        # self.sfCounts = fair_sf_getter.get_sf_counts()
 
         return
 
@@ -160,6 +158,7 @@ class experiments:
         self.GL = gl
         self.ptx = ptx
         self.sfCounts = [0, 0, 0, 0, 0, 0]
+        self.sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 
     def logic(self, nodes, ideal, truth):
         if self.experiment == 1:
@@ -171,10 +170,7 @@ class experiments:
         elif self.experiment == 4:
             self.experiment_four(nodes)
         elif self.experiment == 5:
-            complete = False
-            actual = []
-            while not complete:
-                complete = self.experiment_five(nodes, ideal, actual, truth)
+            self.experiment_five(nodes, ideal, [], truth, len(nodes))
         else:
             print("Invalid experiment!\nQuitting!")
             quit()
@@ -191,7 +187,6 @@ class experiments:
             ch = random.randint(0, self.nrChannels - 1)
             minairtime = 9999
             sf = 0
-
             for i in range(0, 6):
                 if self.sensi[i, 1] <= (self.ptx - self.GL - node.packet.Lpl):
                     sf = int(self.sensi[i, 0])
@@ -203,12 +198,16 @@ class experiments:
 
             rectime = self.esti.airtime(sf, 1, self.plen, 125)
             node.packet.phase_two(sf, 1, 125, ch, rectime)
+            self.sfCounts[sf - 7] += 1
 
-    def experiment_five(self, ideal, actual, truth):
+    # recursive method.
+    def experiment_five(self, ideal, actual, truth, nrNodes):
+        ideal_tot = 0
+        true_tot = 0
         for i, ideal_num, true_num in enumerate(zip(ideal, truth)):
-            if ideal_num <= true_num:
-                truth[i+1] += (true_num-ideal_num)
-                truth[i] = ideal_num
+            ideal_tot += ideal_num
+            true_tot += true_num
+            if ideal_tot <= true_tot:
                 actual.append(ideal_num)
             elif i > 0:
                 # need to do conversion then possible recalc.
@@ -223,7 +222,13 @@ class experiments:
                 return False, ideal
             else:
                 actual.append(true_num)
-                # need to recalculate to redistribute the later nodes and get more correct ideals.
+                fair_sf_getter = fairSF(nrNodes-true_num, self.sfs[i+1:])
+                sfCounts = fair_sf_getter.get_sf_counts()
+                actual.append(self.experiment_five(sfCounts, [], truth[i+1:], nrNodes-true_num))
+
+        if len(actual) != 6:
+            return actual
+        #original method call will exit the for loop then assign all sfs.
 
         return True
 
