@@ -200,37 +200,45 @@ class experiments:
             node.packet.phase_two(sf, 1, 125, ch, rectime)
             self.sfCounts[sf - 7] += 1
 
-    # recursive method.
-    def experiment_five(self, ideal, actual, truth, nrNodes):
-        ideal_tot = 0
-        true_tot = 0
-        for i, ideal_num, true_num in enumerate(zip(ideal, truth)):
-            ideal_tot += ideal_num
-            true_tot += true_num
-            if ideal_tot <= true_tot:
-                actual.append(ideal_num)
-            elif i > 0:
-                # need to do conversion then possible recalc.
-                ratio = true_num/ideal_num
-                equivalent = ratio * ideal[i-1]
-                if equivalent < ideal[i-1]:
-                    # conversion has shown it is good to subcat & recalculate.
-                else:
-                    actual.append(true_num)
-                    # need to recalculate anyway? is above just a special side recalculation?
+    # recursive method. - cancel that. just recalculate actual on the way out.
+    # still working on back tracking issue.
+    def experiment_five(self, nodes, ideal, actual, truth, nrNodes):
+        sf_possible = [0, 0, 0, 0, 0, 0]
+        temp_total = 0
+        truth = [20, 9, 15, 1, 1, 14]
+        for i, amt in enumerate(truth):
+            temp_total += amt
+            sf_possible[i] = temp_total
 
-                return False, ideal
+        used_total = 0
+        for i, total in enumerate(sf_possible):
+            difference = total - used_total
+            if ideal[i] <= difference:
+                actual.append(ideal[i])
+                used_total += ideal[i]
             else:
-                actual.append(true_num)
-                fair_sf_getter = fairSF(nrNodes-true_num, self.sfs[i+1:])
-                sfCounts = fair_sf_getter.get_sf_counts()
-                actual.append(self.experiment_five(sfCounts, [], truth[i+1:], nrNodes-true_num))
+                actual.append(difference)
+                used_total += difference
+                fair_sf_getter = fairSF(nrNodes - used_total , self.sfs[i + 1:])
+                ideal = ideal[:i+1] + fair_sf_getter.get_sf_counts()
 
-        if len(actual) != 6:
-            return actual
-        #original method call will exit the for loop then assign all sfs.
+                ratio = truth[i] / ideal[i]
+                equivalent = ratio * ideal[i - 1]
+                if i > 0 and equivalent < ideal[i-1]:
+                    split_total = actual[i] + actual[i-1]
+                    fair_sf_getter = fairSF(split_total, self.sfs[i-1:i+1])
+                    split_ideal = fair_sf_getter.get_sf_counts()
+                    actual[i-1] = split_ideal[0]
+                    actual[i] = split_ideal[1]
 
-        return True
+        for i, count in enumerate(actual):
+            for j in range(count):
+                sf = i + 7
+                print sf
+                ch = random.randint(0, self.nrChannels - 1)
+                rectime = self.esti.airtime(sf, 1, self.plen, 125)
+                nodes[count].packet.phase_two(sf, 1, 125, ch, rectime)
+                self.sfCounts[sf - 7] += 1
 
 
 class powerControl:
@@ -473,15 +481,8 @@ class fairSF:
             sf_counts.append(temp_count)
             total += temp_count
 
-        difference = total - self.nrNodes
-        if difference != 0:
-            print("Round off error!!!!! total - nrNodes Difference : ", difference)
-            print("before Round: ", before_round, "sfCounts: ", sf_counts, "\nnrNodes", self.nrNodes)
-            quit()
-        # if difference > 0:
-        # subtract nodes from regions
-        # elif difference < 0:
-        # add nodes to region
+        difference = self.nrNodes - total
+        sf_counts[0] += difference
         return sf_counts
 
     def get_percentages(self):
