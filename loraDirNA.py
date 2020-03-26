@@ -83,13 +83,6 @@ sensiDiff = np.array([sf7diff, sf8diff, sf9diff, sf10diff, sf11diff, sf12diff])
 
 TxPowers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
-sfSent = [0, 0, 0, 0, 0, 0]
-sfReceived = [0, 0, 0, 0, 0, 0]
-sfLost = [0, 0, 0, 0, 0, 0]
-sfCollided = [0, 0, 0, 0, 0, 0]
-interferCount = [0, 0, 0, 0, 0, 0]
-
-
 #
 # check for collisions at base station
 # Note: called before a packet (or rather node) is inserted into the list
@@ -370,9 +363,11 @@ repetition = 0  # Going to do 5 repititions
 config_rep = 0  # max configurations of 20
 figure_count = 0
 while config_rep < len(configurations):
-    if repetition == 5:
-        repetition = 0
-        config_rep += 1
+    sfSent = [0, 0, 0, 0, 0, 0]
+    sfReceived = [0, 0, 0, 0, 0, 0]
+    sfLost = [0, 0, 0, 0, 0, 0]
+    sfCollided = [0, 0, 0, 0, 0, 0]
+    interferCount = [0, 0, 0, 0, 0, 0]
     curr_config = configurations[config_rep]
     results.write("Configuration: " + str(config_rep + 1) + ". Repetition: " + str(repetition + 1)
                   + ". Region Counts: " + str(curr_config) + "\n")
@@ -489,9 +484,12 @@ while config_rep < len(configurations):
                   + "%" + "\n")
     results.write("Accumulted empty time: " + str(observer.accum_e) + ", " + str(observer.accum_e / totalTime)
                   + "%" + "\n")
+    results.write("----------------------------------------------------------------\n")
 
     repetition += 1
-    results.write("----------------------------------------------------------------\n")
+    if repetition == 5:
+        repetition = 0
+        config_rep += 1
 
 results.close()
 # this can be done to keep graphics visible
