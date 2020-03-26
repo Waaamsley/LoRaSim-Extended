@@ -16,6 +16,9 @@ class placementGenerator:
         configurations = []
         avg = self.nr_nodes / len(self.region_counts)
 
+        start = [self.nr_nodes, 0, 0, 0, 0, 0]
+        configurations.append(start)
+
         differences = []
         for j in range(0, 6):
             difference = self.region_counts[j] - avg
