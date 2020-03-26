@@ -31,7 +31,11 @@ class placementGenerator:
             temp = list(configurations[-1])
             for j, item in enumerate(changes):
                 temp[j] -= item
-                # temp[j] = round(temp[j] - item)
+            total = 0
+            for i in range(len(temp)):
+                temp[i] = int(round(temp[i]))
+                total += temp[i]
+            temp[0] += (self.nr_nodes - total)
             configurations.append(temp)
 
         changes.reverse()
@@ -39,7 +43,11 @@ class placementGenerator:
             temp = list(configurations[-1])
             for j, item in enumerate(changes):
                 temp[j] += item
-                # temp[j] = round(temp[j] + item)
+            total = 0
+            for i in range(len(temp)):
+                temp[i] = int(round(temp[i]))
+                total += temp[i]
+            temp[0] += (self.nr_nodes - total)
             configurations.append(temp)
 
         return configurations
@@ -205,7 +213,6 @@ class experiments:
     def experiment_five(self, nodes, ideal, actual, truth, nrNodes):
         sf_possible = [0, 0, 0, 0, 0, 0]
         temp_total = 0
-        truth = [20, 9, 15, 1, 1, 14]
         for i, amt in enumerate(truth):
             temp_total += amt
             sf_possible[i] = temp_total
@@ -231,14 +238,15 @@ class experiments:
                     actual[i-1] = split_ideal[0]
                     actual[i] = split_ideal[1]
 
+        counter = 0
         for i, count in enumerate(actual):
             for j in range(count):
                 sf = i + 7
-                print sf
                 ch = random.randint(0, self.nrChannels - 1)
                 rectime = self.esti.airtime(sf, 1, self.plen, 125)
-                nodes[count].packet.phase_two(sf, 1, 125, ch, rectime)
+                nodes[counter].packet.phase_two(sf, 1, 125, ch, rectime)
                 self.sfCounts[sf - 7] += 1
+                counter += 1
 
 
 class powerControl:

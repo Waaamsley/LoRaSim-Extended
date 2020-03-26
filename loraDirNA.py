@@ -101,19 +101,13 @@ def checkcollision(packet):
         if packetsAtBS[i].packet.processed == 1:
             processing = processing + 1
     if processing > maxBSReceives:
-        # print "too long:", len(packetsAtBS)
         packet.processed = 0
     else:
         packet.processed = 1
 
     if packetsAtBS:
-        # print "CHECK node {} (sf:{} bw:{} freq:{:.6e}) others: {}".format(
-        #     packet.nodeid, packet.sf, packet.bw, packet.freq,
-        #     len(packetsAtBS))
         for other in packetsAtBS:
             if other.nodeid != packet.nodeid:
-                # print ">> node {} (sf:{} bw:{} freq:{:.6e})".format(
-                #    other.nodeid, other.packet.sf, other.packet.bw, other.packet.freq)
                 if fullCollision:
                     if timing_collision(packet, other.packet):
                         collided_packets = power_collision(packet, other.packet)
@@ -136,20 +130,14 @@ def power_collision(p1, p2):
     power_threshold = sensiDiff[p1.sf - 7][p2.sf - 7]  # dB
 
     if (abs(p1.rssi - p2.rssi) <= power_threshold) and p1.sf == p2.sf:
-        # print ("Both packets were on same channel and did not meet capture effect requirements."\
-        # , p1.sf, p2.sf, p1.rssi, p2.rssi, powerThreshold)
         return p1, p2
     elif p1.rssi - p2.rssi <= power_threshold:
-        # print ("p2 was significantly stronger than p1 and interfered."\
-        # , p1.sf, p2.sf, p1.rssi, p2.rssi, powerThreshold)
         interferCount[p2.sf - 7] += 1
         return p1,
 
     power_threshold = sensiDiff[p2.sf - 7][p1.sf - 7]  # dB
 
     if p2.rssi - p1.rssi <= power_threshold:
-        # print ("p1 was significantly stronger than p2 and interfered."\
-        # , p2.sf, p1.sf, p2.rssi, p1.rssi, powerThreshold)
         interferCount[p1.sf - 7] += 1
         return p2,
 
@@ -168,15 +156,8 @@ def timing_collision(p1, p2):
     # check whether p2 ends in p1's critical section
     p2_end = p2.addTime + p2.rectime
     p1_cs = env.now + tpreamb
-    # print "collision timing node {} ({},{},{}) node {} ({},{})".format(
-    #   p1.nodeid, env.now - env.now, p1_cs - env.now, p1.rectime,
-    #    p2.nodeid, p2.addTime - env.now, p2_end - env.now
-    # )
     if p1_cs < p2_end:
-        # p1 collided with p2 and lost
-        # print "not late enough"
         return True
-    # print "saved by the preamble"
     return False
 
 
@@ -205,13 +186,11 @@ class myNode:
         self.dist = 0
 
         self.x, self.y, self.dist = nodePlacer.logic(maxDist, bsx, bsy, nodeid)
-        # print('node %d' %nodeid, "x", self.x, "y", self.y, "dist: ", self.dist)
 
         self.packet = myPacket(self.nodeid, self.dist)
         self.sent = 0
         # self.period = (self.packet.rectime * (100 / duty))
         self.period = duty
-        # print("avgsend: ", self.period, "||||airtime: ", self.packet.rectime)
 
         # graphics for node
         global graphics
@@ -265,12 +244,10 @@ class myPacket:
         self.ch = ch
         self.rectime = rectime
         self.symTime = (2.0 ** self.sf) / self.bw
-        return
 
     def phase_three(self, txpow):
         self.txpow = txpow
         self.rssi = self.txpow - GL - self.Lpl
-        return
 
 
 #
@@ -298,8 +275,6 @@ class myTransmitter:
             else:
                 sensitivity = sensi[node.packet.sf - 7, [125, 250, 500].index(node.packet.bw) + 1]
                 if node.packet.rssi < sensitivity:
-                    # print("node id: ", node.nodeid)
-                    # print "node {}: packet will be lost".format(node.nodeid)
                     node.packet.lost = True
                 else:
                     node.packet.lost = False
@@ -434,7 +409,6 @@ while config_rep < len(configurations):
     else:
         minsensi = np.amin(sensi)
     Lpl = Ptx - minsensi
-    # print ("amin", minsensi, "Lpl", Lpl)
     maxDist = distFinder.max_distance((minsensi * -1) + max(TxPowers))
     results.write("maxDist: " + str(maxDist) + "\n")
 
@@ -467,14 +441,7 @@ while config_rep < len(configurations):
     # start simulation
     nodesSorted = nodes
     nodesSorted.sort()
-    # for i, node in enumerate(nodesSorted):
-    #    print i, node.packet.txpow, node.packet.rssi
-    # print "||||||||||||||_______-------______|||||||||||||||"
     powerLogic.logic(nodes)
-    # for i, node in enumerate(nodesSorted):
-    #    print i, node.packet.txpow, node.packet.rssi
-
-    # quit()
     env.run(until=simtime)
 
     # print stats and save into file
@@ -516,7 +483,7 @@ while config_rep < len(configurations):
                           str(float(receivedStat)) + "/" + str(float(sentStat)) + "/" + str(float(lostStat)) + "/"
                           + str(float(collideStat)) + "/" + str(float(interferStat)) + "\n")
         counter += 1
-    results.write("SF Counts: " + str(experiLogic.sfCounts))
+    results.write("SF Counts: " + str(experiLogic.sfCounts) + "\n")
     totalTime = observer.accum_f + observer.accum_e
     results.write("Accumulted full time: " + str(observer.accum_f) + ", " + str(observer.accum_f / totalTime)
                   + "%" + "\n")
@@ -524,6 +491,7 @@ while config_rep < len(configurations):
                   + "%" + "\n")
 
     repetition += 1
+    results.write("----------------------------------------------------------------\n")
 
 results.close()
 # this can be done to keep graphics visible
