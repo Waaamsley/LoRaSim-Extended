@@ -355,7 +355,10 @@ fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
 sf_counts = fair_sf_getter.get_sf_counts()
 placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
 configurations = []
-placementGenerator.wave_placement(configurations)
+placementGenerator.full_placement(configurations)
+for item in configurations:
+    print item
+quit()
 results = open("results.txt", "a")
 results.write("----------------------------------------------------------------\n")
 results.write("----------------------------------------------------------------\n")
