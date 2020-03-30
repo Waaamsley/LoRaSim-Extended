@@ -13,8 +13,8 @@ class placementGenerator:
         self.modifier = 0.2
 
     def full_placement(self, configurations):
-        #self.pre_placement(configurations)
-        self.wave_placement(configurations)
+        self.pre_placement(configurations)
+        #self.wave_placement(configurations)
         #self.post_placement(configurations)
 
     def pre_placement(self, configurations):
@@ -37,8 +37,8 @@ class placementGenerator:
                     change = differences[j] * mods[j]
                     start[j] -= change
                     start[j+1] += change
-                    temp[j] = int(round(temp[j] - change))
-                    temp[j + 1] = int(round(temp[j+1] + change))
+                    temp[j] = int(round(start[j]))
+                    temp[j + 1] = int(round(start[j+1]))
                 else:
                     break
 
@@ -63,7 +63,8 @@ class placementGenerator:
             for j, item in enumerate(changes):
                 start[j] -= item
                 temp[j] = int(round(start[j]))
-            temp[0] += (self.nr_nodes - total)
+                total += temp[j]
+            temp[0] -= (self.nr_nodes - total)
 
         changes.reverse()
         for i in range(0, (1/self.modifier)):
