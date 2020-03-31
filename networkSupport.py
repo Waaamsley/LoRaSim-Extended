@@ -219,7 +219,7 @@ class experiments:
 
     # recursive method. - cancel that. just recalculate actual on the way out.
     # still working on back tracking issue.
-    def experiment_five(self, nodes, ideal, actual, truth, nrNodes):
+    def experiment_five(self, nodes, ideal, actual, truth, nr_nodes):
         sf_possible = [0, 0, 0, 0, 0, 0]
         temp_total = 0
         for i, amt in enumerate(truth):
@@ -235,16 +235,16 @@ class experiments:
             else:
                 actual.append(difference)
                 used_total += difference
-                fair_sf_getter = fairSF(nrNodes - used_total , self.sfs[i + 1:])
-                ideal = ideal[:i+1] + fair_sf_getter.get_sf_counts()
+                fair_sf_getter = fairSF(nr_nodes - used_total, self.sfs[i + 1:])
+                ideal = ideal[:i + 1] + fair_sf_getter.get_sf_counts()
 
                 ratio = truth[i] / ideal[i]
                 equivalent = ratio * ideal[i - 1]
-                if i > 0 and equivalent < ideal[i-1]:
-                    split_total = actual[i] + actual[i-1]
-                    fair_sf_getter = fairSF(split_total, self.sfs[i-1:i+1])
+                if i > 0 and equivalent < ideal[i - 1]:
+                    split_total = actual[i] + actual[i - 1]
+                    fair_sf_getter = fairSF(split_total, self.sfs[i - 1:i + 1])
                     split_ideal = fair_sf_getter.get_sf_counts()
-                    actual[i-1] = split_ideal[0]
+                    actual[i - 1] = split_ideal[0]
                     actual[i] = split_ideal[1]
 
         counter = 0
@@ -346,7 +346,7 @@ class powerControl:
                         temp_index = i - 1
                         break
                     else:
-                        n.packet.phase_three(power_level)
+                        nodes_sorted[i].packet.phase_three(power_level)
         return
 
     def power_three(self, nodes):

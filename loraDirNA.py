@@ -83,6 +83,7 @@ sensiDiff = np.array([sf7diff, sf8diff, sf9diff, sf10diff, sf11diff, sf12diff])
 
 TxPowers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
+
 #
 # check for collisions at base station
 # Note: called before a packet (or rather node) is inserted into the list
@@ -363,134 +364,137 @@ results.write("----------------------------------------------------------------\
 repetition = 0  # Going to do 5 repititions
 config_rep = 0  # max configurations of 20
 figure_count = 0
-while config_rep < len(configurations):
-    sfSent = [0, 0, 0, 0, 0, 0]
-    sfReceived = [0, 0, 0, 0, 0, 0]
-    sfLost = [0, 0, 0, 0, 0, 0]
-    sfCollided = [0, 0, 0, 0, 0, 0]
-    interferCount = [0, 0, 0, 0, 0, 0]
-    curr_config = configurations[config_rep]
-    results.write("Configuration: " + str(config_rep + 1) + ". Repetition: " + str(repetition + 1)
-                  + ". Region Counts: " + str(curr_config) + "\n")
+og_nr_nodes = int(nrNodes)
+for i in range(10):
+    nrNodes = og_nr_nodes * i
+    while config_rep < len(configurations):
+        sfSent = [0, 0, 0, 0, 0, 0]
+        sfReceived = [0, 0, 0, 0, 0, 0]
+        sfLost = [0, 0, 0, 0, 0, 0]
+        sfCollided = [0, 0, 0, 0, 0, 0]
+        interferCount = [0, 0, 0, 0, 0, 0]
+        curr_config = configurations[config_rep]
+        results.write("Configuration: " + str(config_rep + 1) + ". Repetition: " + str(repetition + 1)
+                      + ". Region Counts: " + str(curr_config) + "\n")
 
-    nodes = []
-    packetsAtBS = []
-    env = simpy.Environment()
-    # max distance: 300m in city, 3000 m outside (5 km Utz experiment)
-    # also more unit-disc like according to Utz
-    bsId = 1
-    nrCollisions = 0
-    nrReceived = 0
-    nrProcessed = 0
-    nrLost = 0
+        nodes = []
+        packetsAtBS = []
+        env = simpy.Environment()
+        # max distance: 300m in city, 3000 m outside (5 km Utz experiment)
+        # also more unit-disc like according to Utz
+        bsId = 1
+        nrCollisions = 0
+        nrReceived = 0
+        nrProcessed = 0
+        nrLost = 0
 
-    # maximum number of packets the BS can receive at the same time
-    maxBSReceives = 999
+        # maximum number of packets the BS can receive at the same time
+        maxBSReceives = 999
 
-    gamma = 2.08
-    d0 = 40.0
-    var = 0  # variance ignored for nows
-    Lpld0 = 127.41
-    GL = 0
-    plen = 20
-    distFinder = networkSupport.maxDistFinder()
-    observer = networkSupport.channelUsage()
-    nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi, Ptx, curr_config)
-    experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL, Ptx)
-    powerLogic = networkSupport.powerControl(powerScheme, sensi, sensiDiff, GL, Ptx)
-    transmitter = myTransmitter(env, observer)
+        gamma = 2.08
+        d0 = 40.0
+        var = 0  # variance ignored for nows
+        Lpld0 = 127.41
+        GL = 0
+        plen = 20
+        distFinder = networkSupport.maxDistFinder()
+        observer = networkSupport.channelUsage()
+        nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi, Ptx, curr_config)
+        experiLogic = networkSupport.experiments(experiment, nrChannels, sensi, plen, GL, Ptx)
+        powerLogic = networkSupport.powerControl(powerScheme, sensi, sensiDiff, GL, Ptx)
+        transmitter = myTransmitter(env, observer)
 
-    if experiment == 2:
-        minsensi = sensi[0, 1]
-    else:
-        minsensi = np.amin(sensi)
-    Lpl = Ptx - minsensi
-    maxDist = distFinder.max_distance((minsensi * -1) + max(TxPowers))
-    results.write("maxDist: " + str(maxDist) + "\n")
-
-    # base station placement
-    bsx = maxDist + 10
-    bsy = maxDist + 10
-    xmax = bsx + maxDist + 20
-    ymax = bsy + maxDist + 20
-
-    # prepare graphics and add sink
-    if graphics == 1:
-        plt.ion()
-        figure_count += 1
-        plt.figure(figure_count)
-        ax = plt.gcf().gca()
-        # XXX should be base station position
-        ax.add_artist(plt.Circle((bsx, bsy), 3, fill=True, color='green'))
-        ax.add_artist(plt.Circle((bsx, bsy), maxDist, fill=False, color='green'))
-
-    # Creates a list of nodes and their packets
-    create_nodes()
-    experiLogic.logic(nodes, sf_counts, curr_config)
-
-    # prepare show
-    if graphics == 1:
-        plt.xlim([0, xmax])
-        plt.ylim([0, ymax])
-        plt.draw()
-
-    # start simulation
-    nodesSorted = nodes
-    nodesSorted.sort()
-    powerLogic.logic(nodes)
-    env.run(until=simtime)
-
-    # print stats and save into file
-    results.write("nrCollisions: " + str(nrCollisions) + "\n")
-
-    # compute energy
-    # Transmit consumption in mA from -2 to +17 dBm
-    TX = [22, 22, 22, 23,  # RFO/PA0: -2..1
-          24, 24, 24, 25, 25, 25, 25, 26, 31, 32, 34, 35, 44,  # PA_BOOST/PA1: 2..14
-          82, 85, 90,  # PA_BOOST/PA1: 15..17
-          105, 115, 125]  # PA_BOOST/PA1+PA2: 18..20
-    V = 3.0  # voltage XXX
-    sent = sum(n.sent for n in nodes)
-    energy = sum(node.packet.rectime * TX[int(node.packet.txpow) + 2] * V * node.sent for node in nodes) / 1e6
-
-    results.write("energy (in J): " + str(energy) + "\n")
-    results.write("sent packets: " + str(sent) + "\n")
-    results.write("collisions: " + str(nrCollisions) + "\n")
-    results.write("received packets: " + str(nrReceived) + "\n")
-    results.write("processed packets: " + str(nrProcessed) + "\n")
-    results.write("lost packets: " + str(nrLost) + "\n")
-
-    # data extraction rate
-    der = (sent - nrCollisions) / float(sent)
-    results.write("sent - nrCollisions. DER: " + str(der) + "\n")
-    der = nrReceived / float(sent)
-    results.write("nrReceived / sent. DER method 2: " + str(der) + "\n")
-
-    counter = 7
-    for receivedStat, sentStat, lostStat, collideStat, interferStat in zip(sfReceived, sfSent, sfLost, sfCollided,
-                                                                           interferCount):
-        if float(receivedStat) > 0 and float(sentStat) > 0:
-            results.write("SF" + str(counter) + " DER: " + str(float(receivedStat) / float(sentStat)) +
-                          " Received/Sent/Lost/Collided/Interfered Packets: " + str(float(receivedStat)) + "/"
-                          + str(float(sentStat)) + "/" + str(float(lostStat)) + "/"
-                          + str(float(collideStat)) + "/" + str(float(interferStat)) + "\n")
+        if experiment == 2:
+            minsensi = sensi[0, 1]
         else:
-            results.write("SF" + str(counter) + "Exception: Received/Sent/Lost/Collided/Interefered Packets : " +
-                          str(float(receivedStat)) + "/" + str(float(sentStat)) + "/" + str(float(lostStat)) + "/"
-                          + str(float(collideStat)) + "/" + str(float(interferStat)) + "\n")
-        counter += 1
-    results.write("SF Counts: " + str(experiLogic.sfCounts) + "\n")
-    totalTime = observer.accum_f + observer.accum_e
-    results.write("Accumulted full time: " + str(observer.accum_f) + ", " + str(observer.accum_f / totalTime)
-                  + "%" + "\n")
-    results.write("Accumulted empty time: " + str(observer.accum_e) + ", " + str(observer.accum_e / totalTime)
-                  + "%" + "\n")
-    results.write("----------------------------------------------------------------\n")
+            minsensi = np.amin(sensi)
+        Lpl = Ptx - minsensi
+        maxDist = distFinder.max_distance((minsensi * -1) + max(TxPowers))
+        results.write("maxDist: " + str(maxDist) + "\n")
 
-    repetition += 1
-    if repetition == 5:
-        repetition = 0
-        config_rep += 1
+        # base station placement
+        bsx = maxDist + 10
+        bsy = maxDist + 10
+        xmax = bsx + maxDist + 20
+        ymax = bsy + maxDist + 20
+
+        # prepare graphics and add sink
+        if graphics == 1:
+            plt.ion()
+            figure_count += 1
+            plt.figure(figure_count)
+            ax = plt.gcf().gca()
+            # XXX should be base station position
+            ax.add_artist(plt.Circle((bsx, bsy), 3, fill=True, color='green'))
+            ax.add_artist(plt.Circle((bsx, bsy), maxDist, fill=False, color='green'))
+
+        # Creates a list of nodes and their packets
+        create_nodes()
+        experiLogic.logic(nodes, sf_counts, curr_config)
+
+        # prepare show
+        if graphics == 1:
+            plt.xlim([0, xmax])
+            plt.ylim([0, ymax])
+            plt.draw()
+
+        # start simulation
+        nodesSorted = nodes
+        nodesSorted.sort()
+        powerLogic.logic(nodes)
+        env.run(until=simtime)
+
+        # print stats and save into file
+        results.write("nrCollisions: " + str(nrCollisions) + "\n")
+
+        # compute energy
+        # Transmit consumption in mA from -2 to +17 dBm
+        TX = [22, 22, 22, 23,  # RFO/PA0: -2..1
+              24, 24, 24, 25, 25, 25, 25, 26, 31, 32, 34, 35, 44,  # PA_BOOST/PA1: 2..14
+              82, 85, 90,  # PA_BOOST/PA1: 15..17
+              105, 115, 125]  # PA_BOOST/PA1+PA2: 18..20
+        V = 3.0  # voltage XXX
+        sent = sum(n.sent for n in nodes)
+        energy = sum(node.packet.rectime * TX[int(node.packet.txpow) + 2] * V * node.sent for node in nodes) / 1e6
+
+        results.write("energy (in J): " + str(energy) + "\n")
+        results.write("sent packets: " + str(sent) + "\n")
+        results.write("collisions: " + str(nrCollisions) + "\n")
+        results.write("received packets: " + str(nrReceived) + "\n")
+        results.write("processed packets: " + str(nrProcessed) + "\n")
+        results.write("lost packets: " + str(nrLost) + "\n")
+
+        # data extraction rate
+        der = (sent - nrCollisions) / float(sent)
+        results.write("sent - nrCollisions. DER: " + str(der) + "\n")
+        der = nrReceived / float(sent)
+        results.write("nrReceived / sent. DER method 2: " + str(der) + "\n")
+
+        counter = 7
+        for receivedStat, sentStat, lostStat, collideStat, interferStat in zip(sfReceived, sfSent, sfLost, sfCollided,
+                                                                               interferCount):
+            if float(receivedStat) > 0 and float(sentStat) > 0:
+                results.write("SF" + str(counter) + " DER: " + str(float(receivedStat) / float(sentStat)) +
+                              " Received/Sent/Lost/Collided/Interfered Packets: " + str(float(receivedStat)) + "/"
+                              + str(float(sentStat)) + "/" + str(float(lostStat)) + "/"
+                              + str(float(collideStat)) + "/" + str(float(interferStat)) + "\n")
+            else:
+                results.write("SF" + str(counter) + "Exception: Received/Sent/Lost/Collided/Interefered Packets : " +
+                              str(float(receivedStat)) + "/" + str(float(sentStat)) + "/" + str(float(lostStat)) + "/"
+                              + str(float(collideStat)) + "/" + str(float(interferStat)) + "\n")
+            counter += 1
+        results.write("SF Counts: " + str(experiLogic.sfCounts) + "\n")
+        totalTime = observer.accum_f + observer.accum_e
+        results.write("Accumulted full time: " + str(observer.accum_f) + ", " + str(observer.accum_f / totalTime)
+                      + "%" + "\n")
+        results.write("Accumulted empty time: " + str(observer.accum_e) + ", " + str(observer.accum_e / totalTime)
+                      + "%" + "\n")
+        results.write("----------------------------------------------------------------\n")
+
+        repetition += 1
+        if repetition == 5:
+            repetition = 0
+            config_rep += 1
 
 results.close()
 # this can be done to keep graphics visible
