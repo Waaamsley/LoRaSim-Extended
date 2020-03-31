@@ -10,85 +10,56 @@ class placementGenerator:
     def __init__(self, nr_nodes, region_counts):
         self.nr_nodes = nr_nodes
         self.region_counts = region_counts
-        self.modifier = 0.2
 
     def full_placement(self, configurations):
-        self.pre_placement(configurations)
-        #self.wave_placement(configurations)
-        #self.post_placement(configurations)
-
-    def pre_placement(self, configurations):
         start = [self.nr_nodes, 0, 0, 0, 0, 0]
+        goal = list(self.region_counts)
+        configurations.append(list(start))
+        self.wave(configurations, start, goal, 5)
 
+        start = list(goal)
+        avg = float(self.nr_nodes) / float(len(self.region_counts))
+        goal = [avg, avg, avg, avg, avg, avg]
+        self.wave(configurations, start, goal, 5)
+
+        start = list(goal)
+        goal = list(self.region_counts)
+        goal.reverse()
+        self.wave(configurations, start, goal, 5)
+
+        start = list(goal)
+        goal = [0, 0, 0, 0, 0, self.nr_nodes]
+        self.wave(configurations, start, goal, 5)
+
+    def wave(self, configurations, start, goal, steps):
         differences = []
         total = 0
-        for i in range(len(self.region_counts)-1):
-            total += self.region_counts[i]
-            differences.append(self.nr_nodes - total)
+        actual_total = 0
+
+        for i in range(len(start) - 1):
+            total += goal[i]
+            actual_total += start[i]
+            differences.append(actual_total - total)
 
         temp = list(start)
         mods = [0, 0, 0, 0, 0]
-        for i in range(10):
-            configurations.append(list(temp))
+        for i in range(steps):
+            total = 0
             for j in range(len(differences)):
                 if start[j] != 0:
                     if mods[j] == 0:
-                        mods[j] = 1.0 / (10.0 - i)
+                        mods[j] = 1.0 / (float(steps) - i)
                     change = differences[j] * mods[j]
                     start[j] -= change
-                    start[j+1] += change
+                    start[j + 1] += change
                     temp[j] = int(round(start[j]))
-                    temp[j + 1] = int(round(start[j+1]))
+                    temp[j + 1] = int(round(start[j + 1]))
+                    total += temp[j]
                 else:
                     break
-
-    def wave_placement(self, configurations):
-        avg = self.nr_nodes / len(self.region_counts)
-
-        differences = []
-        for j in range(0, 6):
-            difference = self.region_counts[j] - avg
-            differences.append(difference)
-
-        changes = []
-        for item in differences:
-            change = item * self.modifier
-            changes.append(change)
-
-        start = list(self.region_counts)
-        temp = list(start)
-        for i in range(0, (1/self.modifier)):
-            configurations.append(list(temp))
-            total = 0
-            for j, item in enumerate(changes):
-                start[j] -= item
-                temp[j] = int(round(start[j]))
-                total += temp[j]
-            temp[0] -= (self.nr_nodes - total)
-
-        changes.reverse()
-        for i in range(0, (1/self.modifier)):
-            temp = list(configurations[-1])
-            for j, item in enumerate(changes):
-                temp[j] += item
-            total = 0
-            for j in range(len(temp)):
-                temp[j] = int(round(temp[j]))
-                total += temp[j]
+            total += temp[-1]
             temp[0] += (self.nr_nodes - total)
-            configurations.append(temp)
-
-    def post_placement(self, configurations):
-        temp = []
-        if len(configurations) > 20:
-            temp = list(configurations[1:10])
-        else:
-            self.pre_placement(temp)
-
-        temp.reverse()
-        for item in temp:
-            item.reverse()
-            configurations.append(item)
+            configurations.append(list(temp))
 
 
 class nodePlacer:
