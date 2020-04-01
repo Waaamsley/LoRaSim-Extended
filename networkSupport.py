@@ -113,7 +113,7 @@ class nodePlacer:
                 region = i
                 break
         if region == -1:
-            region = len(self.sfCounts - 1)
+            region = len(self.sfCounts)-1
 
         # currently assuming static txPower of 14dB
         rssi = self.Ptx + (-1 * self.sensi[region, 1])
@@ -187,7 +187,7 @@ class experiments:
         elif self.experiment == 4:
             self.experiment_four(nodes)
         elif self.experiment == 5:
-            self.experiment_five(nodes, ideal, [], truth, len(nodes))
+            self.experiment_five(nodes, ideal, truth, [], len(nodes))
         else:
             print("Invalid experiment!\nQuitting!")
             quit()
@@ -217,9 +217,7 @@ class experiments:
             node.packet.phase_two(sf, 1, 125, ch, rectime)
             self.sfCounts[sf - 7] += 1
 
-    # recursive method. - cancel that. just recalculate actual on the way out.
-    # still working on back tracking issue.
-    def experiment_five(self, nodes, ideal, actual, truth, nr_nodes):
+    def experiment_five(self, nodes, ideal, truth, actual, nr_nodes):
         sf_possible = [0, 0, 0, 0, 0, 0]
         temp_total = 0
         for i, amt in enumerate(truth):
@@ -238,14 +236,15 @@ class experiments:
                 fair_sf_getter = fairSF(nr_nodes - used_total, self.sfs[i + 1:])
                 ideal = ideal[:i + 1] + fair_sf_getter.get_sf_counts()
 
-                ratio = truth[i] / ideal[i]
-                equivalent = ratio * ideal[i - 1]
-                if i > 0 and equivalent < ideal[i - 1]:
-                    split_total = actual[i] + actual[i - 1]
-                    fair_sf_getter = fairSF(split_total, self.sfs[i - 1:i + 1])
-                    split_ideal = fair_sf_getter.get_sf_counts()
-                    actual[i - 1] = split_ideal[0]
-                    actual[i] = split_ideal[1]
+                if i > 0:
+                    ratio = float(truth[i]) / float(ideal[i])
+                    equivalent = ratio * ideal[i - 1]
+                    if equivalent < actual[i - 1]:
+                        split_total = actual[i] + actual[i - 1]
+                        fair_sf_getter = fairSF(split_total, self.sfs[i - 1:i + 1])
+                        split_ideal = fair_sf_getter.get_sf_counts()
+                        actual[i - 1] = split_ideal[0]
+                        actual[i] = split_ideal[1]
 
         counter = 0
         for i, count in enumerate(actual):

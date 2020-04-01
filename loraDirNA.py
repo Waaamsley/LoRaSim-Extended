@@ -352,21 +352,21 @@ print ("Base Tx Power: ", Ptx)
 # global stuff
 # Can do a while loop from here to end to repeat simulations.
 sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
-fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
-sf_counts = fair_sf_getter.get_sf_counts()
-placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
-configurations = []
-placementGenerator.full_placement(configurations)
 results = open("results.txt", "a")
-results.write("----------------------------------------------------------------\n")
-results.write("----------------------------------------------------------------\n")
-
-repetition = 0  # Going to do 5 repititions
-config_rep = 0  # max configurations of 20
 figure_count = 0
 og_nr_nodes = int(nrNodes)
-for i in range(10):
-    nrNodes = og_nr_nodes * i
+for z in range(3, 11):
+    results.write("----------------------------------------------------------------\n")
+    results.write("----------------------------------------------------------------\n")
+    nrNodes = og_nr_nodes * z
+    fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
+    sf_counts = fair_sf_getter.get_sf_counts()
+    placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
+    configurations = []
+    placementGenerator.full_placement(configurations)
+
+    repetition = 0  # Going to do 5 repititions
+    config_rep = 0  # max configurations of 20
     while config_rep < len(configurations):
         sfSent = [0, 0, 0, 0, 0, 0]
         sfReceived = [0, 0, 0, 0, 0, 0]
