@@ -484,11 +484,12 @@ for z in range(3, 11):
                               + str(float(collideStat)) + "/" + str(float(interferStat)) + "\n")
             counter += 1
         results.write("SF Counts: " + str(experiLogic.sfCounts) + "\n")
-        totalTime = observer.accum_f + observer.accum_e
-        results.write("Accumulted full time: " + str(observer.accum_f) + ", " + str(observer.accum_f / totalTime)
-                      + "%" + "\n")
-        results.write("Accumulted empty time: " + str(observer.accum_e) + ", " + str(observer.accum_e / totalTime)
-                      + "%" + "\n")
+        if observer.accum_f > 0 and observer.accum_e > 0:
+            totalTime = observer.accum_f + observer.accum_e
+            results.write("Accumulted full time: " + str(observer.accum_f) + ", " + str(observer.accum_f / totalTime)
+                          + "%" + "\n")
+            results.write("Accumulted empty time: " + str(observer.accum_e) + ", " + str(observer.accum_e / totalTime)
+                          + "%" + "\n")
         results.write("----------------------------------------------------------------\n")
 
         repetition += 1
