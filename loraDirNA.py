@@ -355,15 +355,17 @@ sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 results = open("results.txt", "a")
 figure_count = 0
 og_nr_nodes = int(nrNodes)
-for z in range(3, 11):
+for z in range(1):
     results.write("----------------------------------------------------------------\n")
     results.write("----------------------------------------------------------------\n")
-    nrNodes = og_nr_nodes * z
+    nrNodes = og_nr_nodes * (z+1)
     fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
     sf_counts = fair_sf_getter.get_sf_counts()
     placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
     configurations = []
     placementGenerator.full_placement(configurations)
+
+    configurations = configurations[-2:]
 
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
@@ -374,7 +376,7 @@ for z in range(3, 11):
         sfCollided = [0, 0, 0, 0, 0, 0]
         interferCount = [0, 0, 0, 0, 0, 0]
         curr_config = configurations[config_rep]
-        results.write("Configuration: " + str(config_rep + 1) + ". Repetition: " + str(repetition + 1)
+        results.write("Configuration: " + str(config_rep + 20) + ". Repetition: " + str(repetition + 1)
                       + ". Region Counts: " + str(curr_config) + "\n")
 
         nodes = []
