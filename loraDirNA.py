@@ -355,6 +355,7 @@ sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 results = open("results.txt", "a")
 figure_count = 0
 og_nr_nodes = int(nrNodes)
+# For loop for how different nrNodes.
 for z in range(1):
     results.write("----------------------------------------------------------------\n")
     results.write("----------------------------------------------------------------\n")
@@ -365,7 +366,10 @@ for z in range(1):
     configurations = []
     placementGenerator.full_placement(configurations)
 
-    configurations = configurations[12:]
+    configurations = configurations[16:]
+    print configurations[0]
+    print configurations[1]
+    quit()
 
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
