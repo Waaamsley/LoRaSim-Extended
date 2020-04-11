@@ -366,10 +366,7 @@ for z in range(1):
     configurations = []
     placementGenerator.full_placement(configurations)
 
-    configurations = configurations[16:]
-    print configurations[0]
-    print configurations[1]
-    quit()
+    configurations = configurations[17:]
 
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
@@ -380,7 +377,7 @@ for z in range(1):
         sfCollided = [0, 0, 0, 0, 0, 0]
         interferCount = [0, 0, 0, 0, 0, 0]
         curr_config = configurations[config_rep]
-        results.write("Configuration: " + str(config_rep + 13) + ". Repetition: " + str(repetition + 1)
+        results.write("Configuration: " + str(config_rep + 18) + ". Repetition: " + str(repetition + 1)
                       + ". Region Counts: " + str(curr_config) + "\n")
 
         nodes = []
