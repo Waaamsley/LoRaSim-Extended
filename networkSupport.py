@@ -350,9 +350,14 @@ class powerControl:
 
     def power_three(self, nodes):
         # First sort nodes by RSSI, done with __lt__ method on node class.
-        nodes_sorted = nodes
+        nodes_sorted = list(nodes)
         nodes_sorted.sort()
         nodes_sorted.reverse()
+
+        for node in nodes_sorted:
+            print node.packet.rssi
+
+        quit()
 
         start = 0
         while True:

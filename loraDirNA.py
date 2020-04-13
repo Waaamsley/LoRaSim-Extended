@@ -193,7 +193,8 @@ class myNode:
             ax.add_artist(plt.Circle((self.x, self.y), 2, fill=True, color='blue'))
 
     def __lt__(self, other):
-        return self.packet.rssi > other.packet.rssi
+        return self.packet.Lpl > other.packet.rssi
+        #return self.packet.rssi > other.packet.rssi
 
 
 #
@@ -319,16 +320,20 @@ class myTransmitter:
 
 # get arguments
 inputs = []
-if len(sys.argv) == 2:
+nrNodes_list = []
+if len(sys.argv) == 3:
     inputFile = open(sys.argv[1], "r")
+    nodeFile = open(sys.argv[2], 'r')
     for line in inputFile:
         inputs.append(line.strip())
+    for line in nodeFile:
+        nrNodes_list.append(line.strip())
 else:
     print ("usage: submit the name of the inputs file for them to be read in.\n"
            "Consult the inputs_README for information")
     exit(-1)
 
-nrNodes = int(inputs[0])
+
 avgSend = float(inputs[1])
 experiment = int(inputs[2])
 powerScheme = int(inputs[3])
@@ -338,7 +343,7 @@ fullCollision = int(inputs[6])
 graphics = int(inputs[7])
 distributionType = inputs[8]
 Ptx = int(inputs[9])
-print ("Nodes:", nrNodes)
+print ("Nodes:", nrNodes_list)
 print ("Average Send Time / Inter Packet Arrival Time:", avgSend)
 print ("Experiment: ", experiment)
 print ("Power Control Scheme: ", powerScheme)
@@ -354,12 +359,10 @@ print ("Base Tx Power: ", Ptx)
 sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 results = open("results.txt", "a")
 figure_count = 0
-og_nr_nodes = int(nrNodes)
 # For loop for how different nrNodes.
-for z in range(1):
+for nrNodes in nrNodes_list:
     results.write("----------------------------------------------------------------\n")
     results.write("----------------------------------------------------------------\n")
-    nrNodes = og_nr_nodes * (z+1)
     fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
     sf_counts = fair_sf_getter.get_sf_counts()
     placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
@@ -433,6 +436,14 @@ for z in range(1):
 
         # Creates a list of nodes and their packets
         create_nodes()
+
+        sorted_nodes = list(nodes)
+        sorted_nodes.sort()
+        for node in sorted_nodes:
+            print node.packet.Lpl
+
+        quit()
+
         experiLogic.logic(nodes, sf_counts, curr_config)
 
         # prepare show

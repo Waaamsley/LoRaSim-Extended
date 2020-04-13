@@ -1,4 +1,3 @@
-nodes:
 avgsend:
 experiment:
 power_scheme:
