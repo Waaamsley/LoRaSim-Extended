@@ -22,6 +22,7 @@ import math
 import sys
 import matplotlib.pyplot as plt
 import networkSupport
+import operator
 
 """
  SYNOPSIS:
@@ -193,7 +194,7 @@ class myNode:
             ax.add_artist(plt.Circle((self.x, self.y), 2, fill=True, color='blue'))
 
     def __lt__(self, other):
-        return self.packet.Lpl > other.packet.rssi
+        return self.packet.Lpl < other.packet.Lpl
         #return self.packet.rssi > other.packet.rssi
 
 
@@ -327,22 +328,21 @@ if len(sys.argv) == 3:
     for line in inputFile:
         inputs.append(line.strip())
     for line in nodeFile:
-        nrNodes_list.append(line.strip())
+        nrNodes_list.append(int(line.strip()))
 else:
     print ("usage: submit the name of the inputs file for them to be read in.\n"
            "Consult the inputs_README for information")
     exit(-1)
 
-
-avgSend = float(inputs[1])
-experiment = int(inputs[2])
-powerScheme = int(inputs[3])
-simtime = int(inputs[4])
-nrChannels = int(inputs[5])
-fullCollision = int(inputs[6])
-graphics = int(inputs[7])
-distributionType = inputs[8]
-Ptx = int(inputs[9])
+avgSend = float(inputs[0])
+experiment = int(inputs[1])
+powerScheme = int(inputs[2])
+simtime = int(inputs[3])
+nrChannels = int(inputs[4])
+fullCollision = int(inputs[5])
+graphics = int(inputs[6])
+distributionType = inputs[7]
+Ptx = int(inputs[8])
 print ("Nodes:", nrNodes_list)
 print ("Average Send Time / Inter Packet Arrival Time:", avgSend)
 print ("Experiment: ", experiment)
@@ -368,8 +368,6 @@ for nrNodes in nrNodes_list:
     placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
     configurations = []
     placementGenerator.full_placement(configurations)
-
-    configurations = configurations[17:]
 
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
@@ -437,25 +435,23 @@ for nrNodes in nrNodes_list:
         # Creates a list of nodes and their packets
         create_nodes()
 
-        sorted_nodes = list(nodes)
-        sorted_nodes.sort()
-        for node in sorted_nodes:
-            print node.packet.Lpl
-
-        quit()
-
-        experiLogic.logic(nodes, sf_counts, curr_config)
-
         # prepare show
+        # Their is updated graphics code, maybe add?
+        # This is some of it, their are multiple segments to add.
+        """
         if graphics == 1:
-            plt.xlim([0, xmax])
-            plt.ylim([0, ymax])
-            plt.draw()
+            plt.ion()
+            plt.figure()
+            plt.title("lora simulator")
+            ax = plt.gcf().gca()
+            
+            ax.add_artist()
+        """
 
         # start simulation
-        nodesSorted = nodes
-        nodesSorted.sort()
-        powerLogic.logic(nodes)
+        if experiment != 6:
+            experiLogic.logic(nodes, sf_counts, curr_config, 0)
+        powerLogic.logic(nodes, experiLogic)
         env.run(until=simtime)
 
         # print stats and save into file

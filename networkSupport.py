@@ -177,7 +177,7 @@ class experiments:
         self.sfCounts = [0, 0, 0, 0, 0, 0]
         self.sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 
-    def logic(self, nodes, ideal, truth):
+    def logic(self, nodes, ideal, truth, start):
         if self.experiment == 1:
             self.basic_experiment(nodes, 12, 4, 125)
         elif self.experiment == 2:
@@ -188,6 +188,9 @@ class experiments:
             self.experiment_four(nodes)
         elif self.experiment == 5:
             self.experiment_five(nodes, ideal, truth, [], len(nodes))
+        elif self.experiment ==  6:
+            sf_assigns = self.experiment_six(nodes, len(nodes), start)
+            return sf_assigns
         else:
             print("Invalid experiment!\nQuitting!")
             quit()
@@ -199,6 +202,7 @@ class experiments:
             node.packet.phase_two(sf, cr, bw, ch, rectime)
             self.sfCounts[sf - 7] += 1
 
+    # rssi based.
     def experiment_four(self, nodes):
         for node in nodes:
             ch = random.randint(0, self.nrChannels - 1)
@@ -217,6 +221,7 @@ class experiments:
             node.packet.phase_two(sf, 1, 125, ch, rectime)
             self.sfCounts[sf - 7] += 1
 
+    # My Solution
     def experiment_five(self, nodes, ideal, truth, actual, nr_nodes):
         sf_possible = [0, 0, 0, 0, 0, 0]
         temp_total = 0
@@ -256,6 +261,26 @@ class experiments:
                 self.sfCounts[sf - 7] += 1
                 counter += 1
 
+    def experiment_six(self, nodes, nr_nodes, start):
+        fair_sf_getter = fairSF(nr_nodes - start, self.sfs)
+        sf_assigns = fair_sf_getter.get_sf_counts()
+
+        for i in range(0, start):
+            ch = random.randint(0, self.nrChannels - 1)
+            rectime = self.esti.airtime(7, 1, self.plen, 125)
+            nodes[i].packet.phase_two(7, 1, 125, ch, rectime)
+            nodes[i].packet.phase_three(2.0)
+
+        total = 0
+        for i, item in enumerate(sf_assigns):
+            for number in range(item):
+                ch = random.randint(0, self.nrChannels - 1)
+                rectime = self.esti.airtime(i+7, 1, self.plen, 125)
+                nodes[total+start].packet.phase_two(i+7, 1, 125, ch, rectime)
+                total += 1
+
+        return sf_assigns
+
 
 class powerControl:
 
@@ -267,13 +292,13 @@ class powerControl:
         self.ptx = ptx
         self.atrGet = operator.attrgetter
 
-    def logic(self, nodes):
+    def logic(self, nodes, experi_logic):
         if self.powerScheme == 1:
             self.power_one(nodes)
         elif self.powerScheme == 2:
             self.power_two(nodes)
         elif self.powerScheme == 3:
-            self.power_three(nodes)
+            self.power_three(nodes, experi_logic)
         else:
             for node in nodes:
                 node.packet.phase_three(self.ptx)
@@ -348,67 +373,52 @@ class powerControl:
                         nodes_sorted[i].packet.phase_three(power_level)
         return
 
-    def power_three(self, nodes):
-        # First sort nodes by RSSI, done with __lt__ method on node class.
-        nodes_sorted = list(nodes)
-        nodes_sorted.sort()
-        nodes_sorted.reverse()
-
-        for node in nodes_sorted:
-            print node.packet.rssi
-
-        quit()
+    # OG
+    def power_three(self, nodes, experi_logic):
+        nodes.sort()
 
         start = 0
-        while True:
-            first_sf8 = 0
-            last_sf8 = 0
-            for i, n in enumerate(nodes_sorted, start):
-                # Get first sf8 node for later.
-                if n.packet.sf == 7:  # and nodesSorted[-1].packet.sf == 8
-                    first_sf8 = i - 1
-                    break
-                # Main point of this for loop is to get last sf8 node.
-                if n.packet.sf == 8 and nodes_sorted[i - 1].packet.sf == 9:
-                    last_sf8 = i
+        looping = True
+        while looping:
+            sf_assigns = experi_logic.logic(nodes, [], [], start)
+            last_sf8 = start + sf_assigns[0] + sf_assigns[1] - 1
+
+            node_a = nodes[last_sf8]
+            node_b = nodes[start]
+            cir = self.sensiDiff[node_a.packet.sf - 7][node_b.packet.sf - 7]
+
+            if 14 - node_a.packet.Lpl - cir > 2 - node_b.packet.Lpl:
+                looping = False
+                nodes[start].packet.phase_three(2)
+                nodes[last_sf8].packet.phase_three(14)
+            else:
+                experi_logic.logic(nodes, [], [], start)
+                print node_a.packet.Lpl, node_b.packet.Lpl, cir
+                print ("HEREEEEE, power allocation was not viable.")
+                print (14 - node_a.packet.Lpl, 2 - node_b.packet.Lpl, cir)
             start += 1
 
-            node_a = nodes_sorted[start * -1]
-            node_b = nodes_sorted[last_sf8]
-            cir = self.sensiDiff[node_a.packet.sf - 7][node_a.packet.sf - 7]
-            if 2 - node_a.packet.Lpl - (14 - node_b.packet.Lpl) < abs(cir):
-                break
-            print node_a.packet.Lpl, node_b.packet.Lpl, cir
-            print ("HEREEEEE, power allocation was not viable.")
-            print (2 - node_a.packet.Lpl, 14 - node_b.packet.Lpl, cir)
-            quit()
-            # Need to reapply spreading factors
-            # Will have to do the replacement phase (or do i?)
-
         # Assign power levels
-        for i, n in enumerate(nodes_sorted, start):
-            txpow = self.ptx
-            if n.packet.sf == 7:
-                node_a = nodes_sorted[first_sf8]
-                cir = self.sensiDiff[n.packet.sf - 7][node_a.packet.sf - 7]
-                if n.packet.rssi > node_a.packet.rssi:
-                    txpow = 2
-                else:
-                    difference = node_a.packet.rssi - n.packet.rssi
-                    # cir is negative value.
-                    cirdiff = difference + cir
-                    txpow = max(2, txpow + cirdiff)
+        nodes.reverse()
+        first_sf8 = (((start-1) + sf_assigns[0])*-1)-1
+        for i in range(0, (len(nodes) - start)):
+            node_a = nodes[i]
+            if nodes[i].packet.sf == 7:
+                #make sure sf7 node will not interfer with sf8 node.
+                node_b = nodes[first_sf8]
+                cir = self.sensiDiff[node_b.packet.sf - 7][node_a.packet.sf - 7]
+
             else:
-                node_a = nodes_sorted[start * -1]
-                if n.packet.rssi > node_a.packet.rssi:
-                    txpow = 2
+                node_b = nodes[start*-1]
+                cir = self.sensiDiff[node_a.packet.sf - 7][node_b.packet.sf - 7]
+                diff = (14-node_a.packet.Lpl) - (node_b.packet.txpow - node_b.packet.Lpl)
+                if diff < 0:
+                    diff2 = cir - diff
+                    new_txpow = max(2, nodes[i].packet.txpow - diff2)
+                    nodes[i].packet.phase_three(new_txpow)
                 else:
-                    difference = node_a.packet.rssi - n.packet.rssi
-                    # cir is negative value.
-                    cirdiff = difference + cir
-                    txpow = max(2, txpow + cirdiff)
-            n.packet.phase_three(txpow)
-            # print "testing:", n.packet.sf, cir, txpow, Prx
+                    nodes[i].packet.phase_three(14)
+
         return
 
 
