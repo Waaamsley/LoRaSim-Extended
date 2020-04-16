@@ -452,6 +452,7 @@ for nrNodes in nrNodes_list:
         if experiment != 6:
             experiLogic.logic(nodes, sf_counts, curr_config, 0)
         powerLogic.logic(nodes, experiLogic)
+        quit()
         env.run(until=simtime)
 
         # print stats and save into file

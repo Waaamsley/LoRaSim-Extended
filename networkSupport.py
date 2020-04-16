@@ -399,27 +399,27 @@ class powerControl:
             start += 1
 
         # Assign power levels
+        # Need to add a viable check.
         nodes.reverse()
         first_sf8 = (((start-1) + sf_assigns[0])*-1)-1
         for i in range(0, (len(nodes) - start)):
-            node_a = nodes[i]
             if nodes[i].packet.sf == 7:
-                #make sure sf7 node will not interfer with sf8 node.
+                # Make sure first sf8 node does not interfer with sf7 node.
+                node_a = nodes[i]
                 node_b = nodes[first_sf8]
-                cir = self.sensiDiff[node_b.packet.sf - 7][node_a.packet.sf - 7]
-
             else:
+                # Make sure nearest node will not interfere with current node.
+                node_a = nodes[i]
                 node_b = nodes[start*-1]
-                cir = self.sensiDiff[node_a.packet.sf - 7][node_b.packet.sf - 7]
-                diff = (14-node_a.packet.Lpl) - (node_b.packet.txpow - node_b.packet.Lpl)
-                if diff < 0:
-                    diff2 = cir - diff
-                    new_txpow = max(2, nodes[i].packet.txpow - diff2)
-                    nodes[i].packet.phase_three(new_txpow)
-                else:
-                    nodes[i].packet.phase_three(14)
 
-        return
+            cir = self.sensiDiff[node_a.packet.sf - 7][node_b.packet.sf - 7]
+            diff = (14 - node_a.packet.Lpl) - (node_b.packet.txpow - node_b.packet.Lpl)
+            if diff > cir:
+                diff2 = cir - diff
+                new_txpow = max(2, 14 - abs(diff2))
+                node_a.packet.phase_three(math.ceil(new_txpow))
+            else:
+                nodes[i].packet.phase_three(14)
 
 
 class channelUsage(object):
