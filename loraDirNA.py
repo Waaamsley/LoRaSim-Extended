@@ -378,7 +378,7 @@ for nrNodes in nrNodes_list:
         sfCollided = [0, 0, 0, 0, 0, 0]
         interferCount = [0, 0, 0, 0, 0, 0]
         curr_config = configurations[config_rep]
-        results.write("Configuration: " + str(config_rep + 18) + ". Repetition: " + str(repetition + 1)
+        results.write("Configuration: " + str(config_rep + 1) + ". Repetition: " + str(repetition + 1)
                       + ". Region Counts: " + str(curr_config) + "\n")
 
         nodes = []
@@ -452,7 +452,6 @@ for nrNodes in nrNodes_list:
         if experiment != 6:
             experiLogic.logic(nodes, sf_counts, curr_config, 0)
         powerLogic.logic(nodes, experiLogic)
-        quit()
         env.run(until=simtime)
 
         # print stats and save into file

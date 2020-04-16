@@ -398,8 +398,7 @@ class powerControl:
                 print (14 - node_a.packet.Lpl, 2 - node_b.packet.Lpl, cir)
             start += 1
 
-        # Assign power levels
-        # Need to add a viable check.
+        # Assign power levels, Need to add a viable check.
         nodes.reverse()
         first_sf8 = (((start-1) + sf_assigns[0])*-1)-1
         for i in range(0, (len(nodes) - start)):
