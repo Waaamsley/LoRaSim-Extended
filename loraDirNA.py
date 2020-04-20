@@ -102,7 +102,7 @@ def checkcollision(packet):
 
     if packetsAtBS:
         for other in packetsAtBS:
-            if other.nodeid != packet.nodeid:
+            if other.nodeid != packet.nodeid and other.ch == packet.ch:
                 if fullCollision:
                     if timing_collision(packet, other.packet):
                         collided_packets = power_collision(packet, other.packet)
