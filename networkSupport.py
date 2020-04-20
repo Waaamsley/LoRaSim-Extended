@@ -274,9 +274,11 @@ class experiments:
         total = 0
         for i, item in enumerate(sf_assigns):
             for number in range(item):
+                sf = i+7
                 ch = random.randint(0, self.nrChannels - 1)
                 rectime = self.esti.airtime(i+7, 1, self.plen, 125)
                 nodes[total+start].packet.phase_two(i+7, 1, 125, ch, rectime)
+                self.sfCounts[sf - 7] += 1
                 total += 1
 
         return sf_assigns
@@ -375,6 +377,7 @@ class powerControl:
 
     # OG
     def power_three(self, nodes, experi_logic):
+        validate = False
         nodes.sort()
 
         start = 0
@@ -389,13 +392,16 @@ class powerControl:
 
             if 14 - node_a.packet.Lpl - cir > 2 - node_b.packet.Lpl:
                 looping = False
-                nodes[start].packet.phase_three(2)
+                # Validate here, if is for error check. else is standard.
+                if validate:
+                    minsensi = self.sensi[nodes[start].packet.sf - 7, 1]
+                    temp_tx = max(2, self.ptx - math.floor((self.ptx - nodes[start].packet.Lpl) - minsensi))
+                    nodes[start].packet.phase_three(temp_tx)
+                else:
+                    nodes[start].packet.phase_three(2)
                 nodes[last_sf8].packet.phase_three(14)
             else:
                 experi_logic.logic(nodes, [], [], start)
-                print node_a.packet.Lpl, node_b.packet.Lpl, cir
-                print ("HEREEEEE, power allocation was not viable.")
-                print (14 - node_a.packet.Lpl, 2 - node_b.packet.Lpl, cir)
             start += 1
 
         # Assign power levels, Need to add a viable check.
@@ -415,10 +421,21 @@ class powerControl:
             diff = (14 - node_a.packet.Lpl) - (node_b.packet.txpow - node_b.packet.Lpl)
             if diff > cir:
                 diff2 = cir - diff
-                new_txpow = max(2, 14 - abs(diff2))
-                node_a.packet.phase_three(math.ceil(new_txpow))
+                # Validate here.
+                if validate:
+                    minsensi = self.sensi[node_a.packet.sf - 7, 1]
+                    new_txpow = max(14 - abs(diff2), \
+                                    self.ptx - math.floor((self.ptx - node_a.packet.Lpl) - minsensi))
+                else:
+                    new_txpow = max(2, 14 - math.floor(abs(diff2)))
+                node_a.packet.phase_three(new_txpow)
             else:
                 nodes[i].packet.phase_three(14)
+        """
+            minsensi = self.sensi[node.packet.sf - 7, 1]
+            txpow = max(2, self.ptx - math.floor((self.ptx - node.packet.Lpl) - minsensi))
+            node.packet.phase_three(txpow)
+        """
 
 
 class channelUsage(object):

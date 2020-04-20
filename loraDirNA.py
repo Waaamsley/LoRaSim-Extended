@@ -102,7 +102,7 @@ def checkcollision(packet):
 
     if packetsAtBS:
         for other in packetsAtBS:
-            if other.nodeid != packet.nodeid and other.ch == packet.ch:
+            if other.nodeid != packet.nodeid and other.packet.ch == packet.ch:
                 if fullCollision:
                     if timing_collision(packet, other.packet):
                         collided_packets = power_collision(packet, other.packet)
@@ -272,6 +272,8 @@ class myTransmitter:
                 sensitivity = sensi[node.packet.sf - 7, [125, 250, 500].index(node.packet.bw) + 1]
                 if node.packet.rssi < sensitivity:
                     node.packet.lost = True
+                    global nr_fall_short
+                    nr_fall_short += 1
                 else:
                     node.packet.lost = False
                     # adding packet if no collision
@@ -391,6 +393,7 @@ for nrNodes in nrNodes_list:
         nrReceived = 0
         nrProcessed = 0
         nrLost = 0
+        nr_fall_short = 0
 
         # maximum number of packets the BS can receive at the same time
         maxBSReceives = 999
@@ -473,6 +476,7 @@ for nrNodes in nrNodes_list:
         results.write("received packets: " + str(nrReceived) + "\n")
         results.write("processed packets: " + str(nrProcessed) + "\n")
         results.write("lost packets: " + str(nrLost) + "\n")
+        results.write("fallen short packets: " + str(nr_fall_short) + "\n")
 
         # data extraction rate
         der = (sent - nrCollisions) / float(sent)
