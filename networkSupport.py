@@ -262,6 +262,7 @@ class experiments:
                 counter += 1
 
     def experiment_six(self, nodes, nr_nodes, start):
+        validate2 = False
         fair_sf_getter = fairSF(nr_nodes - start, self.sfs)
         sf_assigns = fair_sf_getter.get_sf_counts()
 
@@ -395,8 +396,10 @@ class powerControl:
                 # Validate here, if is for error check. else is standard.
                 if validate:
                     minsensi = self.sensi[nodes[start].packet.sf - 7, 1]
-                    temp_tx = max(2, self.ptx - math.floor((self.ptx - nodes[start].packet.Lpl) - minsensi))
-                    nodes[start].packet.phase_three(temp_tx)
+                    new_txpow = max(2, self.ptx - math.floor((self.ptx - nodes[start].packet.Lpl) - minsensi))
+                    if new_txpow > 14:
+                        new_txpow = 14
+                    nodes[start].packet.phase_three(new_txpow)
                 else:
                     nodes[start].packet.phase_three(2)
                 nodes[last_sf8].packet.phase_three(14)
@@ -426,8 +429,12 @@ class powerControl:
                     minsensi = self.sensi[node_a.packet.sf - 7, 1]
                     new_txpow = max(14 - abs(diff2), \
                                     self.ptx - math.floor((self.ptx - node_a.packet.Lpl) - minsensi))
+                    if new_txpow > 14:
+                        new_txpow = 14
                 else:
                     new_txpow = max(2, 14 - math.floor(abs(diff2)))
+                    if new_txpow > 14:
+                        new_txpow = 14
                 node_a.packet.phase_three(new_txpow)
             else:
                 nodes[i].packet.phase_three(14)

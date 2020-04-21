@@ -468,7 +468,15 @@ for nrNodes in nrNodes_list:
               105, 115, 125]  # PA_BOOST/PA1+PA2: 18..20
         V = 3.0  # voltage XXX
         sent = sum(n.sent for n in nodes)
-        energy = sum(node.packet.rectime * TX[int(node.packet.txpow) + 2] * V * node.sent for node in nodes) / 1e6
+        try:
+            energy = 0
+            curr_node = None
+            for node in nodes:
+                curr_node = node
+                energy += node.packet.rectime * TX[int(node.packet.txpow) + 2] * V * node.sent
+            energy = energy/1e6
+        except:
+            print int(curr_node.packet.txpow)
 
         results.write("energy (in J): " + str(energy) + "\n")
         results.write("sent packets: " + str(sent) + "\n")
