@@ -377,7 +377,7 @@ class powerControl:
 
     # OG
     def power_three(self, nodes, experi_logic):
-        validate = False
+        validate = True
         nodes.sort()
 
         start = 0
