@@ -269,7 +269,9 @@ class experiments:
         for i in range(0, start):
             ch = random.randint(0, self.nrChannels - 1)
             rectime = self.esti.airtime(7, 1, self.plen, 125)
+            self.sfCounts[nodes[i].packet.sf-7] -= 1
             nodes[i].packet.phase_two(7, 1, 125, ch, rectime)
+            self.sfCounts[nodes[i].packet.sf-7] += 1
             nodes[i].packet.phase_three(2.0)
 
         total = 0
@@ -278,9 +280,27 @@ class experiments:
                 sf = i+7
                 ch = random.randint(0, self.nrChannels - 1)
                 rectime = self.esti.airtime(i+7, 1, self.plen, 125)
-                nodes[total+start].packet.phase_two(i+7, 1, 125, ch, rectime)
+                nodes[total+start].packet.phase_two(sf, 1, 125, ch, rectime)
                 self.sfCounts[sf - 7] += 1
                 total += 1
+
+        if validate2:
+            for i, node in enumerate(nodes):
+                minsensi = self.sensi[node.packet.sf - 7, 1]
+                if 14 - node.Lpl < minsensi:
+                    for j in range(node.packet.sf - 6, len(self.sensi)):
+                        threshold = self.sensi[j, 1]
+                        if 14 - node.Lpl > threshold:
+                            sf = j + 7
+                            ch = random.randint(0, self.nrChannels - 1)
+                            rectime = self.esti.airtime(j + 7, 1, self.plen, 125)
+                            self.sfCounts[node.packet.sf-7] -= 1
+                            node.packet.phase_two(sf, 1, 125, ch, rectime)
+                            self.sfCounts[node.packet.sf-7] += 1
+                            if i < start:
+                                txpow = max(2, self.ptx - math.floor((self.ptx - node.packet.Lpl) - minsensi))
+                                node.packet.phase_three(txpow)
+
 
         return sf_assigns
 
