@@ -74,12 +74,12 @@ sf12 = np.array([12, -136, -133, -130])
 sensi = np.array([sf7, sf8, sf9, sf10, sf11, sf12])
 
 # Arrays with dB differences for inter-SF interference
-sf7diff = np.array([6, -8, -9, -9, -9, -9])
-sf8diff = np.array([-11, 6, -11, -12, -13, -13])
-sf9diff = np.array([-15, -13, 6, -13, -14, -15])
-sf10diff = np.array([-19, -18, -17, 6, -17, -18])
-sf11diff = np.array([-22, -22, -21, -20, 6, -20])
-sf12diff = np.array([-25, -25, -25, -24, -23, 6])
+sf7diff = np.array([1, -8, -9, -9, -9, -9])
+sf8diff = np.array([-11, 1, -11, -12, -13, -13])
+sf9diff = np.array([-15, -13, 1, -13, -14, -15])
+sf10diff = np.array([-19, -18, -17, 1, -17, -18])
+sf11diff = np.array([-22, -22, -21, -20, 1, -20])
+sf12diff = np.array([-25, -25, -25, -24, -23, 1])
 sensiDiff = np.array([sf7diff, sf8diff, sf9diff, sf10diff, sf11diff, sf12diff])
 
 TxPowers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -104,14 +104,14 @@ def checkcollision(packet):
         for other in packetsAtBS:
             if other.nodeid != packet.nodeid and other.packet.ch == packet.ch:
                 if fullCollision:
-                    if timing_collision(packet, other.packet):
+                    if not late_evade(packet, other.packet):
                         collided_packets = power_collision(packet, other.packet)
                         for p in collided_packets:
                             p.collided = 1
                             if p == packet:
                                 col = 1
                 else:
-                    if timing_collision(packet, other.packet) and other.packet.sf == packet.sf:
+                    if not late_evade(packet, other.packet) and other.packet.sf == packet.sf:
                         other.collided = 1
                         packet.collided = 1
                         col = 1
@@ -138,10 +138,8 @@ def power_collision(p1, p2):
 
     return []
 
-
-def timing_collision(p1, p2):
-    # The only way we can win is by being late enough (only the first n - 5 preamble symbols overlap)
-
+# Checks if a received packet is late enough to avoid interferring packet (only the first n - 5 preamble symbols overlap)
+def late_evade(p1, p2):
     # assuming 8 preamble symbols
     npream = 8
 
@@ -152,8 +150,8 @@ def timing_collision(p1, p2):
     p2_end = p2.addTime + p2.rectime
     p1_cs = env.now + tpreamb
     if p1_cs < p2_end:
-        return True
-    return False
+        return False
+    return True
 
 
 # Creates a list of nodes.
@@ -359,12 +357,10 @@ print ("Base Tx Power: ", Ptx)
 # global stuff
 # Can do a while loop from here to end to repeat simulations.
 sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
-results = open("results.txt", "a")
+results = open("mysolution.txt", "a")
 figure_count = 0
 # For loop for how different nrNodes.
 for nrNodes in nrNodes_list:
-    results.write("----------------------------------------------------------------\n")
-    results.write("----------------------------------------------------------------\n")
     fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
     sf_counts = fair_sf_getter.get_sf_counts()
     placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
@@ -512,7 +508,6 @@ for nrNodes in nrNodes_list:
                           + "%" + "\n")
             results.write("Accumulted empty time: " + str(observer.accum_e) + ", " + str(observer.accum_e / totalTime)
                           + "%" + "\n")
-        results.write("----------------------------------------------------------------\n")
 
         repetition += 1
         if repetition == 5:
