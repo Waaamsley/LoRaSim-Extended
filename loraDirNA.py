@@ -343,6 +343,7 @@ fullCollision = int(inputs[5])
 graphics = int(inputs[6])
 distributionType = inputs[7]
 Ptx = int(inputs[8])
+results_file = str(inputs[9])
 print ("Nodes:", nrNodes_list)
 print ("Average Send Time / Inter Packet Arrival Time:", avgSend)
 print ("Experiment: ", experiment)
@@ -353,11 +354,12 @@ print ("Full Collision: ", fullCollision)
 print ("Graphics: ", graphics)
 print ("Distribution Type: ", distributionType)
 print ("Base Tx Power: ", Ptx)
+print ("Results File: ", results_file)
 
 # global stuff
 # Can do a while loop from here to end to repeat simulations.
 sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
-results = open("mysolution.txt", "a")
+results = open(results_file, "a")
 figure_count = 0
 # For loop for how different nrNodes.
 for nrNodes in nrNodes_list:

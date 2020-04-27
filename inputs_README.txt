@@ -7,3 +7,4 @@ full_collison:
 graphics:
 distribution_type:
 baseTx
+results_file
