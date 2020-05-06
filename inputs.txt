@@ -7,4 +7,4 @@
 0
 controlled
 14
-OG_validate_1.txt
+OG_validate_simplecol.txt
