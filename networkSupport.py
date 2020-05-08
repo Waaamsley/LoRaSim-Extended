@@ -263,7 +263,7 @@ class experiments:
 
     # OG solution
     def experiment_six(self, nodes, nr_nodes, start):
-        validate2 = True
+        validate2 = False
         fair_sf_getter = fairSF(nr_nodes - start, self.sfs)
         sf_assigns = fair_sf_getter.get_sf_counts()
 
