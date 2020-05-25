@@ -265,6 +265,7 @@ class experiments:
                 self.sfCounts[sf - 7] += 1
                 counter += 1
 
+    # OG solution
     def experiment_six(self, nodes, nr_nodes, start):
         validate2 = False
         fair_sf_getter = fairSF(nr_nodes - start, self.sfs)
@@ -444,7 +445,7 @@ class powerControl:
                 if validate:
                     minsensi = self.sensi[nodes[start].packet.sf - 7, 1]
                     new_txpow = max(2, self.ptx - math.floor((self.ptx - nodes[start].packet.Lpl) - minsensi))
-                    if new_txpow > 14:
+                    if new_txpow > 14.0:
                         new_txpow = 14
                     nodes[start].packet.phase_three(new_txpow)
                 else:
@@ -476,11 +477,11 @@ class powerControl:
                     minsensi = self.sensi[node_a.packet.sf - 7, 1]
                     new_txpow = max(14 - abs(diff2), \
                                     self.ptx - math.floor((self.ptx - node_a.packet.Lpl) - minsensi))
-                    if new_txpow > 14:
+                    if new_txpow > 14.0:
                         new_txpow = 14
                 else:
                     new_txpow = max(2, 14 - math.floor(abs(diff2)))
-                    if new_txpow > 14:
+                    if new_txpow > 14.0:
                         new_txpow = 14
                 node_a.packet.phase_three(new_txpow)
             else:

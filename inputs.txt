@@ -1,10 +1,10 @@
 131200
-8
-5
+6
+3
 131200000
 1
 0
 0
 controlled
 14
-random_viable.txt
+OG_validate_simplecol.txt
