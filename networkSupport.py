@@ -191,6 +191,10 @@ class experiments:
         elif self.experiment ==  6:
             sf_assigns = self.experiment_six(nodes, len(nodes), start)
             return sf_assigns
+        elif self.experiment == 7:
+            self.experiment_seven(nodes)
+        elif self.experiment == 8:
+            self.experiment_eight(nodes)
         else:
             print("Invalid experiment!\nQuitting!")
             quit()
@@ -301,8 +305,31 @@ class experiments:
                                 txpow = max(2, self.ptx - math.floor((self.ptx - node.packet.Lpl) - minsensi))
                                 node.packet.phase_three(txpow)
 
-
         return sf_assigns
+
+    # randomn assign parameters
+    def experiment_seven(self, nodes):
+        sf_list = [7, 8, 9, 10, 11, 12]
+        for node in nodes:
+            sf = random.choice(sf_list)
+            ch = random.randint(0, self.nrChannels - 1)
+            rectime = self.esti.airtime(sf, 1, self.plen, 125)
+            node.packet.phase_two(sf, 1, 125, ch, rectime)
+
+        return
+
+    # random assign parameters with viability check.
+    def experiment_eight(self, nodes):
+        sf_list = [7, 8, 9, 10, 11, 12]
+        for node in nodes:
+            for j, sf_thresholds in enumerate(self.sensi):
+                threshold = sf_thresholds[1]
+                if 14 + node.packet.Lpl > threshold:
+                    sf = random.choice(sf_list[j:])
+                    ch = random.randint(0, self.nrChannels - 1)
+                    rectime = self.esti.airtime(sf, 1, self.plen, 125)
+                    node.packet.phase_two(sf, 1, 125, ch, rectime)
+                    self.sfCounts[node.packet.sf-7] += 1
 
 
 class powerControl:
@@ -463,6 +490,23 @@ class powerControl:
             txpow = max(2, self.ptx - math.floor((self.ptx - node.packet.Lpl) - minsensi))
             node.packet.phase_three(txpow)
         """
+
+    #random assig power levels
+    def power_four(self, nodes):
+        power_levels = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+        for node in nodes:
+            new_txpow = random.choice(power_levels)
+            node.packet.phase_three(new_txpow)
+
+    # random assign power levels with viability check.
+    def power_five(self, nodes):
+        power_levels = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+        for node in nodes:
+            for j, txpow in enumerate(power_levels):
+                threshold = self.sensi[node.packet.sf-7][1]
+                if txpow - node.packet.Lpl > threshold:
+                    new_txpow = random.choice(power_levels[j:])
+                    node.packet.phase_three(new_txpow)
 
 
 class channelUsage(object):
