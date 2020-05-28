@@ -218,7 +218,7 @@ class experiments:
                     minairtime = self.esti.airtime(sf, 1, self.plen, 125)
                     break
             if minairtime == 9999:
-                print "does not reach base station"
+                print("does not reach base station")
                 exit(-1)
 
             rectime = self.esti.airtime(sf, 1, self.plen, 125)
@@ -376,7 +376,7 @@ class powerControl:
         power_levels = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
         min_power = power_levels.pop(0)
         max_power = None
-        print min_rssi, max_rssi
+        print(min_rssi, max_rssi)
         for i, power_level in enumerate(power_levels):
             max_power = power_level
             if (max_rssi + min_power - min_rssi - max_power) <= min_cir:

@@ -265,7 +265,7 @@ class myTransmitter:
             global sfSent
             sfSent[node.packet.sf - 7] += 1
             if node in packetsAtBS:
-                print "ERROR: packet already in"
+                print("ERROR: packet already in")
             else:
                 sensitivity = sensi[node.packet.sf - 7, [125, 250, 500].index(node.packet.bw) + 1]
                 if node.packet.rssi < sensitivity:
@@ -474,7 +474,7 @@ for nrNodes in nrNodes_list:
                 energy += node.packet.rectime * TX[int(node.packet.txpow) + 2] * V * node.sent
             energy = energy/1e6
         except:
-            print int(curr_node.packet.txpow)
+            print(int(curr_node.packet.txpow))
 
         results.write("energy (in J): " + str(energy) + "\n")
         results.write("sent packets: " + str(sent) + "\n")
@@ -520,7 +520,7 @@ results.close()
 # this can be done to keep graphics visible
 if graphics == 1:
     plt.show()
-    raw_input('Press Enter to continue ...')
+    input('Press Enter to continue ...')
 
 # save experiment data into a dat file that can be read by e.g. gnuplot
 # name of file would be:  exp0.dat for experiment 0
