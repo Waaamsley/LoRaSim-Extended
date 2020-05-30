@@ -474,7 +474,8 @@ for nrNodes in nrNodes_list:
                 energy += node.packet.rectime * TX[int(node.packet.txpow) + 2] * V * node.sent
             energy = energy/1e6
         except:
-            print(int(curr_node.packet.txpow))
+            print("ENERGY CALC ERROR", int(curr_node.nodeid), int(curr_node.packet.Lpl), int(curr_node.packet.txpow), int(curr_node.packet.sf))
+            quit()
 
         results.write("energy (in J): " + str(energy) + "\n")
         results.write("sent packets: " + str(sent) + "\n")

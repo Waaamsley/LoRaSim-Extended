@@ -1,5 +1,5 @@
 131200
-8
+4
 1
 131200000
 1
@@ -7,4 +7,4 @@
 0
 controlled
 14
-random_viable.txt
+rssi_based_simplecol.txt
