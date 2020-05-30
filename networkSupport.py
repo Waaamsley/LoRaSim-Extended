@@ -316,6 +316,7 @@ class experiments:
             ch = random.randint(0, self.nrChannels - 1)
             rectime = self.esti.airtime(sf, 1, self.plen, 125)
             node.packet.phase_two(sf, 1, 125, ch, rectime)
+            self.sfCounts[node.packet.sf - 7] += 1
 
         return
 
@@ -331,6 +332,7 @@ class experiments:
                     rectime = self.esti.airtime(sf, 1, self.plen, 125)
                     node.packet.phase_two(sf, 1, 125, ch, rectime)
                     self.sfCounts[node.packet.sf-7] += 1
+                    break
 
 
 class powerControl:
@@ -358,6 +360,8 @@ class powerControl:
         for node in nodes:
             minsensi = self.sensi[node.packet.sf - 7, 1]
             txpow = max(2, self.ptx - math.floor((self.ptx - node.packet.Lpl) - minsensi))
+            if txpow > 14:
+                txpow = 14
             node.packet.phase_three(txpow)
 
     # FADR - Fair Adaptive Data Rate
