@@ -1,10 +1,10 @@
-131200
+13120
 4
 1
-131200000
+13120000
 1
 0
 0
 controlled
 14
-rssi_based_simplecol.txt
+expo_decay1%.txt
