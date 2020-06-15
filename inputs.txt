@@ -7,4 +7,4 @@
 0
 controlled
 14
-expo_decay1%.txt
+expo_decay10%.txt

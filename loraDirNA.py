@@ -490,6 +490,7 @@ for nrNodes in nrNodes_list:
         # data extraction rate
         der = (sent - nrCollisions) / float(sent)
         results.write("sent - nrCollisions. DER: " + str(der) + "\n")
+        print("sent - nrCollisions. DER: " + str(der) + "\n")
         der = nrReceived / float(sent)
         results.write("nrReceived / sent. DER method 2: " + str(der) + "\n")
 
