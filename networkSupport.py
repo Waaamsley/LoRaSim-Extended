@@ -226,6 +226,10 @@ class experiments:
             self.sfCounts[sf - 7] += 1
 
     # My Solution
+    # ideal is desired nodes per group
+    # actual is the output
+    # sf_possible is the total amount possible for each group
+    # truth is the amount available for that group and no previous others.
     def experiment_five(self, nodes, ideal, truth, actual, nr_nodes):
         sf_possible = [0, 0, 0, 0, 0, 0]
         temp_total = 0
@@ -246,7 +250,7 @@ class experiments:
                 ideal = ideal[:i + 1] + fair_sf_getter.get_sf_counts()
 
                 if i > 0:
-                    ratio = float(truth[i]) / float(ideal[i])
+                    ratio = float(actual[i]) / float(ideal[i])
                     equivalent = ratio * ideal[i - 1]
                     if equivalent < actual[i - 1]:
                         split_total = actual[i] + actual[i - 1]
