@@ -455,6 +455,14 @@ for nrNodes in nrNodes_list:
         if experiment != 6:
             experiLogic.logic(nodes, sf_counts, curr_config, 0)
         powerLogic.logic(nodes, experiLogic)
+
+        min_node = [0, 0, 0, 0, 0, 0]
+        for node in nodes:
+            if min_node[node.packet.sf-7] ==0:
+                print(node.packet.sf, node.packet.txpow)
+                min_node[node.packet.sf - 7] = 1
+        quit()
+
         env.run(until=simtime)
 
         # print stats and save into file

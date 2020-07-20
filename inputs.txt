@@ -1,10 +1,10 @@
-13120
-4
+131200
+5
 1
-13120000
+131200000
 1
 0
 0
 controlled
 14
-expo_decay10%.txt
+demo.txt

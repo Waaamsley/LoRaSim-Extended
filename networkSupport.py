@@ -259,6 +259,9 @@ class experiments:
                         actual[i - 1] = split_ideal[0]
                         actual[i] = split_ideal[1]
 
+        # did i delete a sort line somewherE?
+        nodes.sort()
+
         counter = 0
         for i, count in enumerate(actual):
             for j in range(count):
@@ -271,6 +274,7 @@ class experiments:
 
     # OG solution
     def experiment_six(self, nodes, nr_nodes, start):
+        nodes.sort()
         validate2 = False
         fair_sf_getter = fairSF(nr_nodes - start, self.sfs)
         sf_assigns = fair_sf_getter.get_sf_counts()
@@ -360,6 +364,7 @@ class powerControl:
             for node in nodes:
                 node.packet.phase_three(self.ptx)
 
+    # My transmission power scheme (TPS) method.
     def power_one(self, nodes):
         for node in nodes:
             minsensi = self.sensi[node.packet.sf - 7, 1]
@@ -372,8 +377,7 @@ class powerControl:
     # I have implemented their power control system
     def power_two(self, nodes):
         # First sort nodes by RSSI, done with __lt__ method on node class.
-        nodes_sorted = nodes
-        nodes_sorted.sort()
+        nodes.sort()
 
         # get max/min RSSI and min CIR (inter SF collision?)
         min_rssi = min(nodes_sorted, key=self.atrGet('packet.rssi')).packet.rssi
