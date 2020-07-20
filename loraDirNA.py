@@ -369,8 +369,6 @@ for nrNodes in nrNodes_list:
     configurations = []
     placementGenerator.full_placement(configurations)
 
-    configurations = configurations[0:1] # temporary line
-
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
     while config_rep < len(configurations):
@@ -380,6 +378,9 @@ for nrNodes in nrNodes_list:
         sfCollided = [0, 0, 0, 0, 0, 0]
         interferCount = [0, 0, 0, 0, 0, 0]
         curr_config = configurations[config_rep]
+
+        curr_config = [674, 246, 138, 77, 42, 23]
+
         results.write("Configuration: " + str(config_rep + 1) + ". Repetition: " + str(repetition + 1)
                       + ". Region Counts: " + str(curr_config) + "\n")
 

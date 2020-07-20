@@ -380,8 +380,8 @@ class powerControl:
         nodes.sort()
 
         # get max/min RSSI and min CIR (inter SF collision?)
-        min_rssi = min(nodes_sorted, key=self.atrGet('packet.rssi')).packet.rssi
-        max_rssi = max(nodes_sorted, key=self.atrGet('packet.rssi')).packet.rssi
+        min_rssi = min(nodes, key=self.atrGet('packet.rssi')).packet.rssi
+        max_rssi = max(nodes, key=self.atrGet('packet.rssi')).packet.rssi
         min_cir = 8
 
         # Find range of power levels to use
@@ -403,7 +403,7 @@ class powerControl:
 
         # Assign minimum power and save minPowerIndex
         min_power_index = None
-        for i, n in enumerate(nodes_sorted):
+        for i, n in enumerate(nodes):
             if n.packet.rssi + min_power > min_rssi:
                 min_power_index = i - 1
                 print ("here", i)
@@ -413,7 +413,7 @@ class powerControl:
 
         # Assign maximum power and save maxPowerIndex
         max_power_index = None
-        for i, n in enumerate(reversed(nodes_sorted)):
+        for i, n in enumerate(reversed(nodes)):
             if n.packet.rssi + max_power - min_rssi > min_cir:
                 max_power_index = i - 1
                 break
@@ -422,18 +422,18 @@ class powerControl:
 
         # Assign the reaming power levels to the inbetween nodes
         temp_index = min_power_index
-        max_node_rssi = nodes_sorted[max_power_index].packet.rssi
+        max_node_rssi = nodes[max_power_index].packet.rssi
         for power_level in power_levels:
-            temp_node_rssi = nodes_sorted[temp_index].packet.rssi
+            temp_node_rssi = nodes[temp_index].packet.rssi
             if temp_node_rssi + power_level - min_rssi <= min_cir \
                     and temp_node_rssi + power_level - max_node_rssi - max_power <= min_cir:
                 for i in range(temp_index, max_power_index):
-                    curr_node_rssi = nodes_sorted[i].packet.rssi
+                    curr_node_rssi = nodes[i].packet.rssi
                     if curr_node_rssi + power_level - max_node_rssi - max_power > min_cir:
                         temp_index = i - 1
                         break
                     else:
-                        nodes_sorted[i].packet.phase_three(power_level)
+                        nodes[i].packet.phase_three(power_level)
         return
 
     # OG
