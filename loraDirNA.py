@@ -362,12 +362,14 @@ sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 results = open(results_file, "a")
 figure_count = 0
 # For loop for how different nrNodes.
-for nrNodes in nrNodes_list:
+for nrNodes in nrNodes_list[0:1]:
     fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
     sf_counts = fair_sf_getter.get_sf_counts()
     placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
     configurations = []
     placementGenerator.full_placement(configurations)
+
+    configurations = [[334, 0, 333, 0, 333, 0]]
 
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
@@ -378,8 +380,6 @@ for nrNodes in nrNodes_list:
         sfCollided = [0, 0, 0, 0, 0, 0]
         interferCount = [0, 0, 0, 0, 0, 0]
         curr_config = configurations[config_rep]
-
-        curr_config = [674, 246, 138, 77, 42, 23]
 
         results.write("Configuration: " + str(config_rep + 1) + ". Repetition: " + str(repetition + 1)
                       + ". Region Counts: " + str(curr_config) + "\n")
@@ -456,13 +456,6 @@ for nrNodes in nrNodes_list:
         if experiment != 6:
             experiLogic.logic(nodes, sf_counts, curr_config, 0)
         powerLogic.logic(nodes, experiLogic)
-
-        min_node = [0, 0, 0, 0, 0, 0]
-        for node in nodes:
-            if min_node[node.packet.sf-7] ==0:
-                print(node.packet.sf, node.packet.txpow)
-                min_node[node.packet.sf - 7] = 1
-        quit()
 
         env.run(until=simtime)
 

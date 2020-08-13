@@ -1,10 +1,10 @@
 131200
-5
-1
+6
+3
 131200000
 1
 0
 0
 controlled
 14
-demo.txt
+undulating.txt
