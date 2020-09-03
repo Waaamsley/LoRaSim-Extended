@@ -66,3 +66,5 @@ SF12 DER: 0.810243245518 Received/Sent/Lost/Collided/Interfered Packets: 19253.0
 SF Counts: [8509, 4863, 2735, 1520, 836, 456]
 Accumulted full time: 13.9407088757, 0.628132403917%
 Accumulted empty time: 8.25319290161, 0.371867596083%
+Configuration: 1. Repetition: 1. Region Counts: [1000, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025

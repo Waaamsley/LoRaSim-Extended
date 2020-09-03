@@ -187,7 +187,7 @@ class myNode:
 
         # graphics for node
         global graphics
-        if graphics == 1:
+        if (graphics == 1):
             global ax
             ax.add_artist(plt.Circle((self.x, self.y), 2, fill=True, color='blue'))
 
@@ -369,7 +369,7 @@ for nrNodes in nrNodes_list[0:1]:
     configurations = []
     placementGenerator.full_placement(configurations)
 
-    configurations = [[334, 0, 333, 0, 333, 0]]
+    configurations = [[1200, 0, 0, 0, 0, 0]]
 
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
@@ -427,30 +427,28 @@ for nrNodes in nrNodes_list[0:1]:
         ymax = bsy + maxDist + 20
 
         # prepare graphics and add sink
-        if graphics == 1:
+        if (graphics == 1):
+            print ("entered graphics")
             plt.ion()
-            figure_count += 1
-            plt.figure(figure_count)
-            ax = plt.gcf().gca()
-            # XXX should be base station position
+            plt.figure()
+            plt.title("lora simulator")
+            fig, ax = plt.subplots()
+
             ax.add_artist(plt.Circle((bsx, bsy), 3, fill=True, color='green'))
             ax.add_artist(plt.Circle((bsx, bsy), maxDist, fill=False, color='green'))
+            plt.pause(0.01)
 
         # Creates a list of nodes and their packets
         create_nodes()
 
-        # prepare show
-        # Their is updated graphics code, maybe add?
-        # This is some of it, their are multiple segments to add.
-        """
         if graphics == 1:
-            plt.ion()
-            plt.figure()
-            plt.title("lora simulator")
-            ax = plt.gcf().gca()
-            
-            ax.add_artist()
-        """
+            plt.xlim([0, xmax])
+            plt.ylim([0, ymax])
+            plt.draw()
+            # plt.ioff()
+            plt.show()
+            input('Press Enter to continue ...')
+            quit()
 
         # start simulation
         if experiment != 6:
@@ -518,7 +516,7 @@ for nrNodes in nrNodes_list[0:1]:
                           + "%" + "\n")
 
         repetition += 1
-        if repetition == 1: # changed from 5 to 1
+        if repetition == 5:
             repetition = 0
             config_rep += 1
 
