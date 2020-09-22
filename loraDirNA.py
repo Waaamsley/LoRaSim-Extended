@@ -193,7 +193,6 @@ class myNode:
 
     def __lt__(self, other):
         return self.packet.Lpl < other.packet.Lpl
-        #return self.packet.rssi > other.packet.rssi
 
 
 #
@@ -362,14 +361,14 @@ sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 results = open(results_file, "a")
 figure_count = 0
 # For loop for how different nrNodes.
-for nrNodes in nrNodes_list[0:1]:
+for nrNodes in nrNodes_list:
     fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
     sf_counts = fair_sf_getter.get_sf_counts()
     placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
     configurations = []
     placementGenerator.full_placement(configurations)
 
-    configurations = [[1200, 0, 0, 0, 0, 0]]
+    configurations = [[nrNodes, 0, 0, 0, 0, 0]]
 
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
@@ -448,7 +447,6 @@ for nrNodes in nrNodes_list[0:1]:
             # plt.ioff()
             plt.show()
             input('Press Enter to continue ...')
-            quit()
 
         # start simulation
         if experiment != 6:

@@ -521,6 +521,11 @@ class powerControl:
                     new_txpow = random.choice(power_levels[j:])
                     node.packet.phase_three(new_txpow)
 
+    # Use input file Tp
+    def power_six(self, nodes):
+        for node in nodes:
+            node.packet.phase_three(self.ptx)
+
 
 class channelUsage(object):
     def __init__(self):
