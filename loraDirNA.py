@@ -368,7 +368,8 @@ for nrNodes in nrNodes_list:
     configurations = []
     placementGenerator.full_placement(configurations)
 
-    configurations = [[nrNodes, 0, 0, 0, 0, 0]]
+    configurations = [[nrNodes, 0, 0, 0, 0, 0],[541, 308, 173, 96, 53, 29],
+                      [200, 200, 200, 200, 200, 200],[400, 0, 400, 0, 400, 0]]
 
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
@@ -514,7 +515,7 @@ for nrNodes in nrNodes_list:
                           + "%" + "\n")
 
         repetition += 1
-        if repetition == 5:
+        if repetition == 1:
             repetition = 0
             config_rep += 1
 
