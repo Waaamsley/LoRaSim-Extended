@@ -1,10 +1,10 @@
-1318900
+131890
+7
 4
-1
-1318900000
+131890000
 1
 0
 0
 controlled
 14
-rssi_fourdists_onerun.txt
+random_fourdists_onerun2.txt

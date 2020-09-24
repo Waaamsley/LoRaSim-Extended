@@ -343,22 +343,25 @@ graphics = int(inputs[6])
 distributionType = inputs[7]
 Ptx = int(inputs[8])
 results_file = str(inputs[9])
-print ("Nodes:", nrNodes_list)
-print ("Average Send Time / Inter Packet Arrival Time:", avgSend)
-print ("Experiment: ", experiment)
-print ("Power Control Scheme: ", powerScheme)
-print ("Simtime: ", simtime)
-print ("Channels: ", nrChannels)
-print ("Full Collision: ", fullCollision)
-print ("Graphics: ", graphics)
-print ("Distribution Type: ", distributionType)
-print ("Base Tx Power: ", Ptx)
-print ("Results File: ", results_file)
+
+results = open(results_file, "a")
+
+print("Nodes List: ", nrNodes_list)
+print("Results File: ", results_file)
+
+results.write("Average Send Time / Inter Packet Arrival Time: " + str(avgSend) + "\n")
+results.write("Experiment: " + str(experiment) + "\n")
+results.write("Power Control Scheme: " + str(powerScheme) + "\n")
+results.write("Simtime: " + str(simtime) + "\n")
+results.write("Channels: " + str(nrChannels) + "\n")
+results.write("Full Collision: " + str(fullCollision) + "\n")
+results.write("Graphics: " + str(graphics) + "\n")
+results.write("Distribution Type: "+  str(distributionType) + "\n")
+results.write("Base Tx Power: " +  str(Ptx) + "\n")
 
 # global stuff
 # Can do a while loop from here to end to repeat simulations.
 sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
-results = open(results_file, "a")
 figure_count = 0
 # For loop for how different nrNodes.
 for nrNodes in nrNodes_list:
@@ -368,8 +371,9 @@ for nrNodes in nrNodes_list:
     configurations = []
     placementGenerator.full_placement(configurations)
 
-    configurations = [[nrNodes, 0, 0, 0, 0, 0],[541, 308, 173, 96, 53, 29],
-                      [200, 200, 200, 200, 200, 200],[400, 0, 400, 0, 400, 0]]
+    undthird = math.floor(nrNodes/3)
+    configurations = [configurations[0],configurations[5],
+                     configurations[10],[nrNodes - (undthird*2), 0, undthird, 0, undthird]]
 
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
