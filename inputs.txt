@@ -1,10 +1,10 @@
 131890
-7
+4
 4
 131890000
 1
-0
+1
 0
 controlled
 14
-random_fourdists_onerun2.txt
+comprehensive_fourdistris_onerun_1%.txt

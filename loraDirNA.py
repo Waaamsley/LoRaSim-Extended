@@ -74,12 +74,12 @@ sf12 = np.array([12, -136, -133, -130])
 sensi = np.array([sf7, sf8, sf9, sf10, sf11, sf12])
 
 # Arrays with dB differences for inter-SF interference
-sf7diff = np.array([1, -8, -9, -9, -9, -9])
-sf8diff = np.array([-11, 1, -11, -12, -13, -13])
-sf9diff = np.array([-15, -13, 1, -13, -14, -15])
-sf10diff = np.array([-19, -18, -17, 1, -17, -18])
-sf11diff = np.array([-22, -22, -21, -20, 1, -20])
-sf12diff = np.array([-25, -25, -25, -24, -23, 1])
+sf7diff = np.array([3, -8, -9, -9, -9, -9])
+sf8diff = np.array([-11, 3, -11, -12, -13, -13])
+sf9diff = np.array([-15, -13, 3, -13, -14, -15])
+sf10diff = np.array([-19, -18, -17, 3, -17, -18])
+sf11diff = np.array([-22, -22, -21, -20, 3, -20])
+sf12diff = np.array([-25, -25, -25, -24, -23, 3])
 sensiDiff = np.array([sf7diff, sf8diff, sf9diff, sf10diff, sf11diff, sf12diff])
 
 TxPowers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -373,7 +373,7 @@ for nrNodes in nrNodes_list:
 
     undthird = math.floor(nrNodes/3)
     configurations = [configurations[0],configurations[5],
-                     configurations[10],[nrNodes - (undthird*2), 0, undthird, 0, undthird]]
+                     configurations[10],[nrNodes - (undthird*2), 0, undthird, 0, undthird, 0]]
 
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
