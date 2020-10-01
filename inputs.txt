@@ -3,8 +3,8 @@
 4
 131890000
 1
-1
+0
 0
 controlled
 14
-comprehensive_fourdistris_onerun_1%.txt
+demo.txt

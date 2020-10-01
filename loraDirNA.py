@@ -84,7 +84,9 @@ sensiDiff = np.array([sf7diff, sf8diff, sf9diff, sf10diff, sf11diff, sf12diff])
 
 TxPowers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
-
+collide_one = [0, 0, 0, 0, 0, 0]
+collide_two = [0, 0, 0, 0, 0, 0]
+collide_three = 0
 #
 # check for collisions at base station
 # Note: called before a packet (or rather node) is inserted into the list
@@ -105,38 +107,70 @@ def checkcollision(packet):
             if other.nodeid != packet.nodeid and other.packet.ch == packet.ch:
                 if fullCollision:
                     if not late_evade(packet, other.packet):
+                        #code = power_collision(packet, other.packet)
+                        if packet.sf == other.packet.sf:#power_collision(packet, other.packet):#code == 1:
+                            packet.collided = 1
+                            other.packet.collided = 1
+                            col = 1
+                        """
+                        if code == 2:
+                            packet.collided = 1
+                            col = 1
+                        if code == 3:
+                            other.packet.collided = 1
+                        
                         collided_packets = power_collision(packet, other.packet)
                         for p in collided_packets:
                             p.collided = 1
                             if p == packet:
                                 col = 1
+                        """
                 else:
-                    if not late_evade(packet, other.packet) and other.packet.sf == packet.sf:
-                        other.collided = 1
-                        packet.collided = 1
-                        col = 1
+                    if not late_evade(packet, other.packet):
+                        if other.packet.sf == packet.sf:
+                            other.packet.collided = 1
+                            packet.collided = 1
+                            col = 1
 
         return col
     return 0
 
-
 def power_collision(p1, p2):
+    global collide_one
+    global collide_two
+    global collide_three
+
+    if p1.sf == p2.sf:
+        return 1
+
+    return 0
+
     global interferCount
     power_threshold = sensiDiff[p1.sf - 7][p2.sf - 7]  # dB
 
-    if (abs(p1.rssi - p2.rssi) <= power_threshold) and p1.sf == p2.sf:
-        return p1, p2
-    elif p1.rssi - p2.rssi <= power_threshold:
-        interferCount[p2.sf - 7] += 1
-        return p1,
+    if p1.sf == p2.sf:
+        abs_power_diff = abs(p1.rssi - p2.rssi)
+        if abs_power_diff <= power_threshold:
+            return 1 #return p1, p2
+        else:
+            if p1.rssi > p2.rssi:
+                return 3 #return p2,
+            else:
+                return 2 #return p1,
+    else:
+        if p1.rssi - p2.rssi <= power_threshold:
+            collide_two[p1.sf - 7] += 1
+            interferCount[p2.sf - 7] += 1
+            return 2 #return p1,
+        else:
+            power_threshold = sensiDiff[p2.sf - 7][p1.sf - 7]
+            if p2.rssi - p1.rssi <= power_threshold:
+                collide_two[p2.sf - 7] += 1
+                interferCount[p1.sf - 7] += 1
+                return 3 #return p2,
 
-    power_threshold = sensiDiff[p2.sf - 7][p1.sf - 7]  # dB
-
-    if p2.rssi - p1.rssi <= power_threshold:
-        interferCount[p1.sf - 7] += 1
-        return p2,
-
-    return []
+    collide_three += 1
+    return 0
 
 # Checks if a received packet is late enough to avoid interferring packet (only the first n - 5 preamble symbols overlap)
 def late_evade(p1, p2):
@@ -364,7 +398,7 @@ results.write("Base Tx Power: " +  str(Ptx) + "\n")
 sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 figure_count = 0
 # For loop for how different nrNodes.
-for nrNodes in nrNodes_list:
+for nrNodes in [nrNodes_list[0]]:
     fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
     sf_counts = fair_sf_getter.get_sf_counts()
     placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
@@ -372,8 +406,9 @@ for nrNodes in nrNodes_list:
     placementGenerator.full_placement(configurations)
 
     undthird = math.floor(nrNodes/3)
-    configurations = [configurations[0],configurations[5],
-                     configurations[10],[nrNodes - (undthird*2), 0, undthird, 0, undthird, 0]]
+    configurations = [configurations[10]]
+    #configurations = [configurations[0],configurations[5],
+     #                configurations[10],[nrNodes - (undthird*2), 0, undthird, 0, undthird, 0]]
 
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
@@ -461,6 +496,9 @@ for nrNodes in nrNodes_list:
         env.run(until=simtime)
 
         # print stats and save into file
+        results.write("col1: " + str(collide_one) + "\n")
+        results.write("col2: " + str(collide_two) + "\n")
+        results.write("col3: " + str(collide_three) + "\n")
         results.write("nrCollisions: " + str(nrCollisions) + "\n")
 
         # compute energy
