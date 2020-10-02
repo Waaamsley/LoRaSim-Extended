@@ -84,10 +84,6 @@ sensiDiff = np.array([sf7diff, sf8diff, sf9diff, sf10diff, sf11diff, sf12diff])
 
 TxPowers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
-collide_one = [0, 0, 0, 0, 0, 0]
-collide_two = [0, 0, 0, 0, 0, 0]
-collide_three = 0
-#
 # check for collisions at base station
 # Note: called before a packet (or rather node) is inserted into the list
 def checkcollision(packet):
@@ -107,16 +103,11 @@ def checkcollision(packet):
             if other.nodeid != packet.nodeid and other.packet.ch == packet.ch:
                 if fullCollision:
                     if not late_evade(packet, other.packet):
-                        code = power_collision(packet, other.packet)
-                        if code == 1:
-                            packet.collided = 1
-                            other.packet.collided = 1
-                            col = 1
-                        elif code == 2:
-                            packet.collided = 1
-                            col = 1
-                        else:
-                            other.packet.collided = 1
+                        collided_packets = power_collision(packet, other.packet)
+                        for p in collided_packets:
+                            p.collided = 1
+                            if p == packet:
+                                col = 1
                 else:
                     if not late_evade(packet, other.packet):
                         if other.packet.sf == packet.sf:
@@ -128,29 +119,32 @@ def checkcollision(packet):
     return 0
 
 def power_collision(p1, p2):
+    global sf7InterferredWith
     global interferCount
 
-    power_threshold = sensiDiff[p1.sf - 7][p2.sf - 7]  # dB
+    power_threshold = sensiDiff[p1.sf - 7][p2.sf - 7]
     if p1.sf == p2.sf:
         abs_power_diff = abs(p1.rssi - p2.rssi)
         if abs_power_diff <= power_threshold:
-            return 1 #return p1, p2
+            return p1, p2
         else:
             if p1.rssi > p2.rssi:
-                return 3 #return p2,
+                return p2,
             else:
-                return 2 #return p1,
+                return p1,
     else:
         if p1.rssi - p2.rssi <= power_threshold:
+            sf7InterferredWith[p1.sf-7] += 1
             interferCount[p2.sf - 7] += 1
-            return 2 #return p1,
+            return p1,
         else:
             power_threshold = sensiDiff[p2.sf - 7][p1.sf - 7]
             if p2.rssi - p1.rssi <= power_threshold:
+                sf7InterferredWith[p2.sf - 7] += 1
                 interferCount[p1.sf - 7] += 1
-                return 3 #return p2,
+                return p2,
 
-    return 0
+    return []
 
 # Checks if a received packet is late enough to avoid interferring packet (only the first n - 5 preamble symbols overlap)
 def late_evade(p1, p2):
@@ -378,7 +372,7 @@ results.write("Base Tx Power: " +  str(Ptx) + "\n")
 sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 figure_count = 0
 # For loop for how different nrNodes.
-for nrNodes in nrNodes_list:
+for nrNodes in [nrNodes_list[0]]:
     fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
     sf_counts = fair_sf_getter.get_sf_counts()
     placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
@@ -386,7 +380,7 @@ for nrNodes in nrNodes_list:
     placementGenerator.full_placement(configurations)
 
     undthird = math.floor(nrNodes/3)
-    #configurations = [configurations[0]]
+    #configurations = [configurations[5]]
     configurations = [configurations[0],configurations[5],
                      configurations[10],[nrNodes - (undthird*2), 0, undthird, 0, undthird, 0]]
 
@@ -398,6 +392,7 @@ for nrNodes in nrNodes_list:
         sfLost = [0, 0, 0, 0, 0, 0]
         sfCollided = [0, 0, 0, 0, 0, 0]
         interferCount = [0, 0, 0, 0, 0, 0]
+        sf7InterferredWith = [0, 0, 0, 0, 0, 0]
         curr_config = configurations[config_rep]
 
         results.write("Configuration: " + str(config_rep + 1) + ". Repetition: " + str(repetition + 1)
@@ -476,9 +471,6 @@ for nrNodes in nrNodes_list:
         env.run(until=simtime)
 
         # print stats and save into file
-        results.write("col1: " + str(collide_one) + "\n")
-        results.write("col2: " + str(collide_two) + "\n")
-        results.write("col3: " + str(collide_three) + "\n")
         results.write("nrCollisions: " + str(nrCollisions) + "\n")
 
         # compute energy
@@ -529,6 +521,7 @@ for nrNodes in nrNodes_list:
                               str(float(receivedStat)) + "/" + str(float(sentStat)) + "/" + str(float(lostStat)) + "/"
                               + str(float(collideStat)) + "/" + str(float(interferStat)) + "\n")
             counter += 1
+        results.write("SF7 Interferred With: " + str(sf7InterferredWith) + "\n")
         results.write("SF Counts: " + str(experiLogic.sfCounts) + "\n")
         if observer.accum_f > 0 and observer.accum_e > 0:
             totalTime = observer.accum_f + observer.accum_e
