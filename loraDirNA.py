@@ -107,24 +107,16 @@ def checkcollision(packet):
             if other.nodeid != packet.nodeid and other.packet.ch == packet.ch:
                 if fullCollision:
                     if not late_evade(packet, other.packet):
-                        #code = power_collision(packet, other.packet)
-                        if packet.sf == other.packet.sf:#power_collision(packet, other.packet):#code == 1:
+                        code = power_collision(packet, other.packet)
+                        if code == 1:
                             packet.collided = 1
                             other.packet.collided = 1
                             col = 1
-                        """
-                        if code == 2:
+                        elif code == 2:
                             packet.collided = 1
                             col = 1
-                        if code == 3:
+                        else:
                             other.packet.collided = 1
-                        
-                        collided_packets = power_collision(packet, other.packet)
-                        for p in collided_packets:
-                            p.collided = 1
-                            if p == packet:
-                                col = 1
-                        """
                 else:
                     if not late_evade(packet, other.packet):
                         if other.packet.sf == packet.sf:
@@ -136,18 +128,9 @@ def checkcollision(packet):
     return 0
 
 def power_collision(p1, p2):
-    global collide_one
-    global collide_two
-    global collide_three
-
-    if p1.sf == p2.sf:
-        return 1
-
-    return 0
-
     global interferCount
-    power_threshold = sensiDiff[p1.sf - 7][p2.sf - 7]  # dB
 
+    power_threshold = sensiDiff[p1.sf - 7][p2.sf - 7]  # dB
     if p1.sf == p2.sf:
         abs_power_diff = abs(p1.rssi - p2.rssi)
         if abs_power_diff <= power_threshold:
@@ -159,17 +142,14 @@ def power_collision(p1, p2):
                 return 2 #return p1,
     else:
         if p1.rssi - p2.rssi <= power_threshold:
-            collide_two[p1.sf - 7] += 1
             interferCount[p2.sf - 7] += 1
             return 2 #return p1,
         else:
             power_threshold = sensiDiff[p2.sf - 7][p1.sf - 7]
             if p2.rssi - p1.rssi <= power_threshold:
-                collide_two[p2.sf - 7] += 1
                 interferCount[p1.sf - 7] += 1
                 return 3 #return p2,
 
-    collide_three += 1
     return 0
 
 # Checks if a received packet is late enough to avoid interferring packet (only the first n - 5 preamble symbols overlap)
@@ -398,7 +378,7 @@ results.write("Base Tx Power: " +  str(Ptx) + "\n")
 sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 figure_count = 0
 # For loop for how different nrNodes.
-for nrNodes in [nrNodes_list[0]]:
+for nrNodes in nrNodes_list:
     fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
     sf_counts = fair_sf_getter.get_sf_counts()
     placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
@@ -406,9 +386,9 @@ for nrNodes in [nrNodes_list[0]]:
     placementGenerator.full_placement(configurations)
 
     undthird = math.floor(nrNodes/3)
-    configurations = [configurations[10]]
-    #configurations = [configurations[0],configurations[5],
-     #                configurations[10],[nrNodes - (undthird*2), 0, undthird, 0, undthird, 0]]
+    #configurations = [configurations[0]]
+    configurations = [configurations[0],configurations[5],
+                     configurations[10],[nrNodes - (undthird*2), 0, undthird, 0, undthird, 0]]
 
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
@@ -531,8 +511,9 @@ for nrNodes in [nrNodes_list[0]]:
         # data extraction rate
         der = (sent - nrCollisions) / float(sent)
         results.write("sent - nrCollisions. DER: " + str(der) + "\n")
-        print("sent - nrCollisions. DER: " + str(der) + "\n")
+        #print("sent - nrCollisions. DER: " + str(der) + "\n")
         der = nrReceived / float(sent)
+        print("nrReceived/sent. DER: " + str(der))
         results.write("nrReceived / sent. DER method 2: " + str(der) + "\n")
 
         counter = 7
