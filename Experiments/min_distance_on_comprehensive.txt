@@ -1,0 +1,31 @@
+Average Send Time / Inter Packet Arrival Time: 131890.0
+Experiment: 4
+Power Control Scheme: 4
+Simtime: 131890000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [450, 257, 145, 80, 44, 24]
+maxDist: 487.66061680961025
+nrCollisions: 309263
+energy (in J): 22708.672352256006
+sent packets: 998754
+collisions: 309263
+received packets: 689489
+processed packets: 998752
+lost packets: 0
+fallen short packets: 0
+sent - nrCollisions. DER: 0.6903511775672488
+nrReceived / sent. DER method 2: 0.6903491750721399
+SF7 DER: 0.762748076683901 Received/Sent/Lost/Collided/Interfered Packets: 343438.0/450264.0/0.0/106826.0/39410.0
+SF8 DER: 0.6499391680054905 Received/Sent/Lost/Collided/Interfered Packets: 166673.0/256444.0/0.0/89769.0/0.0
+SF9 DER: 0.642646275952185 Received/Sent/Lost/Collided/Interfered Packets: 92953.0/144641.0/0.0/51688.0/0.0
+SF10 DER: 0.6043683854987616 Received/Sent/Lost/Collided/Interfered Packets: 48312.0/79938.0/0.0/31626.0/0.0
+SF11 DER: 0.5689292411837351 Received/Sent/Lost/Collided/Interfered Packets: 24877.0/43726.0/0.0/18849.0/0.0
+SF12 DER: 0.5575165325807675 Received/Sent/Lost/Collided/Interfered Packets: 13236.0/23741.0/0.0/10505.0/0.0
+SF7 Interferred With: [0, 13915, 9344, 7337, 4952, 3862]
+SF Counts: [450, 257, 145, 80, 44, 24]
+Accumulted full time: 18.980785131454468, 0.8759517292522181%
+Accumulted empty time: 2.687971830368042, 0.12404827074778187%
