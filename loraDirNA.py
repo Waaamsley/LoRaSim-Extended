@@ -372,7 +372,7 @@ results.write("Base Tx Power: " +  str(Ptx) + "\n")
 sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 figure_count = 0
 # For loop for how different nrNodes.
-for nrNodes in [nrNodes_list[0]]:
+for nrNodes in nrNodes_list:
     fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
     sf_counts = fair_sf_getter.get_sf_counts()
     placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
