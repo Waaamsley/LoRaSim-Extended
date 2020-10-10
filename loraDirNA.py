@@ -274,7 +274,11 @@ class myTransmitter:
             if node in packetsAtBS:
                 print("ERROR: packet already in")
             else:
+                global experiment
+                #if experiment != 6:
                 sensitivity = sensi[node.packet.sf - 7, [125, 250, 500].index(node.packet.bw) + 1]
+                #else:
+                    #sensitivity = -999
                 if node.packet.rssi < sensitivity:
                     node.packet.lost = True
                     global nr_fall_short
@@ -372,7 +376,7 @@ results.write("Base Tx Power: " +  str(Ptx) + "\n")
 sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 figure_count = 0
 # For loop for how different nrNodes.
-for nrNodes in [nrNodes_list[0]]:
+for nrNodes in nrNodes_list:
     fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
     sf_counts = fair_sf_getter.get_sf_counts()
     placementGenerator = networkSupport.placementGenerator(nrNodes, sf_counts)
@@ -380,9 +384,9 @@ for nrNodes in [nrNodes_list[0]]:
     placementGenerator.full_placement(configurations)
 
     undthird = math.floor(nrNodes/3)
-    configurations = [configurations[5]]
-    #configurations = [configurations[0],configurations[5],
-                     #configurations[10],[nrNodes - (undthird*2), 0, undthird, 0, undthird, 0]]
+    #configurations = [configurations[5]]
+    configurations = [configurations[0],configurations[5],
+                     configurations[10],[nrNodes - (undthird*2), 0, undthird, 0, undthird, 0]]
 
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
@@ -464,7 +468,7 @@ for nrNodes in [nrNodes_list[0]]:
             input('Press Enter to continue ...')
 
         # start simulation
-        if experiment != 6:
+        if experiment != 6 or powerScheme == 2:
             experiLogic.logic(nodes, sf_counts, curr_config, 0)
         powerLogic.logic(nodes, experiLogic)
 

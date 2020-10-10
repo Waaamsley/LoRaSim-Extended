@@ -1,10 +1,10 @@
-131890
-4
-4
-131890000
+1318900
+6
+2
+1318900000
 1
-0
+1
 0
 controlled
 14
-min_distance_on_simple.txt
+FADR_dc01%_noviable_keydistributions.txt

@@ -272,7 +272,7 @@ class experiments:
                 self.sfCounts[sf - 7] += 1
                 counter += 1
 
-    # OG solution
+    # OG solution or FADR!
     def experiment_six(self, nodes, nr_nodes, start):
         nodes.sort()
         validate2 = False
@@ -297,6 +297,7 @@ class experiments:
                 self.sfCounts[sf - 7] += 1
                 total += 1
 
+        # reassigns sf to nodes to validate transmissions. Not going to use.
         if validate2:
             for i, node in enumerate(nodes):
                 minsensi = self.sensi[node.packet.sf - 7, 1]
@@ -374,7 +375,6 @@ class powerControl:
             node.packet.phase_three(txpow)
 
     # FADR - Fair Adaptive Data Rate
-    # I have implemented their power control system
     def power_two(self, nodes):
         # First sort nodes by RSSI, done with __lt__ method on node class.
         nodes.sort()
@@ -385,6 +385,7 @@ class powerControl:
         min_cir = 8
 
         # Find range of power levels to use
+        # need to rewrite this !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         power_levels = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
         min_power = power_levels.pop(0)
         max_power = None
@@ -420,7 +421,7 @@ class powerControl:
             else:
                 n.packet.phase_three(max_power)
 
-        # Assign the reaming power levels to the inbetween nodes
+        # Assign the remaining power levels to the inbetween nodes
         temp_index = min_power_index
         max_node_rssi = nodes[max_power_index].packet.rssi
         for power_level in power_levels:
@@ -438,7 +439,7 @@ class powerControl:
 
     # OG
     def power_three(self, nodes, experi_logic):
-        validate = True
+        validate = False
         nodes.sort()
 
         start = 0
@@ -504,7 +505,7 @@ class powerControl:
             node.packet.phase_three(txpow)
         """
 
-    #random assig power levels
+    #random assign power levels
     def power_four(self, nodes):
         power_levels = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
         for node in nodes:
