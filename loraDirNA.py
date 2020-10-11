@@ -384,9 +384,9 @@ for nrNodes in nrNodes_list:
     placementGenerator.full_placement(configurations)
 
     undthird = math.floor(nrNodes/3)
-    #configurations = [configurations[5]]
-    configurations = [configurations[0],configurations[5],
-                     configurations[10],[nrNodes - (undthird*2), 0, undthird, 0, undthird, 0]]
+    configurations = [[20,20,20,20,20,20]]
+    #configurations = [configurations[0],configurations[5],
+                     #configurations[10],[nrNodes - (undthird*2), 0, undthird, 0, undthird, 0]]
 
     repetition = 0  # Going to do 5 repititions
     config_rep = 0  # max configurations of 20
@@ -471,6 +471,7 @@ for nrNodes in nrNodes_list:
         if experiment != 6 or powerScheme == 2:
             experiLogic.logic(nodes, sf_counts, curr_config, 0)
         powerLogic.logic(nodes, experiLogic)
+
 
         env.run(until=simtime)
 

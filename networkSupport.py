@@ -378,10 +378,12 @@ class powerControl:
     def power_two(self, nodes):
         # First sort nodes by RSSI, done with __lt__ method on node class.
         nodes.sort()
+        for n in nodes:
+            n.packet.phase_three(14)
 
         # get max/min RSSI and min CIR (inter SF collision?)
-        min_rssi = min(nodes, key=self.atrGet('packet.rssi')).packet.rssi
-        max_rssi = max(nodes, key=self.atrGet('packet.rssi')).packet.rssi
+        min_rssi_node = min(nodes, key=self.atrGet('packet.rssi'))#.packet.rssi
+        max_rssi_node = max(nodes, key=self.atrGet('packet.rssi'))#.packet.rssi
         min_cir = 8
 
         # Find range of power levels to use
@@ -389,25 +391,28 @@ class powerControl:
         power_levels = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
         min_power = power_levels.pop(0)
         max_power = None
-        print(min_rssi, max_rssi)
         for i, power_level in enumerate(power_levels):
             max_power = power_level
-            if (max_rssi + min_power - min_rssi - max_power) <= min_cir:
+            if abs(((-1*max_rssi_node.packet.Lpl) + min_power) - ((-1*min_rssi_node.packet.Lpl) + max_power)) <= min_cir:
                 power_levels = power_levels[0: i]
                 break
             elif power_level == max(power_levels):
-                max_power = power_levels.pop()
+                max_power = max(power_levels)
 
         # Recalc min_rssi, max_rssi
-        min_rssi = min(min_rssi + max_power, max_rssi + min_power)
-        # max_rssi = max(min_rssi + max_power, max_rssi + min_power). Need to revisit why this is calced.
+        nodes[-1].packet.phase_three(max_power) # min node
+        nodes[0].packet.phase_three(min_power) # max node
+        temp_node = None
+        if nodes[-1].packet.rssi > nodes[0].packet.rssi:
+            min_rssi_node = nodes[0]
+            max_rssi_node = nodes[-1]
 
         # Assign minimum power and save minPowerIndex
         min_power_index = None
         for i, n in enumerate(nodes):
-            if n.packet.rssi + min_power > min_rssi:
+            if abs(min_power - n.packet.Lpl) > abs(min_rssi_node.packet.rssi):
                 min_power_index = i - 1
-                print ("here", i)
+                print("min power index", i)
                 break
             else:
                 n.packet.phase_three(min_power)
@@ -415,26 +420,31 @@ class powerControl:
         # Assign maximum power and save maxPowerIndex
         max_power_index = None
         for i, n in enumerate(reversed(nodes)):
-            if n.packet.rssi + max_power - min_rssi > min_cir:
+            if abs(abs(max_power - n.packet.Lpl) - abs(min_rssi_node.packet.rssi)) > min_cir:
                 max_power_index = i - 1
+                print("max power index", i)
                 break
             else:
                 n.packet.phase_three(max_power)
 
         # Assign the remaining power levels to the inbetween nodes
+        start_rssi = min_rssi_node.packet.rssi
         temp_index = min_power_index
-        max_node_rssi = nodes[max_power_index].packet.rssi
-        for power_level in power_levels:
-            temp_node_rssi = nodes[temp_index].packet.rssi
-            if temp_node_rssi + power_level - min_rssi <= min_cir \
-                    and temp_node_rssi + power_level - max_node_rssi - max_power <= min_cir:
-                for i in range(temp_index, max_power_index):
-                    curr_node_rssi = nodes[i].packet.rssi
-                    if curr_node_rssi + power_level - max_node_rssi - max_power > min_cir:
-                        temp_index = i - 1
-                        break
-                    else:
-                        nodes[i].packet.phase_three(power_level)
+        assign_loop = True
+        index = 0
+        while assign_loop:
+            power_level = power_levels[index]
+            for i in range(temp_index, max_power_index):
+                if (abs(power_level - nodes[i].packet.Lpl + abs(start_rssi)) > min_cir):
+                    temp_index = i
+                    start_rssi = nodes[temp_index].packet.rssi
+                    break
+                else:
+                    nodes[i].packet.phase_three(power_level)
+                if (i == max_power_index-1):
+                    assign_loop = False
+            index += 1
+
         return
 
     # OG

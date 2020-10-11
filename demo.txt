@@ -1,97 +1,539 @@
 Average Send Time / Inter Packet Arrival Time: 1318900.0
-Experiment: 4
-Power Control Scheme: 4
+Experiment: 6
+Power Control Scheme: 2
 Simtime: 1318900000
 Channels: 1
 Full Collision: 1
 Graphics: 0
 Distribution Type: controlled
 Base Tx Power: 14
-Configuration: 1. Repetition: 1. Region Counts: [5000, 0, 0, 0, 0, 0]
+Configuration: 1. Repetition: 1. Region Counts: [0, 2, 2, 2, 2, 2]
 maxDist: 487.66061680961025
-nrCollisions: 1287620
-energy (in J): 37344.75283968003
-sent packets: 5000615
-collisions: 1287620
-received packets: 3712994
-processed packets: 5000614
-lost packets: 0
-fallen short packets: 0
-sent - nrCollisions. DER: 0.7425076715563985
-nrReceived / sent. DER method 2: 0.7425074715809955
-SF7 DER: 0.7425074715809955 Received/Sent/Lost/Collided/Interfered Packets: 3712994.0/5000615.0/0.0/1287620.0/0.0
-SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/0.0/0.0/0.0/0.0
-SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/0.0/0.0/0.0/0.0
-SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/0.0/0.0/0.0/0.0
-SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/0.0/0.0/0.0/0.0
-SF12Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/0.0/0.0/0.0/0.0
-SF7 Interferred With: [0, 0, 0, 0, 0, 0]
-SF Counts: [5000, 0, 0, 0, 0, 0]
-Accumulted full time: 42.12678098678589, 0.5131563176999472%
-Accumulted empty time: 39.96668553352356, 0.48684368230005287%
-Configuration: 2. Repetition: 1. Region Counts: [2249, 1285, 723, 402, 221, 120]
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [0, 2, 2, 2, 2, 2]
 maxDist: 487.66061680961025
-nrCollisions: 856943
-energy (in J): 114157.03448371189
-sent packets: 4999218
-collisions: 856943
-received packets: 4142275
-processed packets: 4999218
-lost packets: 0
-fallen short packets: 0
-sent - nrCollisions. DER: 0.8285845906299746
-nrReceived / sent. DER method 2: 0.8285845906299746
-SF7 DER: 0.8743643949039486 Received/Sent/Lost/Collided/Interfered Packets: 1965447.0/2247858.0/0.0/282411.0/104695.0
-SF8 DER: 0.8036984695746588 Received/Sent/Lost/Collided/Interfered Packets: 1033332.0/1285721.0/0.0/252389.0/0.0
-SF9 DER: 0.8008348372953044 Received/Sent/Lost/Collided/Interfered Packets: 578632.0/722536.0/0.0/143904.0/0.0
-SF10 DER: 0.774573958426709 Received/Sent/Lost/Collided/Interfered Packets: 311072.0/401604.0/0.0/90532.0/0.0
-SF11 DER: 0.7473756481832801 Received/Sent/Lost/Collided/Interfered Packets: 165460.0/221388.0/0.0/55928.0/0.0
-SF12 DER: 0.7354197367435122 Received/Sent/Lost/Collided/Interfered Packets: 88332.0/120111.0/0.0/31779.0/0.0
-SF7 Interferred With: [0, 37755, 24641, 18158, 13464, 10677]
-SF Counts: [2249, 1285, 723, 402, 221, 120]
-Accumulted full time: 69.38393211364746, 0.7230044100273954%
-Accumulted empty time: 26.582193613052368, 0.2769955899726046%
-Configuration: 3. Repetition: 1. Region Counts: [835, 833, 833, 833, 833, 833]
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [0, 2, 2, 2, 2, 2]
 maxDist: 487.66061680961025
-nrCollisions: 1771054
-energy (in J): 305034.55335936
-sent packets: 4998898
-collisions: 1771054
-received packets: 3227844
-processed packets: 4998898
-lost packets: 0
-fallen short packets: 0
-sent - nrCollisions. DER: 0.6457111147296865
-nrReceived / sent. DER method 2: 0.6457111147296865
-SF7 DER: 0.9510938770914118 Received/Sent/Lost/Collided/Interfered Packets: 793957.0/834783.0/0.0/40826.0/72965.0
-SF8 DER: 0.8747520061413715 Received/Sent/Lost/Collided/Interfered Packets: 729272.0/833690.0/0.0/104418.0/0.0
-SF9 DER: 0.7941052894415247 Received/Sent/Lost/Collided/Interfered Packets: 661504.0/833018.0/0.0/171514.0/0.0
-SF10 DER: 0.634824986795986 Received/Sent/Lost/Collided/Interfered Packets: 528860.0/833080.0/0.0/304220.0/0.0
-SF11 DER: 0.40926575023680045 Received/Sent/Lost/Collided/Interfered Packets: 340478.0/831924.0/0.0/491446.0/0.0
-SF12 DER: 0.20876066040127197 Received/Sent/Lost/Collided/Interfered Packets: 173773.0/832403.0/0.0/658630.0/0.0
-SF7 Interferred With: [0, 9747, 10852, 13371, 16178, 22817]
-SF Counts: [835, 833, 833, 833, 833, 833]
-Accumulted full time: 106.16028904914856, 0.9243478167091529%
-Accumulted empty time: 8.6885666847229, 0.07565218329084711%
-Configuration: 4. Repetition: 1. Region Counts: [1668, 0, 1666, 0, 1666, 0]
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [0, 2, 2, 2, 2, 2]
 maxDist: 487.66061680961025
-nrCollisions: 2160328
-energy (in J): 216373.6546498561
-sent packets: 5002207
-collisions: 2160328
-received packets: 2841879
-processed packets: 5002207
-lost packets: 0
-fallen short packets: 0
-sent - nrCollisions. DER: 0.5681250296119293
-nrReceived / sent. DER method 2: 0.5681250296119293
-SF7 DER: 0.9048496921947785 Received/Sent/Lost/Collided/Interfered Packets: 1510262.0/1669075.0/0.0/158813.0/103361.0
-SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/0.0/0.0/0.0/0.0
-SF9 DER: 0.6316706903195833 Received/Sent/Lost/Collided/Interfered Packets: 1052352.0/1665982.0/0.0/613630.0/0.0
-SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/0.0/0.0/0.0/0.0
-SF11 DER: 0.1675104219776265 Received/Sent/Lost/Collided/Interfered Packets: 279265.0/1667150.0/0.0/1387885.0/0.0
-SF12Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/0.0/0.0/0.0/0.0
-SF7 Interferred With: [0, 0, 37616, 0, 65745, 0]
-SF Counts: [1668, 0, 1666, 0, 1666, 0]
-Accumulted full time: 89.67214727401733, 0.8600412379662088%
-Accumulted empty time: 14.59279179573059, 0.13995876203379123%
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [0, 2, 2, 2, 2, 2]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [0, 2, 2, 2, 2, 2]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [0, 2, 2, 2, 2, 2]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [0, 2, 2, 2, 2, 2]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [0, 2, 2, 2, 2, 2]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [0, 2, 2, 2, 2, 2]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [0, 2, 2, 2, 2, 2]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [0, 2, 2, 2, 2, 2]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [0, 2, 2, 2, 2, 2]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [835, 833, 833, 833, 833, 833]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [165, 167, 167, 167, 167, 167]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [34, 0, 33, 0, 33, 0]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [34, 0, 33, 0, 33, 0]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [20, 20, 20, 20, 20, 20]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [20, 20, 20, 20, 20, 20]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [200, 200, 200, 200, 200, 200]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [200, 200, 200, 200, 200, 200]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [200, 200, 200, 200, 200, 200]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [20, 20, 20, 20, 20, 20]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [20, 20, 20, 20, 20, 20]
+maxDist: 487.66061680961025
+Average Send Time / Inter Packet Arrival Time: 1318900.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 1318900000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [20, 20, 20, 20, 20, 20]
+maxDist: 487.66061680961025
