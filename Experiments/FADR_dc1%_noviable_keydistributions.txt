@@ -1,0 +1,1329 @@
+Average Send Time / Inter Packet Arrival Time: 131890.0
+Experiment: 6
+Power Control Scheme: 2
+Simtime: 131890000
+Channels: 1
+Full Collision: 1
+Graphics: 0
+Distribution Type: controlled
+Base Tx Power: 14
+Configuration: 1. Repetition: 1. Region Counts: [100, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 2695
+energy (in J): 1573.784561664
+sent packets: 100257
+collisions: 2695
+received packets: 86742
+processed packets: 89437
+lost packets: 10820
+fallen short packets: 10820
+sent - nrCollisions. DER: 0.9731190839542376
+nrReceived / sent. DER method 2: 0.8651964451360005
+SF7 DER: 0.7440033175458891 Received/Sent/Lost/Collided/Interfered Packets: 34088.0/45817.0/10820.0/909.0/0.0
+SF8 DER: 0.9653898872982029 Received/Sent/Lost/Collided/Interfered Packets: 25355.0/26264.0/0.0/909.0/0.0
+SF9 DER: 0.9687700078252828 Received/Sent/Lost/Collided/Interfered Packets: 13618.0/14057.0/0.0/439.0/0.0
+SF10 DER: 0.9652957885636656 Received/Sent/Lost/Collided/Interfered Packets: 7816.0/8097.0/0.0/281.0/0.0
+SF11 DER: 0.9690464303544682 Received/Sent/Lost/Collided/Interfered Packets: 3882.0/4006.0/0.0/124.0/0.0
+SF12 DER: 0.9836309523809523 Received/Sent/Lost/Collided/Interfered Packets: 1983.0/2016.0/0.0/33.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [46, 26, 14, 8, 4, 2]
+Accumulted full time: 1.21150541305542, 0.43755544872316493%
+Accumulted empty time: 1.5572988986968994, 0.5624445512768351%
+Configuration: 2. Repetition: 1. Region Counts: [46, 26, 14, 8, 4, 2]
+maxDist: 487.66061680961025
+nrCollisions: 555
+energy (in J): 1766.278957056
+sent packets: 100328
+collisions: 555
+received packets: 24671
+processed packets: 25226
+lost packets: 75102
+fallen short packets: 75102
+sent - nrCollisions. DER: 0.9944681444860857
+nrReceived / sent. DER method 2: 0.2459034367275337
+SF7 DER: 0.11118108184404248 Received/Sent/Lost/Collided/Interfered Packets: 5120.0/46051.0/40928.0/3.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/26156.0/26156.0/0.0/0.0
+SF9 DER: 0.4203561976968743 Received/Sent/Lost/Collided/Interfered Packets: 5877.0/13981.0/8018.0/86.0/0.0
+SF10 DER: 0.9611484422724496 Received/Sent/Lost/Collided/Interfered Packets: 7867.0/8185.0/0.0/318.0/0.0
+SF11 DER: 0.9715284715284715 Received/Sent/Lost/Collided/Interfered Packets: 3890.0/4004.0/0.0/114.0/0.0
+SF12 DER: 0.9825730394669401 Received/Sent/Lost/Collided/Interfered Packets: 1917.0/1951.0/0.0/34.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [46, 26, 14, 8, 4, 2]
+Accumulted full time: 0.5041604042053223, 0.1913006504993977%
+Accumulted empty time: 2.131274461746216, 0.8086993495006023%
+Configuration: 3. Repetition: 1. Region Counts: [15, 17, 17, 17, 17, 17]
+maxDist: 487.66061680961025
+nrCollisions: 24
+energy (in J): 2029.2695838719997
+sent packets: 99775
+collisions: 24
+received packets: 2939
+processed packets: 2963
+lost packets: 96812
+fallen short packets: 96812
+sent - nrCollisions. DER: 0.9997594587822601
+nrReceived / sent. DER method 2: 0.029456276622400402
+SF7 DER: 0.021443091652276553 Received/Sent/Lost/Collided/Interfered Packets: 981.0/45749.0/44768.0/0.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/26120.0/26120.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/13890.0/13890.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/7987.0/7987.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/4047.0/4047.0/0.0/0.0
+SF12 DER: 0.987891019172553 Received/Sent/Lost/Collided/Interfered Packets: 1958.0/1982.0/0.0/24.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [46, 26, 14, 8, 4, 2]
+Accumulted full time: 0.06059551239013672, 0.031694747936990605%
+Accumulted empty time: 1.8512516021728516, 0.9683052520630094%
+Configuration: 4. Repetition: 1. Region Counts: [34, 0, 33, 0, 33, 0]
+maxDist: 487.66061680961025
+nrCollisions: 183
+energy (in J): 2041.9069040639997
+sent packets: 99581
+collisions: 183
+received packets: 10770
+processed packets: 10953
+lost packets: 88628
+fallen short packets: 88628
+sent - nrCollisions. DER: 0.9981623000371557
+nrReceived / sent. DER method 2: 0.10815316174772296
+SF7 DER: 0.10830645335873401 Received/Sent/Lost/Collided/Interfered Packets: 5003.0/46193.0/41168.0/22.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/25648.0/25648.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/13837.0/13837.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/7975.0/7975.0/0.0/0.0
+SF11 DER: 0.97305464618484 Received/Sent/Lost/Collided/Interfered Packets: 3864.0/3971.0/0.0/107.0/0.0
+SF12 DER: 0.9724067450178845 Received/Sent/Lost/Collided/Interfered Packets: 1903.0/1957.0/0.0/54.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [46, 26, 14, 8, 4, 2]
+Accumulted full time: 0.23549151420593262, 0.10937101889404856%
+Accumulted empty time: 1.9176521301269531, 0.8906289811059515%
+Configuration: 1. Repetition: 1. Region Counts: [200, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 12118
+energy (in J): 3582.7990648320015
+sent packets: 198923
+collisions: 12118
+received packets: 175817
+processed packets: 187935
+lost packets: 10987
+fallen short packets: 10987
+sent - nrCollisions. DER: 0.9390819563348632
+nrReceived / sent. DER method 2: 0.8838445026467527
+SF7 DER: 0.8292054066723963 Received/Sent/Lost/Collided/Interfered Packets: 74291.0/89593.0/10987.0/4315.0/0.0
+SF8 DER: 0.9312528356972363 Received/Sent/Lost/Collided/Interfered Packets: 47208.0/50693.0/0.0/3484.0/0.0
+SF9 DER: 0.9268217479187365 Received/Sent/Lost/Collided/Interfered Packets: 27053.0/29189.0/0.0/2136.0/0.0
+SF10 DER: 0.9274019545627618 Received/Sent/Lost/Collided/Interfered Packets: 14614.0/15758.0/0.0/1144.0/0.0
+SF11 DER: 0.9221302047389004 Received/Sent/Lost/Collided/Interfered Packets: 8017.0/8694.0/0.0/677.0/0.0
+SF12 DER: 0.9275420336269016 Received/Sent/Lost/Collided/Interfered Packets: 4634.0/4996.0/0.0/362.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [90, 51, 29, 16, 9, 5]
+Accumulted full time: 4.902646541595459, 0.5247023088908215%
+Accumulted empty time: 4.441025972366333, 0.47529769110917847%
+Configuration: 2. Repetition: 1. Region Counts: [90, 51, 29, 16, 9, 5]
+maxDist: 487.66061680961025
+nrCollisions: 2981
+energy (in J): 3839.3805311999995
+sent packets: 200119
+collisions: 2981
+received packets: 47243
+processed packets: 50224
+lost packets: 149895
+fallen short packets: 149895
+sent - nrCollisions. DER: 0.9851038632013952
+nrReceived / sent. DER method 2: 0.23607453565128747
+SF7 DER: 0.04521155406381631 Received/Sent/Lost/Collided/Interfered Packets: 4068.0/89977.0/85899.0/10.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/50862.0/50862.0/0.0/0.0
+SF9 DER: 0.5273780153508771 Received/Sent/Lost/Collided/Interfered Packets: 15391.0/29184.0/13134.0/659.0/0.0
+SF10 DER: 0.9227868447082097 Received/Sent/Lost/Collided/Interfered Packets: 14927.0/16176.0/0.0/1249.0/0.0
+SF11 DER: 0.923085460599334 Received/Sent/Lost/Collided/Interfered Packets: 8317.0/9010.0/0.0/693.0/0.0
+SF12 DER: 0.924643584521385 Received/Sent/Lost/Collided/Interfered Packets: 4540.0/4910.0/0.0/370.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [90, 51, 29, 16, 9, 5]
+Accumulted full time: 1.8412425518035889, 0.25870545018543994%
+Accumulted empty time: 5.275896072387695, 0.74129454981456%
+Configuration: 3. Repetition: 1. Region Counts: [35, 33, 33, 33, 33, 33]
+maxDist: 487.66061680961025
+nrCollisions: 380
+energy (in J): 4307.572973568
+sent packets: 199700
+collisions: 380
+received packets: 7529
+processed packets: 7909
+lost packets: 191791
+fallen short packets: 191791
+sent - nrCollisions. DER: 0.9980971457185779
+nrReceived / sent. DER method 2: 0.03770155232849274
+SF7 DER: 0.0328047991793225 Received/Sent/Lost/Collided/Interfered Packets: 2942.0/89682.0/86734.0/6.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/51220.0/51220.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/28724.0/28724.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/16088.0/16088.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/9025.0/9025.0/0.0/0.0
+SF12 DER: 0.9246119733924612 Received/Sent/Lost/Collided/Interfered Packets: 4587.0/4961.0/0.0/374.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [90, 51, 29, 16, 9, 5]
+Accumulted full time: 0.3923518657684326, 0.07204921915371612%
+Accumulted empty time: 5.053256988525391, 0.9279507808462839%
+Configuration: 4. Repetition: 1. Region Counts: [68, 0, 66, 0, 66, 0]
+maxDist: 487.66061680961025
+nrCollisions: 1086
+energy (in J): 4345.477260287999
+sent packets: 198940
+collisions: 1086
+received packets: 16733
+processed packets: 17819
+lost packets: 181120
+fallen short packets: 181121
+sent - nrCollisions. DER: 0.9945410676585905
+nrReceived / sent. DER method 2: 0.08411078717201166
+SF7 DER: 0.04431910648401012 Received/Sent/Lost/Collided/Interfered Packets: 3976.0/89713.0/85731.0/6.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/50843.0/50843.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/28695.0/28695.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/15852.0/15851.0/0.0/0.0
+SF11 DER: 0.9179775280898876 Received/Sent/Lost/Collided/Interfered Packets: 8170.0/8900.0/0.0/730.0/0.0
+SF12 DER: 0.9291067449868341 Received/Sent/Lost/Collided/Interfered Packets: 4587.0/4937.0/0.0/350.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [90, 51, 29, 16, 9, 5]
+Accumulted full time: 0.8038818836212158, 0.14768575462165556%
+Accumulted empty time: 4.639309883117676, 0.8523142453783444%
+Configuration: 1. Repetition: 1. Region Counts: [300, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 25632
+energy (in J): 5127.669841919998
+sent packets: 299782
+collisions: 25632
+received packets: 243191
+processed packets: 268823
+lost packets: 30958
+fallen short packets: 30958
+sent - nrCollisions. DER: 0.9144978684510745
+nrReceived / sent. DER method 2: 0.8112261576745768
+SF7 DER: 0.7139282123540506 Received/Sent/Lost/Collided/Interfered Packets: 97282.0/136263.0/30958.0/8023.0/0.0
+SF8 DER: 0.8935837043172171 Received/Sent/Lost/Collided/Interfered Packets: 69049.0/77272.0/0.0/8223.0/0.0
+SF9 DER: 0.8942610889215893 Received/Sent/Lost/Collided/Interfered Packets: 38286.0/42813.0/0.0/4527.0/0.0
+SF10 DER: 0.8896079337731647 Received/Sent/Lost/Collided/Interfered Packets: 21170.0/23797.0/0.0/2627.0/0.0
+SF11 DER: 0.8788140246293827 Received/Sent/Lost/Collided/Interfered Packets: 11204.0/12749.0/0.0/1545.0/0.0
+SF12 DER: 0.9001161440185831 Received/Sent/Lost/Collided/Interfered Packets: 6200.0/6888.0/0.0/687.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [136, 77, 43, 24, 13, 7]
+Accumulted full time: 7.240249156951904, 0.5975792572397373%
+Accumulted empty time: 4.875715494155884, 0.40242074276026274%
+Configuration: 2. Repetition: 1. Region Counts: [136, 77, 43, 24, 13, 7]
+maxDist: 487.66061680961025
+nrCollisions: 5678
+energy (in J): 5532.171644928
+sent packets: 299201
+collisions: 5678
+received packets: 59755
+processed packets: 65433
+lost packets: 233768
+fallen short packets: 233768
+sent - nrCollisions. DER: 0.9810227906992289
+nrReceived / sent. DER method 2: 0.19971524159344387
+SF7 DER: 0.029308687615526803 Received/Sent/Lost/Collided/Interfered Packets: 3964.0/135250.0/131278.0/8.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/77221.0/77221.0/0.0/0.0
+SF9 DER: 0.39612529002320185 Received/Sent/Lost/Collided/Interfered Packets: 17073.0/43100.0/25269.0/758.0/0.0
+SF10 DER: 0.8860961667787491 Received/Sent/Lost/Collided/Interfered Packets: 21082.0/23792.0/0.0/2710.0/0.0
+SF11 DER: 0.8861466821885914 Received/Sent/Lost/Collided/Interfered Packets: 11418.0/12885.0/0.0/1467.0/0.0
+SF12 DER: 0.8942902344311808 Received/Sent/Lost/Collided/Interfered Packets: 6218.0/6953.0/0.0/735.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [136, 77, 43, 24, 13, 7]
+Accumulted full time: 2.8327407836914062, 0.31713962510323196%
+Accumulted empty time: 6.0994157791137695, 0.6828603748967681%
+Configuration: 3. Repetition: 1. Region Counts: [50, 50, 50, 50, 50, 50]
+maxDist: 487.66061680961025
+nrCollisions: 742
+energy (in J): 6303.338711039998
+sent packets: 299392
+collisions: 742
+received packets: 7165
+processed packets: 7907
+lost packets: 291484
+fallen short packets: 291484
+sent - nrCollisions. DER: 0.9975216438648995
+nrReceived / sent. DER method 2: 0.023931835185976913
+SF7 DER: 0.007916697437412303 Received/Sent/Lost/Collided/Interfered Packets: 1072.0/135410.0/134338.0/0.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/77626.0/77626.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/42627.0/42627.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/23980.0/23980.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/12913.0/12913.0/0.0/0.0
+SF12 DER: 0.8913107080163839 Received/Sent/Lost/Collided/Interfered Packets: 6093.0/6836.0/0.0/742.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [136, 77, 43, 24, 13, 7]
+Accumulted full time: 0.6288352012634277, 0.08445512921603454%
+Accumulted empty time: 6.816955327987671, 0.9155448707839655%
+Configuration: 4. Repetition: 1. Region Counts: [100, 0, 100, 0, 100, 0]
+maxDist: 487.66061680961025
+nrCollisions: 2250
+energy (in J): 6409.36338432
+sent packets: 299727
+collisions: 2250
+received packets: 24554
+processed packets: 26804
+lost packets: 272922
+fallen short packets: 272923
+sent - nrCollisions. DER: 0.9924931687835931
+nrReceived / sent. DER method 2: 0.08192121497229145
+SF7 DER: 0.050645736815441884 Received/Sent/Lost/Collided/Interfered Packets: 6898.0/136201.0/129271.0/32.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/76752.0/76752.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/43090.0/43089.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/23810.0/23810.0/0.0/0.0
+SF11 DER: 0.8807465769142507 Received/Sent/Lost/Collided/Interfered Packets: 11514.0/13073.0/0.0/1559.0/0.0
+SF12 DER: 0.9031024849286869 Received/Sent/Lost/Collided/Interfered Packets: 6142.0/6801.0/0.0/659.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [136, 77, 43, 24, 13, 7]
+Accumulted full time: 1.5332305431365967, 0.1908133888268076%
+Accumulted empty time: 6.502005100250244, 0.8091866111731925%
+Configuration: 1. Repetition: 1. Region Counts: [400, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 45085
+energy (in J): 7208.079670272004
+sent packets: 400332
+collisions: 45085
+received packets: 316188
+processed packets: 361273
+lost packets: 39058
+fallen short packets: 39058
+sent - nrCollisions. DER: 0.8873809737917528
+nrReceived / sent. DER method 2: 0.7898144540031774
+SF7 DER: 0.7075603575506112 Received/Sent/Lost/Collided/Interfered Packets: 127046.0/179555.0/39058.0/13451.0/0.0
+SF8 DER: 0.8614235117170443 Received/Sent/Lost/Collided/Interfered Packets: 88774.0/103055.0/0.0/14280.0/0.0
+SF9 DER: 0.8632568208370559 Received/Sent/Lost/Collided/Interfered Packets: 50245.0/58204.0/0.0/7959.0/0.0
+SF10 DER: 0.8467026549231303 Received/Sent/Lost/Collided/Interfered Packets: 26821.0/31677.0/0.0/4856.0/0.0
+SF11 DER: 0.836591086786552 Received/Sent/Lost/Collided/Interfered Packets: 14980.0/17906.0/0.0/2926.0/0.0
+SF12 DER: 0.8376446904881731 Received/Sent/Lost/Collided/Interfered Packets: 8322.0/9935.0/0.0/1613.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [179, 103, 58, 32, 18, 10]
+Accumulted full time: 10.873745918273926, 0.6607074857502078%
+Accumulted empty time: 5.583984851837158, 0.3392925142497922%
+Configuration: 2. Repetition: 1. Region Counts: [179, 103, 58, 32, 18, 10]
+maxDist: 487.66061680961025
+nrCollisions: 12725
+energy (in J): 7729.9616256
+sent packets: 398746
+collisions: 12725
+received packets: 94182
+processed packets: 106907
+lost packets: 291838
+fallen short packets: 291838
+sent - nrCollisions. DER: 0.9680874541688193
+nrReceived / sent. DER method 2: 0.23619547280725073
+SF7 DER: 0.05091598302052901 Received/Sent/Lost/Collided/Interfered Packets: 9080.0/178333.0/169214.0/39.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/102715.0/102715.0/0.0/0.0
+SF9 DER: 0.5952008889814911 Received/Sent/Lost/Collided/Interfered Packets: 34280.0/57594.0/19909.0/3405.0/0.0
+SF10 DER: 0.8508576382438541 Received/Sent/Lost/Collided/Interfered Packets: 27481.0/32298.0/0.0/4817.0/0.0
+SF11 DER: 0.8385495118549512 Received/Sent/Lost/Collided/Interfered Packets: 15031.0/17925.0/0.0/2894.0/0.0
+SF12 DER: 0.841007995142192 Received/Sent/Lost/Collided/Interfered Packets: 8310.0/9881.0/0.0/1570.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [179, 103, 58, 32, 18, 10]
+Accumulted full time: 3.4144744873046875, 0.41407073451249726%
+Accumulted empty time: 4.831639528274536, 0.5859292654875027%
+Configuration: 3. Repetition: 1. Region Counts: [65, 67, 67, 67, 67, 67]
+maxDist: 487.66061680961025
+nrCollisions: 1495
+energy (in J): 8621.315088384
+sent packets: 399257
+collisions: 1495
+received packets: 13396
+processed packets: 14891
+lost packets: 384366
+fallen short packets: 384366
+sent - nrCollisions. DER: 0.9962555446742324
+nrReceived / sent. DER method 2: 0.03355232344079127
+SF7 DER: 0.027912743356901117 Received/Sent/Lost/Collided/Interfered Packets: 4998.0/179058.0/174045.0/15.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/102424.0/102424.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/57963.0/57963.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/32042.0/32042.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/17892.0/17892.0/0.0/0.0
+SF12 DER: 0.8501720996153067 Received/Sent/Lost/Collided/Interfered Packets: 8398.0/9878.0/0.0/1480.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [179, 103, 58, 32, 18, 10]
+Accumulted full time: 0.9812893867492676, 0.12124630206711885%
+Accumulted empty time: 7.11206579208374, 0.8787536979328812%
+Configuration: 4. Repetition: 1. Region Counts: [134, 0, 133, 0, 133, 0]
+maxDist: 487.66061680961025
+nrCollisions: 4384
+energy (in J): 8713.934054400002
+sent packets: 398972
+collisions: 4384
+received packets: 37301
+processed packets: 41685
+lost packets: 357285
+fallen short packets: 357287
+sent - nrCollisions. DER: 0.9890117602237751
+nrReceived / sent. DER method 2: 0.09349277643543907
+SF7 DER: 0.07780044147643131 Received/Sent/Lost/Collided/Interfered Packets: 13922.0/178945.0/164904.0/118.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/102705.0/102705.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/57996.0/57996.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/31681.0/31680.0/0.0/0.0
+SF11 DER: 0.8454207083239341 Received/Sent/Lost/Collided/Interfered Packets: 14991.0/17732.0/0.0/2741.0/0.0
+SF12 DER: 0.846161605971956 Received/Sent/Lost/Collided/Interfered Packets: 8388.0/9913.0/0.0/1525.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [179, 103, 58, 32, 18, 10]
+Accumulted full time: 2.3182971477508545, 0.2460938444137291%
+Accumulted empty time: 7.102081298828125, 0.7539061555862709%
+Configuration: 1. Repetition: 1. Region Counts: [500, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 67744
+energy (in J): 8873.649278976
+sent packets: 499247
+collisions: 67744
+received packets: 375488
+processed packets: 443232
+lost packets: 56014
+fallen short packets: 56014
+sent - nrCollisions. DER: 0.8643076473168592
+nrReceived / sent. DER method 2: 0.7521086756655523
+SF7 DER: 0.6634980988593155 Received/Sent/Lost/Collided/Interfered Packets: 149023.0/224602.0/56014.0/19565.0/0.0
+SF8 DER: 0.8293091416608513 Received/Sent/Lost/Collided/Interfered Packets: 106956.0/128970.0/0.0/22014.0/0.0
+SF9 DER: 0.8336182811392352 Received/Sent/Lost/Collided/Interfered Packets: 59973.0/71943.0/0.0/11969.0/0.0
+SF10 DER: 0.8087186393336326 Received/Sent/Lost/Collided/Interfered Packets: 32428.0/40098.0/0.0/7670.0/0.0
+SF11 DER: 0.8027113970588236 Received/Sent/Lost/Collided/Interfered Packets: 17467.0/21760.0/0.0/4293.0/0.0
+SF12 DER: 0.8119420582785919 Received/Sent/Lost/Collided/Interfered Packets: 9641.0/11874.0/0.0/2233.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [225, 129, 72, 40, 22, 12]
+Accumulted full time: 12.051144361495972, 0.7089139704689602%
+Accumulted empty time: 4.948301076889038, 0.29108602953103974%
+Configuration: 2. Repetition: 1. Region Counts: [225, 129, 72, 40, 22, 12]
+maxDist: 487.66061680961025
+nrCollisions: 16534
+energy (in J): 9379.567282176004
+sent packets: 499370
+collisions: 16534
+received packets: 102403
+processed packets: 118937
+lost packets: 380433
+fallen short packets: 380433
+sent - nrCollisions. DER: 0.9668902817550113
+nrReceived / sent. DER method 2: 0.20506438112021147
+SF7 DER: 0.05360607769395739 Received/Sent/Lost/Collided/Interfered Packets: 12073.0/225217.0/213063.0/81.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/128664.0/128664.0/0.0/0.0
+SF9 DER: 0.42228203268812403 Received/Sent/Lost/Collided/Interfered Packets: 30281.0/71708.0/38706.0/2721.0/0.0
+SF10 DER: 0.8196470263349485 Received/Sent/Lost/Collided/Interfered Packets: 32649.0/39833.0/0.0/7184.0/0.0
+SF11 DER: 0.8051356765616463 Received/Sent/Lost/Collided/Interfered Packets: 17684.0/21964.0/0.0/4280.0/0.0
+SF12 DER: 0.8107476635514018 Received/Sent/Lost/Collided/Interfered Packets: 9716.0/11984.0/0.0/2268.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [225, 129, 72, 40, 22, 12]
+Accumulted full time: 5.441208839416504, 0.44452249389095466%
+Accumulted empty time: 6.79936146736145, 0.5554775061090453%
+Configuration: 3. Repetition: 1. Region Counts: [85, 83, 83, 83, 83, 83]
+maxDist: 487.66061680961025
+nrCollisions: 2219
+energy (in J): 10622.828845055996
+sent packets: 498754
+collisions: 2219
+received packets: 15737
+processed packets: 17956
+lost packets: 480797
+fallen short packets: 480798
+sent - nrCollisions. DER: 0.9955509128748842
+nrReceived / sent. DER method 2: 0.0315526291518464
+SF7 DER: 0.026898614286796727 Received/Sent/Lost/Collided/Interfered Packets: 6035.0/224361.0/218302.0/24.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/128663.0/128663.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/71987.0/71986.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/39879.0/39879.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/21967.0/21967.0/0.0/0.0
+SF12 DER: 0.815499705808187 Received/Sent/Lost/Collided/Interfered Packets: 9702.0/11897.0/0.0/2195.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [225, 129, 72, 40, 22, 12]
+Accumulted full time: 1.4168784618377686, 0.1394632591944124%
+Accumulted empty time: 8.742632150650024, 0.8605367408055876%
+Configuration: 4. Repetition: 1. Region Counts: [168, 0, 166, 0, 166, 0]
+maxDist: 487.66061680961025
+nrCollisions: 6530
+energy (in J): 10820.053976063995
+sent packets: 498798
+collisions: 6530
+received packets: 37406
+processed packets: 43936
+lost packets: 454862
+fallen short packets: 454862
+sent - nrCollisions. DER: 0.9869085281015562
+nrReceived / sent. DER method 2: 0.0749922814445928
+SF7 DER: 0.04404190057294982 Received/Sent/Lost/Collided/Interfered Packets: 9893.0/224627.0/214677.0/57.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/128231.0/128231.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/72144.0/72144.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/39810.0/39810.0/0.0/0.0
+SF11 DER: 0.8079139981701738 Received/Sent/Lost/Collided/Interfered Packets: 17661.0/21860.0/0.0/4199.0/0.0
+SF12 DER: 0.8124690747154873 Received/Sent/Lost/Collided/Interfered Packets: 9852.0/12126.0/0.0/2274.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [225, 129, 72, 40, 22, 12]
+Accumulted full time: 2.8708674907684326, 0.2722952610621149%
+Accumulted empty time: 7.672347545623779, 0.7277047389378851%
+Configuration: 1. Repetition: 1. Region Counts: [600, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 96896
+energy (in J): 10650.832753920002
+sent packets: 598984
+collisions: 96896
+received packets: 438802
+processed packets: 535698
+lost packets: 63286
+fallen short packets: 63286
+sent - nrCollisions. DER: 0.8382327407743779
+nrReceived / sent. DER method 2: 0.7325771639977028
+SF7 DER: 0.6598255268147697 Received/Sent/Lost/Collided/Interfered Packets: 177821.0/269497.0/63286.0/28390.0/0.0
+SF8 DER: 0.7981517920343925 Received/Sent/Lost/Collided/Interfered Packets: 122905.0/153987.0/0.0/31082.0/0.0
+SF9 DER: 0.7987849247508056 Received/Sent/Lost/Collided/Interfered Packets: 69158.0/86579.0/0.0/17421.0/0.0
+SF10 DER: 0.7799514048968912 Received/Sent/Lost/Collided/Interfered Packets: 37557.0/48153.0/0.0/10596.0/0.0
+SF11 DER: 0.7625180950966928 Received/Sent/Lost/Collided/Interfered Packets: 20543.0/26941.0/0.0/6398.0/0.0
+SF12 DER: 0.7823822955087871 Received/Sent/Lost/Collided/Interfered Packets: 10818.0/13827.0/0.0/3009.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [270, 154, 87, 48, 27, 14]
+Accumulted full time: 16.5993914604187, 0.7522136114882467%
+Accumulted empty time: 5.46799898147583, 0.24778638851175333%
+Configuration: 2. Repetition: 1. Region Counts: [270, 154, 87, 48, 27, 14]
+maxDist: 487.66061680961025
+nrCollisions: 25657
+energy (in J): 11294.649575423993
+sent packets: 599029
+collisions: 25657
+received packets: 126038
+processed packets: 151695
+lost packets: 447333
+fallen short packets: 447333
+sent - nrCollisions. DER: 0.9571690185283184
+nrReceived / sent. DER method 2: 0.21040383687601102
+SF7 DER: 0.05543850261418236 Received/Sent/Lost/Collided/Interfered Packets: 14919.0/269109.0/254019.0/171.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/154246.0/154246.0/0.0/0.0
+SF9 DER: 0.4867375220468653 Received/Sent/Lost/Collided/Interfered Packets: 42499.0/87314.0/39068.0/5747.0/0.0
+SF10 DER: 0.7832452641032603 Received/Sent/Lost/Collided/Interfered Packets: 37501.0/47879.0/0.0/10378.0/0.0
+SF11 DER: 0.7578797634199296 Received/Sent/Lost/Collided/Interfered Packets: 20246.0/26714.0/0.0/6468.0/0.0
+SF12 DER: 0.7897871722234329 Received/Sent/Lost/Collided/Interfered Packets: 10873.0/13767.0/0.0/2893.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [270, 154, 87, 48, 27, 14]
+Accumulted full time: 7.408634424209595, 0.5015795428933789%
+Accumulted empty time: 7.361972808837891, 0.49842045710662103%
+Configuration: 3. Repetition: 1. Region Counts: [100, 100, 100, 100, 100, 100]
+maxDist: 487.66061680961025
+nrCollisions: 3227
+energy (in J): 12806.584129536008
+sent packets: 599664
+collisions: 3227
+received packets: 14840
+processed packets: 18067
+lost packets: 581596
+fallen short packets: 581597
+sent - nrCollisions. DER: 0.9946186531124096
+nrReceived / sent. DER method 2: 0.024747191760719336
+SF7 DER: 0.014466418699171917 Received/Sent/Lost/Collided/Interfered Packets: 3901.0/269659.0/265748.0/10.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/154313.0/154313.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/86770.0/86770.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/47835.0/47835.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/26931.0/26930.0/0.0/0.0
+SF12 DER: 0.7727465385702176 Received/Sent/Lost/Collided/Interfered Packets: 10939.0/14156.0/0.0/3217.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [270, 154, 87, 48, 27, 14]
+Accumulted full time: 1.8834443092346191, 0.15742346395237827%
+Accumulted empty time: 10.080746173858643, 0.8425765360476217%
+Configuration: 4. Repetition: 1. Region Counts: [200, 0, 200, 0, 200, 0]
+maxDist: 487.66061680961025
+nrCollisions: 9427
+energy (in J): 12958.699858944003
+sent packets: 600448
+collisions: 9427
+received packets: 43953
+processed packets: 53380
+lost packets: 547067
+fallen short packets: 547068
+sent - nrCollisions. DER: 0.9843000559582179
+nrReceived / sent. DER method 2: 0.07320034374333831
+SF7 DER: 0.04728379158708302 Received/Sent/Lost/Collided/Interfered Packets: 12774.0/270156.0/257273.0/108.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/154031.0/154031.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/87251.0/87251.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/48512.0/48512.0/0.0/0.0
+SF11 DER: 0.7609533430613238 Received/Sent/Lost/Collided/Interfered Packets: 20338.0/26727.0/0.0/6389.0/0.0
+SF12 DER: 0.7872340425531915 Received/Sent/Lost/Collided/Interfered Packets: 10841.0/13771.0/0.0/2930.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [270, 154, 87, 48, 27, 14]
+Accumulted full time: 3.730642795562744, 0.30223272811458657%
+Accumulted empty time: 8.612966775894165, 0.6977672718854134%
+Configuration: 1. Repetition: 1. Region Counts: [700, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 127007
+energy (in J): 12464.538372863997
+sent packets: 698745
+collisions: 127007
+received packets: 485808
+processed packets: 612815
+lost packets: 85929
+fallen short packets: 85929
+sent - nrCollisions. DER: 0.8182355508805071
+nrReceived / sent. DER method 2: 0.6952579267114612
+SF7 DER: 0.6125446226877335 Received/Sent/Lost/Collided/Interfered Packets: 192524.0/314302.0/85929.0/35849.0/0.0
+SF8 DER: 0.7709537532135103 Received/Sent/Lost/Collided/Interfered Packets: 138848.0/180099.0/0.0/41251.0/0.0
+SF9 DER: 0.7731575220179735 Received/Sent/Lost/Collided/Interfered Packets: 77516.0/100259.0/0.0/22743.0/0.0
+SF10 DER: 0.745321283711663 Received/Sent/Lost/Collided/Interfered Packets: 41896.0/56212.0/0.0/14316.0/0.0
+SF11 DER: 0.7236370678803138 Received/Sent/Lost/Collided/Interfered Packets: 22419.0/30981.0/0.0/8562.0/0.0
+SF12 DER: 0.7462112242481648 Received/Sent/Lost/Collided/Interfered Packets: 12605.0/16892.0/0.0/4286.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [315, 180, 101, 56, 31, 17]
+Accumulted full time: 18.600437879562378, 0.7792383489840442%
+Accumulted empty time: 5.269585847854614, 0.2207616510159558%
+Configuration: 2. Repetition: 1. Region Counts: [315, 180, 101, 56, 31, 17]
+maxDist: 487.66061680961025
+nrCollisions: 33046
+energy (in J): 13231.794561023997
+sent packets: 698340
+collisions: 33046
+received packets: 133748
+processed packets: 166794
+lost packets: 531545
+fallen short packets: 531546
+sent - nrCollisions. DER: 0.9526792106996592
+nrReceived / sent. DER method 2: 0.19152275395938942
+SF7 DER: 0.040365875378469834 Received/Sent/Lost/Collided/Interfered Packets: 12692.0/314424.0/301630.0/102.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/178881.0/178880.0/0.0/0.0
+SF9 DER: 0.43395834158317825 Received/Sent/Lost/Collided/Interfered Packets: 43835.0/101012.0/51035.0/6142.0/0.0
+SF10 DER: 0.7490515291309692 Received/Sent/Lost/Collided/Interfered Packets: 42054.0/56143.0/0.0/14089.0/0.0
+SF11 DER: 0.7278098866681735 Received/Sent/Lost/Collided/Interfered Packets: 22541.0/30971.0/0.0/8430.0/0.0
+SF12 DER: 0.7467029392631143 Received/Sent/Lost/Collided/Interfered Packets: 12626.0/16909.0/0.0/4283.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [315, 180, 101, 56, 31, 17]
+Accumulted full time: 9.03298306465149, 0.5402986429186546%
+Accumulted empty time: 7.685517311096191, 0.45970135708134535%
+Configuration: 3. Repetition: 1. Region Counts: [115, 117, 117, 117, 117, 117]
+maxDist: 487.66061680961025
+nrCollisions: 4262
+energy (in J): 14906.728065023997
+sent packets: 699560
+collisions: 4262
+received packets: 17637
+processed packets: 21899
+lost packets: 677661
+fallen short packets: 677661
+sent - nrCollisions. DER: 0.9939075990622677
+nrReceived / sent. DER method 2: 0.025211561552976155
+SF7 DER: 0.015995309479288816 Received/Sent/Lost/Collided/Interfered Packets: 5047.0/315530.0/310474.0/9.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/180296.0/180296.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/100466.0/100466.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/55845.0/55845.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/30580.0/30580.0/0.0/0.0
+SF12 DER: 0.7474915395119635 Received/Sent/Lost/Collided/Interfered Packets: 12590.0/16843.0/0.0/4253.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [315, 180, 101, 56, 31, 17]
+Accumulted full time: 2.629368543624878, 0.18199429064104555%
+Accumulted empty time: 11.818164587020874, 0.8180057093589544%
+Configuration: 4. Repetition: 1. Region Counts: [234, 0, 233, 0, 233, 0]
+maxDist: 487.66061680961025
+nrCollisions: 12945
+energy (in J): 15135.55473715201
+sent packets: 699091
+collisions: 12945
+received packets: 50559
+processed packets: 63504
+lost packets: 635585
+fallen short packets: 635586
+sent - nrCollisions. DER: 0.9814830973363983
+nrReceived / sent. DER method 2: 0.0723210569153372
+SF7 DER: 0.05021332666060631 Received/Sent/Lost/Collided/Interfered Packets: 15853.0/315713.0/299721.0/138.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/179426.0/179426.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/100467.0/100467.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/55971.0/55971.0/0.0/0.0
+SF11 DER: 0.7246277652885023 Received/Sent/Lost/Collided/Interfered Packets: 22241.0/30693.0/0.0/8452.0/0.0
+SF12 DER: 0.7410379882289995 Received/Sent/Lost/Collided/Interfered Packets: 12465.0/16821.0/0.0/4355.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [315, 180, 101, 56, 31, 17]
+Accumulted full time: 4.467788219451904, 0.344130766467246%
+Accumulted empty time: 8.51503300666809, 0.6558692335327541%
+Configuration: 1. Repetition: 1. Region Counts: [800, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 175806
+energy (in J): 13823.036057088
+sent packets: 799028
+collisions: 175806
+received packets: 558137
+processed packets: 733943
+lost packets: 65083
+fallen short packets: 65083
+sent - nrCollisions. DER: 0.7799751698313451
+nrReceived / sent. DER method 2: 0.6985199517413657
+SF7 DER: 0.6565183081685163 Received/Sent/Lost/Collided/Interfered Packets: 236277.0/359894.0/65083.0/58534.0/0.0
+SF8 DER: 0.7413839205410057 Received/Sent/Lost/Collided/Interfered Packets: 152496.0/205691.0/0.0/53194.0/0.0
+SF9 DER: 0.7408873708361365 Received/Sent/Lost/Collided/Interfered Packets: 85897.0/115938.0/0.0/30041.0/0.0
+SF10 DER: 0.7162481790698767 Received/Sent/Lost/Collided/Interfered Packets: 45726.0/63841.0/0.0/18115.0/0.0
+SF11 DER: 0.6982209469153515 Received/Sent/Lost/Collided/Interfered Packets: 24333.0/34850.0/0.0/10517.0/0.0
+SF12 DER: 0.7126607845221643 Received/Sent/Lost/Collided/Interfered Packets: 13408.0/18814.0/0.0/5405.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [360, 206, 116, 64, 35, 19]
+Accumulted full time: 18.130887269973755, 0.8174104859642246%
+Accumulted empty time: 4.049996852874756, 0.1825895140357754%
+Configuration: 2. Repetition: 1. Region Counts: [360, 206, 116, 64, 35, 19]
+maxDist: 487.66061680961025
+nrCollisions: 45344
+energy (in J): 15143.408203776014
+sent packets: 799319
+collisions: 45344
+received packets: 159272
+processed packets: 204616
+lost packets: 594703
+fallen short packets: 594703
+sent - nrCollisions. DER: 0.9432717100431742
+nrReceived / sent. DER method 2: 0.19925961975131332
+SF7 DER: 0.04933151477945404 Received/Sent/Lost/Collided/Interfered Packets: 17759.0/359993.0/342017.0/217.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/205452.0/205452.0/0.0/0.0
+SF9 DER: 0.496000207109017 Received/Sent/Lost/Collided/Interfered Packets: 57477.0/115881.0/47234.0/11170.0/0.0
+SF10 DER: 0.717015269914058 Received/Sent/Lost/Collided/Interfered Packets: 45970.0/64113.0/0.0/18143.0/0.0
+SF11 DER: 0.7027982999115726 Received/Sent/Lost/Collided/Interfered Packets: 24638.0/35057.0/0.0/10419.0/0.0
+SF12 DER: 0.7133825638846093 Received/Sent/Lost/Collided/Interfered Packets: 13428.0/18823.0/0.0/5395.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [360, 206, 116, 64, 35, 19]
+Accumulted full time: 8.793035745620728, 0.5940534804721004%
+Accumulted empty time: 6.0087220668792725, 0.4059465195278997%
+Configuration: 3. Repetition: 1. Region Counts: [135, 133, 133, 133, 133, 133]
+maxDist: 487.66061680961025
+nrCollisions: 5250
+energy (in J): 16917.751151615994
+sent packets: 798347
+collisions: 5250
+received packets: 20539
+processed packets: 25789
+lost packets: 772557
+fallen short packets: 772558
+sent - nrCollisions. DER: 0.9934239121584975
+nrReceived / sent. DER method 2: 0.025726908224118085
+SF7 DER: 0.019404915912031046 Received/Sent/Lost/Collided/Interfered Packets: 6975.0/359445.0/352441.0/29.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/205909.0/205909.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/115621.0/115621.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/63852.0/63851.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/34735.0/34735.0/0.0/0.0
+SF12 DER: 0.7220654777748203 Received/Sent/Lost/Collided/Interfered Packets: 13564.0/18785.0/0.0/5221.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [360, 206, 116, 64, 35, 19]
+Accumulted full time: 2.405333995819092, 0.19999451282423153%
+Accumulted empty time: 9.621665954589844, 0.8000054871757685%
+Configuration: 4. Repetition: 1. Region Counts: [268, 0, 266, 0, 266, 0]
+maxDist: 487.66061680961025
+nrCollisions: 15961
+energy (in J): 17232.606741503998
+sent packets: 799717
+collisions: 15961
+received packets: 57795
+processed packets: 73756
+lost packets: 725959
+fallen short packets: 725959
+sent - nrCollisions. DER: 0.9800416897477483
+nrReceived / sent. DER method 2: 0.07226931527027686
+SF7 DER: 0.054785936113575864 Received/Sent/Lost/Collided/Interfered Packets: 19758.0/360640.0/340596.0/286.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/205807.0/205807.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/115591.0/115591.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/63965.0/63965.0/0.0/0.0
+SF11 DER: 0.7017966130834694 Received/Sent/Lost/Collided/Interfered Packets: 24492.0/34899.0/0.0/10405.0/0.0
+SF12 DER: 0.719904331650279 Received/Sent/Lost/Collided/Interfered Packets: 13545.0/18815.0/0.0/5270.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [360, 206, 116, 64, 35, 19]
+Accumulted full time: 4.845334529876709, 0.38193623391266424%
+Accumulted empty time: 7.840904951095581, 0.6180637660873357%
+Configuration: 1. Repetition: 1. Region Counts: [900, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 217048
+energy (in J): 16127.842473215993
+sent packets: 899250
+collisions: 217048
+received packets: 608074
+processed packets: 825122
+lost packets: 74127
+fallen short packets: 74127
+sent - nrCollisions. DER: 0.7586344175701973
+nrReceived / sent. DER method 2: 0.6762012788434807
+SF7 DER: 0.6424137044035735 Received/Sent/Lost/Collided/Interfered Packets: 259733.0/404308.0/74127.0/70448.0/0.0
+SF8 DER: 0.7129816565432505 Received/Sent/Lost/Collided/Interfered Packets: 164569.0/230818.0/0.0/66249.0/0.0
+SF9 DER: 0.7136880497747264 Received/Sent/Lost/Collided/Interfered Packets: 93142.0/130508.0/0.0/37366.0/0.0
+SF10 DER: 0.6893820435501578 Received/Sent/Lost/Collided/Interfered Packets: 49610.0/71963.0/0.0/22353.0/0.0
+SF11 DER: 0.6589196138236999 Received/Sent/Lost/Collided/Interfered Packets: 26140.0/39671.0/0.0/13530.0/0.0
+SF12 DER: 0.6769174779364935 Received/Sent/Lost/Collided/Interfered Packets: 14880.0/21982.0/0.0/7102.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [405, 231, 130, 72, 40, 22]
+Accumulted full time: 23.57982039451599, 0.8479781883209025%
+Accumulted empty time: 4.2272868156433105, 0.15202181167909745%
+Configuration: 2. Repetition: 1. Region Counts: [405, 231, 130, 72, 40, 22]
+maxDist: 487.66061680961025
+nrCollisions: 50244
+energy (in J): 16938.421936128
+sent packets: 899020
+collisions: 50244
+received packets: 158970
+processed packets: 209214
+lost packets: 689803
+fallen short packets: 689805
+sent - nrCollisions. DER: 0.9441124780316345
+nrReceived / sent. DER method 2: 0.1768258770661387
+SF7 DER: 0.05317731364497789 Received/Sent/Lost/Collided/Interfered Packets: 21550.0/405248.0/383371.0/327.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/230415.0/230413.0/0.0/0.0
+SF9 DER: 0.35940920723998643 Received/Sent/Lost/Collided/Interfered Packets: 46624.0/129724.0/76019.0/7081.0/0.0
+SF10 DER: 0.6908269166387679 Received/Sent/Lost/Collided/Interfered Packets: 49524.0/71688.0/0.0/22163.0/0.0
+SF11 DER: 0.6603726271972717 Received/Sent/Lost/Collided/Interfered Packets: 26335.0/39879.0/0.0/13544.0/0.0
+SF12 DER: 0.676923774132149 Received/Sent/Lost/Collided/Interfered Packets: 14937.0/22066.0/0.0/7129.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [405, 231, 130, 72, 40, 22]
+Accumulted full time: 10.096055746078491, 0.6167663171428182%
+Accumulted empty time: 6.2732813358306885, 0.3832336828571818%
+Configuration: 3. Repetition: 1. Region Counts: [150, 150, 150, 150, 150, 150]
+maxDist: 487.66061680961025
+nrCollisions: 7366
+energy (in J): 19233.377006592014
+sent packets: 897159
+collisions: 7366
+received packets: 25511
+processed packets: 32877
+lost packets: 864282
+fallen short packets: 864282
+sent - nrCollisions. DER: 0.9917896381800774
+nrReceived / sent. DER method 2: 0.028435316370899695
+SF7 DER: 0.02667522388355577 Received/Sent/Lost/Collided/Interfered Packets: 10765.0/403558.0/392715.0/78.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/230425.0/230425.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/129654.0/129654.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/71888.0/71888.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/39600.0/39600.0/0.0/0.0
+SF12 DER: 0.6692384496686938 Received/Sent/Lost/Collided/Interfered Packets: 14746.0/22034.0/0.0/7288.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [405, 231, 130, 72, 40, 22]
+Accumulted full time: 3.2517330646514893, 0.23024601226181884%
+Accumulted empty time: 10.87113070487976, 0.7697539877381812%
+Configuration: 4. Repetition: 1. Region Counts: [300, 0, 300, 0, 300, 0]
+maxDist: 487.66061680961025
+nrCollisions: 20521
+energy (in J): 19462.825046015994
+sent packets: 897709
+collisions: 20521
+received packets: 65879
+processed packets: 86400
+lost packets: 811309
+fallen short packets: 811309
+sent - nrCollisions. DER: 0.9771406992689168
+nrReceived / sent. DER method 2: 0.07338569625569087
+SF7 DER: 0.061049202726719175 Received/Sent/Lost/Collided/Interfered Packets: 24664.0/404002.0/378930.0/408.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/231019.0/231019.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/129883.0/129883.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/71477.0/71477.0/0.0/0.0
+SF11 DER: 0.663191478671557 Received/Sent/Lost/Collided/Interfered Packets: 26399.0/39806.0/0.0/13407.0/0.0
+SF12 DER: 0.6884118576340489 Received/Sent/Lost/Collided/Interfered Packets: 14816.0/21522.0/0.0/6706.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [405, 231, 130, 72, 40, 22]
+Accumulted full time: 6.653677225112915, 0.4150710149926398%
+Accumulted empty time: 9.376536846160889, 0.5849289850073601%
+Configuration: 1. Repetition: 1. Region Counts: [1000, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 251519
+energy (in J): 17707.388499456003
+sent packets: 997278
+collisions: 251519
+received packets: 637008
+processed packets: 888527
+lost packets: 108749
+fallen short packets: 108749
+sent - nrCollisions. DER: 0.7477944966197991
+nrReceived / sent. DER method 2: 0.6387466684314704
+SF7 DER: 0.5922197539264804 Received/Sent/Lost/Collided/Interfered Packets: 266323.0/449703.0/108749.0/74630.0/0.0
+SF8 DER: 0.6856133427442783 Received/Sent/Lost/Collided/Interfered Packets: 175818.0/256439.0/0.0/80621.0/0.0
+SF9 DER: 0.686541619606566 Received/Sent/Lost/Collided/Interfered Packets: 99081.0/144319.0/0.0/45238.0/0.0
+SF10 DER: 0.6610641434313145 Received/Sent/Lost/Collided/Interfered Packets: 52468.0/79369.0/0.0/26901.0/0.0
+SF11 DER: 0.6356095325389551 Received/Sent/Lost/Collided/Interfered Packets: 27738.0/43640.0/0.0/15902.0/0.0
+SF12 DER: 0.6544018817204301 Received/Sent/Lost/Collided/Interfered Packets: 15580.0/23808.0/0.0/8227.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [450, 257, 145, 80, 44, 24]
+Accumulted full time: 25.000824451446533, 0.8647548092305897%
+Accumulted empty time: 3.910057783126831, 0.13524519076941036%
+Configuration: 2. Repetition: 1. Region Counts: [450, 257, 145, 80, 44, 24]
+maxDist: 487.66061680961025
+nrCollisions: 62001
+energy (in J): 18743.025451008005
+sent packets: 998001
+collisions: 62001
+received packets: 174595
+processed packets: 236596
+lost packets: 761403
+fallen short packets: 761404
+sent - nrCollisions. DER: 0.9378748117486856
+nrReceived / sent. DER method 2: 0.17494471448425403
+SF7 DER: 0.04625307835240356 Received/Sent/Lost/Collided/Interfered Packets: 20810.0/449916.0/428794.0/312.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/256198.0/256198.0/0.0/0.0
+SF9 DER: 0.39583246855672244 Received/Sent/Lost/Collided/Interfered Packets: 57216.0/144546.0/76411.0/10918.0/0.0
+SF10 DER: 0.6643951446216287 Received/Sent/Lost/Collided/Interfered Packets: 53038.0/79829.0/0.0/26790.0/0.0
+SF11 DER: 0.6360601765055558 Received/Sent/Lost/Collided/Interfered Packets: 27820.0/43738.0/0.0/15918.0/0.0
+SF12 DER: 0.6608479851939093 Received/Sent/Lost/Collided/Interfered Packets: 15711.0/23774.0/0.0/8063.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [450, 257, 145, 80, 44, 24]
+Accumulted full time: 11.986259460449219, 0.646153769433479%
+Accumulted empty time: 6.563906192779541, 0.3538462305665209%
+Configuration: 3. Repetition: 1. Region Counts: [165, 167, 167, 167, 167, 167]
+maxDist: 487.66061680961025
+nrCollisions: 8196
+energy (in J): 21158.868962304023
+sent packets: 996532
+collisions: 8196
+received packets: 29295
+processed packets: 37491
+lost packets: 959040
+fallen short packets: 959040
+sent - nrCollisions. DER: 0.9917754773554688
+nrReceived / sent. DER method 2: 0.02939694861780655
+SF7 DER: 0.03098158893775817 Received/Sent/Lost/Collided/Interfered Packets: 13898.0/448589.0/434566.0/125.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/256783.0/256783.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/144873.0/144873.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/79232.0/79232.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/43586.0/43586.0/0.0/0.0
+SF12 DER: 0.6560569261579104 Received/Sent/Lost/Collided/Interfered Packets: 15397.0/23469.0/0.0/8071.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [450, 257, 145, 80, 44, 24]
+Accumulted full time: 3.8917109966278076, 0.24404899705144062%
+Accumulted empty time: 12.05472207069397, 0.7559510029485594%
+Configuration: 4. Repetition: 1. Region Counts: [334, 0, 333, 0, 333, 0]
+maxDist: 487.66061680961025
+nrCollisions: 24307
+energy (in J): 21555.828424704
+sent packets: 998149
+collisions: 24307
+received packets: 61934
+processed packets: 86241
+lost packets: 911905
+fallen short packets: 911906
+sent - nrCollisions. DER: 0.9756479243078939
+nrReceived / sent. DER method 2: 0.06204885242584023
+SF7 DER: 0.04136045956066178 Received/Sent/Lost/Collided/Interfered Packets: 18612.0/449995.0/431149.0/234.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/256221.0/256221.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/144808.0/144807.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/79728.0/79728.0/0.0/0.0
+SF11 DER: 0.6375857338820302 Received/Sent/Lost/Collided/Interfered Packets: 27888.0/43740.0/0.0/15852.0/0.0
+SF12 DER: 0.6524073213002494 Received/Sent/Lost/Collided/Interfered Packets: 15434.0/23657.0/0.0/8221.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [450, 257, 145, 80, 44, 24]
+Accumulted full time: 6.996648788452148, 0.4328034603544316%
+Accumulted empty time: 9.169231176376343, 0.5671965396455684%
+Configuration: 1. Repetition: 1. Region Counts: [1500, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 524321
+energy (in J): 26657.213609472004
+sent packets: 1499318
+collisions: 524321
+received packets: 804482
+processed packets: 1328803
+lost packets: 170511
+fallen short packets: 170511
+sent - nrCollisions. DER: 0.6502936668538629
+nrReceived / sent. DER method 2: 0.5365652916859532
+SF7 DER: 0.5126595017300628 Received/Sent/Lost/Collided/Interfered Packets: 346403.0/675698.0/170511.0/158783.0/0.0
+SF8 DER: 0.5686071980982238 Received/Sent/Lost/Collided/Interfered Packets: 219098.0/385324.0/0.0/166226.0/0.0
+SF9 DER: 0.565919795544607 Received/Sent/Lost/Collided/Interfered Packets: 122675.0/216771.0/0.0/94095.0/0.0
+SF10 DER: 0.537720733050706 Received/Sent/Lost/Collided/Interfered Packets: 64434.0/119828.0/0.0/55393.0/0.0
+SF11 DER: 0.5030646923170288 Received/Sent/Lost/Collided/Interfered Packets: 33158.0/65912.0/0.0/32754.0/0.0
+SF12 DER: 0.5229565460388431 Received/Sent/Lost/Collided/Interfered Packets: 18714.0/35785.0/0.0/17070.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [675, 386, 217, 120, 66, 36]
+Accumulted full time: 47.14861798286438, 0.9330668136392559%
+Accumulted empty time: 3.382187843322754, 0.06693318636074404%
+Configuration: 2. Repetition: 1. Region Counts: [675, 386, 217, 120, 66, 36]
+maxDist: 487.66061680961025
+nrCollisions: 134278
+energy (in J): 28215.775617024035
+sent packets: 1497141
+collisions: 134278
+received packets: 238814
+processed packets: 373092
+lost packets: 1124049
+fallen short packets: 1124049
+sent - nrCollisions. DER: 0.9103103849270042
+nrReceived / sent. DER method 2: 0.15951336580856446
+SF7 DER: 0.057376733378973914 Received/Sent/Lost/Collided/Interfered Packets: 38720.0/674838.0/635005.0/1113.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/384954.0/384954.0/0.0/0.0
+SF9 DER: 0.38681694713589343 Received/Sent/Lost/Collided/Interfered Packets: 83877.0/216839.0/104090.0/28872.0/0.0
+SF10 DER: 0.5385421557448521 Received/Sent/Lost/Collided/Interfered Packets: 64233.0/119272.0/0.0/55039.0/0.0
+SF11 DER: 0.5071895225302234 Received/Sent/Lost/Collided/Interfered Packets: 33227.0/65512.0/0.0/32285.0/0.0
+SF12 DER: 0.5250237921961597 Received/Sent/Lost/Collided/Interfered Packets: 18757.0/35726.0/0.0/16969.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [675, 386, 217, 120, 66, 36]
+Accumulted full time: 24.260586500167847, 0.7804173465210081%
+Accumulted empty time: 6.826096296310425, 0.21958265347899183%
+Configuration: 3. Repetition: 1. Region Counts: [250, 250, 250, 250, 250, 250]
+maxDist: 487.66061680961025
+nrCollisions: 17193
+energy (in J): 31872.283880448038
+sent packets: 1498993
+collisions: 17193
+received packets: 34487
+processed packets: 51680
+lost packets: 1447310
+fallen short packets: 1447313
+sent - nrCollisions. DER: 0.9885303000080721
+nrReceived / sent. DER method 2: 0.023006778550667014
+SF7 DER: 0.02350673631625575 Received/Sent/Lost/Collided/Interfered Packets: 15867.0/674998.0/658962.0/168.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/386340.0/386340.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/216471.0/216471.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/119879.0/119879.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/65660.0/65658.0/0.0/0.0
+SF12 DER: 0.5223734044045448 Received/Sent/Lost/Collided/Interfered Packets: 18620.0/35645.0/0.0/17025.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [675, 386, 217, 120, 66, 36]
+Accumulted full time: 8.137390375137329, 0.33455829384635133%
+Accumulted empty time: 16.185397386550903, 0.6654417061536487%
+Configuration: 4. Repetition: 1. Region Counts: [500, 0, 500, 0, 500, 0]
+maxDist: 487.66061680961025
+nrCollisions: 50097
+energy (in J): 32404.641709055995
+sent packets: 1498124
+collisions: 50097
+received packets: 86211
+processed packets: 136308
+lost packets: 1361814
+fallen short packets: 1361814
+sent - nrCollisions. DER: 0.9665601779291968
+nrReceived / sent. DER method 2: 0.05754597082751495
+SF7 DER: 0.050501396020562944 Received/Sent/Lost/Collided/Interfered Packets: 34059.0/674417.0/639495.0/863.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/385355.0/385355.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/217188.0/217188.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/119776.0/119776.0/0.0/0.0
+SF11 DER: 0.50816 Received/Sent/Lost/Collided/Interfered Packets: 33348.0/65625.0/0.0/32275.0/0.0
+SF12 DER: 0.5257948158711517 Received/Sent/Lost/Collided/Interfered Packets: 18804.0/35763.0/0.0/16959.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [675, 386, 217, 120, 66, 36]
+Accumulted full time: 15.102479934692383, 0.5700052639494796%
+Accumulted empty time: 11.3928542137146, 0.42999473605052035%
+Configuration: 1. Repetition: 1. Region Counts: [2000, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 869888
+energy (in J): 35542.345105152
+sent packets: 1996077
+collisions: 869888
+received packets: 913014
+processed packets: 1782902
+lost packets: 213170
+fallen short packets: 213170
+sent - nrCollisions. DER: 0.5642011806157778
+nrReceived / sent. DER method 2: 0.45740419833503415
+SF7 DER: 0.45722170193336376 Received/Sent/Lost/Collided/Interfered Packets: 411564.0/900141.0/213170.0/275407.0/0.0
+SF8 DER: 0.4722904035226463 Received/Sent/Lost/Collided/Interfered Packets: 241867.0/512115.0/0.0/270248.0/0.0
+SF9 DER: 0.46877708817308694 Received/Sent/Lost/Collided/Interfered Packets: 135200.0/288410.0/0.0/153209.0/0.0
+SF10 DER: 0.4310447947168401 Received/Sent/Lost/Collided/Interfered Packets: 69187.0/160510.0/0.0/91322.0/0.0
+SF11 DER: 0.4032344951688883 Received/Sent/Lost/Collided/Interfered Packets: 35181.0/87247.0/0.0/52065.0/0.0
+SF12 DER: 0.4200067150711378 Received/Sent/Lost/Collided/Interfered Packets: 20015.0/47654.0/0.0/27637.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [900, 514, 289, 161, 88, 48]
+Accumulted full time: 73.47084927558899, 0.9680559977840951%
+Accumulted empty time: 2.4243979454040527, 0.03194400221590491%
+Configuration: 2. Repetition: 1. Region Counts: [900, 514, 289, 161, 88, 48]
+maxDist: 487.66061680961025
+nrCollisions: 209683
+energy (in J): 37443.364540416034
+sent packets: 1997940
+collisions: 209683
+received packets: 258986
+processed packets: 468669
+lost packets: 1529268
+fallen short packets: 1529269
+sent - nrCollisions. DER: 0.8950504019139713
+nrReceived / sent. DER method 2: 0.1296265153107701
+SF7 DER: 0.04615358931552588 Received/Sent/Lost/Collided/Interfered Packets: 41469.0/898500.0/855828.0/1203.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/514128.0/514127.0/0.0/0.0
+SF9 DER: 0.31979206909873614 Received/Sent/Lost/Collided/Interfered Packets: 92709.0/289904.0/159313.0/37882.0/0.0
+SF10 DER: 0.4321485114705243 Received/Sent/Lost/Collided/Interfered Packets: 69604.0/161065.0/0.0/91461.0/0.0
+SF11 DER: 0.40727000403249036 Received/Sent/Lost/Collided/Interfered Packets: 35349.0/86795.0/0.0/51444.0/0.0
+SF12 DER: 0.4175780264154118 Received/Sent/Lost/Collided/Interfered Packets: 19855.0/47548.0/0.0/27693.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [900, 514, 289, 161, 88, 48]
+Accumulted full time: 35.78323435783386, 0.8543765119693365%
+Accumulted empty time: 6.099043369293213, 0.14562348803066347%
+Configuration: 3. Repetition: 1. Region Counts: [335, 333, 333, 333, 333, 333]
+maxDist: 487.66061680961025
+nrCollisions: 27676
+energy (in J): 42538.508924928035
+sent packets: 1997451
+collisions: 27676
+received packets: 35805
+processed packets: 63481
+lost packets: 1933967
+fallen short packets: 1933970
+sent - nrCollisions. DER: 0.9861443409625568
+nrReceived / sent. DER method 2: 0.017925345853290017
+SF7 DER: 0.017505314748761373 Received/Sent/Lost/Collided/Interfered Packets: 15744.0/899384.0/883482.0/157.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/514139.0/514137.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/287763.0/287763.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/161085.0/161085.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/87500.0/87500.0/0.0/0.0
+SF12 DER: 0.4216267339218159 Received/Sent/Lost/Collided/Interfered Packets: 20061.0/47580.0/0.0/27519.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [900, 514, 289, 161, 88, 48]
+Accumulted full time: 13.674477100372314, 0.4088444139127236%
+Accumulted empty time: 19.772175550460815, 0.5911555860872764%
+Configuration: 4. Repetition: 1. Region Counts: [668, 0, 666, 0, 666, 0]
+maxDist: 487.66061680961025
+nrCollisions: 80227
+energy (in J): 43186.51837439999
+sent packets: 1995901
+collisions: 80227
+received packets: 86799
+processed packets: 167026
+lost packets: 1828872
+fallen short packets: 1828874
+sent - nrCollisions. DER: 0.9598041185409497
+nrReceived / sent. DER method 2: 0.043488629947076536
+SF7 DER: 0.034869460704667364 Received/Sent/Lost/Collided/Interfered Packets: 31333.0/898580.0/866580.0/667.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/513247.0/513247.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/288421.0/288421.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/160626.0/160624.0/0.0/0.0
+SF11 DER: 0.4048752574959945 Received/Sent/Lost/Collided/Interfered Packets: 35378.0/87380.0/0.0/52002.0/0.0
+SF12 DER: 0.4216005204944697 Received/Sent/Lost/Collided/Interfered Packets: 20088.0/47647.0/0.0/27558.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [900, 514, 289, 161, 88, 48]
+Accumulted full time: 23.519019603729248, 0.6666399504072339%
+Accumulted empty time: 11.760923624038696, 0.33336004959276616%
+Configuration: 1. Repetition: 1. Region Counts: [3000, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 1673386
+energy (in J): 53419.07467008004
+sent packets: 2995567
+collisions: 1673386
+received packets: 990709
+processed packets: 2664095
+lost packets: 331464
+fallen short packets: 331464
+sent - nrCollisions. DER: 0.44137921134796854
+nrReceived / sent. DER method 2: 0.33072503469293124
+SF7 DER: 0.35773442928666027 Received/Sent/Lost/Collided/Interfered Packets: 481874.0/1347016.0/331464.0/533677.0/0.0
+SF8 DER: 0.323425159804017 Received/Sent/Lost/Collided/Interfered Packets: 249191.0/770475.0/0.0/521282.0/0.0
+SF9 DER: 0.32105288637762547 Received/Sent/Lost/Collided/Interfered Packets: 139266.0/433779.0/0.0/294512.0/0.0
+SF10 DER: 0.28315619753106996 Received/Sent/Lost/Collided/Interfered Packets: 67964.0/240023.0/0.0/172057.0/0.0
+SF11 DER: 0.2509637363549266 Received/Sent/Lost/Collided/Interfered Packets: 33267.0/132557.0/0.0/99288.0/0.0
+SF12 DER: 0.26697993502237966 Received/Sent/Lost/Collided/Interfered Packets: 19147.0/71717.0/0.0/52570.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [1349, 771, 434, 241, 133, 72]
+Accumulted full time: 137.69083857536316, 0.9923617932666934%
+Accumulted empty time: 1.0598061084747314, 0.007638206733306667%
+Configuration: 2. Repetition: 1. Region Counts: [1349, 771, 434, 241, 133, 72]
+maxDist: 487.66061680961025
+nrCollisions: 415009
+energy (in J): 56426.50232217597
+sent packets: 2993921
+collisions: 415009
+received packets: 303101
+processed packets: 718110
+lost packets: 2275805
+fallen short packets: 2275807
+sent - nrCollisions. DER: 0.8613827819772132
+nrReceived / sent. DER method 2: 0.10123881024248803
+SF7 DER: 0.04555445592263527 Received/Sent/Lost/Collided/Interfered Packets: 61450.0/1348935.0/1284697.0/2786.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/767445.0/767445.0/0.0/0.0
+SF9 DER: 0.2794190258646547 Received/Sent/Lost/Collided/Interfered Packets: 121103.0/433410.0/223663.0/88643.0/0.0
+SF10 DER: 0.2835278664538441 Received/Sent/Lost/Collided/Interfered Packets: 68210.0/240576.0/0.0/172366.0/0.0
+SF11 DER: 0.25066737248081067 Received/Sent/Lost/Collided/Interfered Packets: 33147.0/132235.0/0.0/99086.0/0.0
+SF12 DER: 0.26908300616937747 Received/Sent/Lost/Collided/Interfered Packets: 19191.0/71320.0/0.0/52128.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [1349, 771, 434, 241, 133, 72]
+Accumulted full time: 66.63309526443481, 0.9421752410241183%
+Accumulted empty time: 4.089518070220947, 0.05782475897588171%
+Configuration: 3. Repetition: 1. Region Counts: [500, 500, 500, 500, 500, 500]
+maxDist: 487.66061680961025
+nrCollisions: 52703
+energy (in J): 63879.57717196788
+sent packets: 2994497
+collisions: 52703
+received packets: 47453
+processed packets: 100156
+lost packets: 2894337
+fallen short packets: 2894341
+sent - nrCollisions. DER: 0.9824000491568367
+nrReceived / sent. DER method 2: 0.015846734860646045
+SF7 DER: 0.020939423119041557 Received/Sent/Lost/Collided/Interfered Packets: 28204.0/1346933.0/1318157.0/572.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/770714.0/770713.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/432664.0/432663.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/240808.0/240806.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/131998.0/131998.0/0.0/0.0
+SF12 DER: 0.2696693751751191 Received/Sent/Lost/Collided/Interfered Packets: 19249.0/71380.0/0.0/52131.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [1349, 771, 434, 241, 133, 72]
+Accumulted full time: 28.24281072616577, 0.5447697872574359%
+Accumulted empty time: 23.600759506225586, 0.4552302127425642%
+Configuration: 4. Repetition: 1. Region Counts: [1000, 0, 1000, 0, 1000, 0]
+maxDist: 487.66061680961025
+nrCollisions: 153348
+energy (in J): 64789.18409625588
+sent packets: 2993723
+collisions: 153348
+received packets: 108980
+processed packets: 262328
+lost packets: 2731389
+fallen short packets: 2731393
+sent - nrCollisions. DER: 0.9487768240415029
+nrReceived / sent. DER method 2: 0.03640283352868652
+SF7 DER: 0.041968913454321057 Received/Sent/Lost/Collided/Interfered Packets: 56584.0/1348236.0/1289353.0/2298.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/769778.0/769778.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/432519.0/432517.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/239742.0/239741.0/0.0/0.0
+SF11 DER: 0.2503458128302229 Received/Sent/Lost/Collided/Interfered Packets: 33120.0/132297.0/0.0/99176.0/0.0
+SF12 DER: 0.27091678261725066 Received/Sent/Lost/Collided/Interfered Packets: 19276.0/71151.0/0.0/51874.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [1349, 771, 434, 241, 133, 72]
+Accumulted full time: 46.050753593444824, 0.8046027554957706%
+Accumulted empty time: 11.18339490890503, 0.1953972445042294%
+Configuration: 1. Repetition: 1. Region Counts: [4000, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 2634716
+energy (in J): 71290.47881702395
+sent packets: 3997759
+collisions: 2634716
+received packets: 960219
+processed packets: 3594935
+lost packets: 402818
+fallen short packets: 402818
+sent - nrCollisions. DER: 0.3409517682281498
+nrReceived / sent. DER method 2: 0.24018931606432503
+SF7 DER: 0.27846560561579947 Received/Sent/Lost/Collided/Interfered Packets: 501494.0/1800919.0/402818.0/896607.0/0.0
+SF8 DER: 0.22184173840462054 Received/Sent/Lost/Collided/Interfered Packets: 228038.0/1027931.0/0.0/799891.0/0.0
+SF9 DER: 0.22025269042821422 Received/Sent/Lost/Collided/Interfered Packets: 127014.0/576674.0/0.0/449659.0/0.0
+SF10 DER: 0.18491706253407056 Received/Sent/Lost/Collided/Interfered Packets: 59363.0/321025.0/0.0/261662.0/0.0
+SF11 DER: 0.1578579307051158 Received/Sent/Lost/Collided/Interfered Packets: 27765.0/175886.0/0.0/148120.0/0.0
+SF12 DER: 0.17356594351894591 Received/Sent/Lost/Collided/Interfered Packets: 16545.0/95324.0/0.0/78777.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [1800, 1028, 578, 321, 177, 96]
+Accumulted full time: 219.64820837974548, 0.998186537826354%
+Accumulted empty time: 0.3990473747253418, 0.0018134621736460084%
+Configuration: 2. Repetition: 1. Region Counts: [1800, 1028, 578, 321, 177, 96]
+maxDist: 487.66061680961025
+nrCollisions: 600153
+energy (in J): 74691.28108646406
+sent packets: 3997202
+collisions: 600153
+received packets: 323210
+processed packets: 923363
+lost packets: 3073835
+fallen short packets: 3073837
+sent - nrCollisions. DER: 0.8498567247789829
+nrReceived / sent. DER method 2: 0.08085906091310872
+SF7 DER: 0.0516662659506714 Received/Sent/Lost/Collided/Interfered Packets: 93048.0/1800943.0/1701292.0/6601.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/1028347.0/1028347.0/0.0/0.0
+SF9 DER: 0.2188055543041699 Received/Sent/Lost/Collided/Interfered Packets: 126281.0/577138.0/344196.0/106661.0/0.0
+SF10 DER: 0.18629836258334062 Received/Sent/Lost/Collided/Interfered Packets: 59573.0/319772.0/0.0/260199.0/0.0
+SF11 DER: 0.15871316116243833 Received/Sent/Lost/Collided/Interfered Packets: 27864.0/175562.0/0.0/147696.0/0.0
+SF12 DER: 0.1722967309304275 Received/Sent/Lost/Collided/Interfered Packets: 16444.0/95440.0/0.0/78996.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [1800, 1028, 578, 321, 177, 96]
+Accumulted full time: 98.152822971344, 0.9730619216401936%
+Accumulted empty time: 2.7172458171844482, 0.02693807835980647%
+Configuration: 3. Repetition: 1. Region Counts: [665, 667, 667, 667, 667, 667]
+maxDist: 487.66061680961025
+nrCollisions: 78891
+energy (in J): 85043.44903372803
+sent packets: 3998346
+collisions: 78891
+received packets: 52598
+processed packets: 131489
+lost packets: 3866850
+fallen short packets: 3866856
+sent - nrCollisions. DER: 0.9802690912692398
+nrReceived / sent. DER method 2: 0.013154939567511166
+SF7 DER: 0.020045760850443708 Received/Sent/Lost/Collided/Interfered Packets: 36122.0/1801977.0/1764864.0/989.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/1028186.0/1028186.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/577431.0/577430.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/319870.0/319869.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/176503.0/176501.0/0.0/0.0
+SF12 DER: 0.17457273334110343 Received/Sent/Lost/Collided/Interfered Packets: 16476.0/94379.0/0.0/77902.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [1800, 1028, 578, 321, 177, 96]
+Accumulted full time: 46.637948989868164, 0.6398635147894818%
+Accumulted empty time: 26.249390125274658, 0.3601364852105182%
+Configuration: 4. Repetition: 1. Region Counts: [1334, 0, 1333, 0, 1333, 0]
+maxDist: 487.66061680961025
+nrCollisions: 233028
+energy (in J): 86412.65338060791
+sent packets: 3993379
+collisions: 233028
+received packets: 128694
+processed packets: 361722
+lost packets: 3631650
+fallen short packets: 3631654
+sent - nrCollisions. DER: 0.9416464102205175
+nrReceived / sent. DER method 2: 0.0322268434826747
+SF7 DER: 0.04706224885317023 Received/Sent/Lost/Collided/Interfered Packets: 84700.0/1799744.0/1709606.0/5436.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/1026751.0/1026751.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/576096.0/576096.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/319199.0/319197.0/0.0/0.0
+SF11 DER: 0.1570994581604661 Received/Sent/Lost/Collided/Interfered Packets: 27718.0/176436.0/0.0/148717.0/0.0
+SF12 DER: 0.17105083392010761 Received/Sent/Lost/Collided/Interfered Packets: 16276.0/95153.0/0.0/78875.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [1800, 1028, 578, 321, 177, 96]
+Accumulted full time: 68.95927166938782, 0.8829086167555094%
+Accumulted empty time: 9.145381927490234, 0.11709138324449067%
+Configuration: 1. Repetition: 1. Region Counts: [5000, 0, 0, 0, 0, 0]
+maxDist: 487.66061680961025
+nrCollisions: 3601774
+energy (in J): 89019.8895552
+sent packets: 4993137
+collisions: 3601774
+received packets: 873760
+processed packets: 4475534
+lost packets: 517598
+fallen short packets: 517598
+sent - nrCollisions. DER: 0.27865508196550587
+nrReceived / sent. DER method 2: 0.17499219428587678
+SF7 DER: 0.2159810003385805 Received/Sent/Lost/Collided/Interfered Packets: 485443.0/2247619.0/517598.0/1244578.0/0.0
+SF8 DER: 0.1525841722760732 Received/Sent/Lost/Collided/Interfered Packets: 195760.0/1282964.0/0.0/1087202.0/0.0
+SF9 DER: 0.14992931777125515 Received/Sent/Lost/Collided/Interfered Packets: 108392.0/722954.0/0.0/614562.0/0.0
+SF10 DER: 0.12284912764967972 Received/Sent/Lost/Collided/Interfered Packets: 49134.0/399954.0/0.0/350819.0/0.0
+SF11 DER: 0.09926578960495944 Received/Sent/Lost/Collided/Interfered Packets: 21889.0/220509.0/0.0/198620.0/0.0
+SF12 DER: 0.11030997926756592 Received/Sent/Lost/Collided/Interfered Packets: 13142.0/119137.0/0.0/105993.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [2249, 1285, 723, 402, 221, 120]
+Accumulted full time: 261.75655150413513, 0.9995052529501388%
+Accumulted empty time: 0.12956738471984863, 0.0004947470498611547%
+Configuration: 2. Repetition: 1. Region Counts: [2249, 1285, 723, 402, 221, 120]
+maxDist: 487.66061680961025
+nrCollisions: 841064
+energy (in J): 93542.07371059193
+sent packets: 4995422
+collisions: 841064
+received packets: 341532
+processed packets: 1182596
+lost packets: 3812816
+fallen short packets: 3812816
+sent - nrCollisions. DER: 0.831633043214367
+nrReceived / sent. DER method 2: 0.06836899865516867
+SF7 DER: 0.053268364610425556 Received/Sent/Lost/Collided/Interfered Packets: 119794.0/2248877.0/2117294.0/11789.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/1284884.0/1284884.0/0.0/0.0
+SF9 DER: 0.19033345096492502 Received/Sent/Lost/Collided/Interfered Packets: 137534.0/722595.0/410638.0/174423.0/0.0
+SF10 DER: 0.12176343431875357 Received/Sent/Lost/Collided/Interfered Packets: 48837.0/401081.0/0.0/352238.0/0.0
+SF11 DER: 0.1010022708411232 Received/Sent/Lost/Collided/Interfered Packets: 22150.0/219302.0/0.0/197149.0/0.0
+SF12 DER: 0.1113638853079211 Received/Sent/Lost/Collided/Interfered Packets: 13217.0/118683.0/0.0/105465.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [2249, 1285, 723, 402, 221, 120]
+Accumulted full time: 103.72757983207703, 0.9888614334336043%
+Accumulted empty time: 1.1683907508850098, 0.01113856656639572%
+Configuration: 3. Repetition: 1. Region Counts: [835, 833, 833, 833, 833, 833]
+maxDist: 487.66061680961025
+nrCollisions: 107004
+energy (in J): 106309.74253670378
+sent packets: 4994087
+collisions: 107004
+received packets: 61256
+processed packets: 168260
+lost packets: 4825818
+fallen short packets: 4825826
+sent - nrCollisions. DER: 0.9785738614485491
+nrReceived / sent. DER method 2: 0.012265705423233516
+SF7 DER: 0.021332014331259728 Received/Sent/Lost/Collided/Interfered Packets: 48001.0/2250186.0/2200561.0/1621.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/1283937.0/1283936.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/720270.0/720266.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/401562.0/401562.0/0.0/0.0
+SF11Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/219493.0/219493.0/0.0/0.0
+SF12 DER: 0.11172548656006878 Received/Sent/Lost/Collided/Interfered Packets: 13255.0/118639.0/0.0/105383.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [2249, 1285, 723, 402, 221, 120]
+Accumulted full time: 48.721776723861694, 0.7234041302155693%
+Accumulted empty time: 18.628926277160645, 0.27659586978443074%
+Configuration: 4. Repetition: 1. Region Counts: [1668, 0, 1666, 0, 1666, 0]
+maxDist: 487.66061680961025
+nrCollisions: 310492
+energy (in J): 108070.8161341439
+sent packets: 4996981
+collisions: 310492
+received packets: 125174
+processed packets: 435666
+lost packets: 4561306
+fallen short packets: 4561311
+sent - nrCollisions. DER: 0.9378640823329126
+nrReceived / sent. DER method 2: 0.02504992514480243
+SF7 DER: 0.0401621323135796 Received/Sent/Lost/Collided/Interfered Packets: 90405.0/2251001.0/2154049.0/6545.0/0.0
+SF8Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/1286089.0/1286088.0/0.0/0.0
+SF9Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/721453.0/721452.0/0.0/0.0
+SF10Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/399718.0/399717.0/0.0/0.0
+SF11 DER: 0.0990167131426905 Received/Sent/Lost/Collided/Interfered Packets: 21731.0/219468.0/0.0/197735.0/0.0
+SF12 DER: 0.10933149968134706 Received/Sent/Lost/Collided/Interfered Packets: 13038.0/119252.0/0.0/106212.0/0.0
+SF7 Interferred With: [0, 0, 0, 0, 0, 0]
+SF Counts: [2249, 1285, 723, 402, 221, 120]
+Accumulted full time: 70.6155173778534, 0.9301198559526299%
+Accumulted empty time: 5.305361986160278, 0.06988014404737003%

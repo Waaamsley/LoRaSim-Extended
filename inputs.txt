@@ -1,10 +1,10 @@
-1318900
+131890
 6
 2
-1318900000
+131890000
 1
 1
 0
 controlled
 14
-demo.txt
+FADR_dc1%_viable_keydistributions.txt

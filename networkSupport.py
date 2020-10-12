@@ -412,27 +412,28 @@ class powerControl:
         for i, n in enumerate(nodes):
             if abs(min_power - n.packet.Lpl) > abs(min_rssi_node.packet.rssi):
                 min_power_index = i - 1
-                print("min power index", i)
                 break
             else:
                 n.packet.phase_three(min_power)
 
         # Assign maximum power and save maxPowerIndex
         max_power_index = None
-        for i, n in enumerate(reversed(nodes)):
-            if abs(abs(max_power - n.packet.Lpl) - abs(min_rssi_node.packet.rssi)) > min_cir:
+        for i in range(len(nodes)-1, min_power_index, -1):
+            if abs(abs(max_power - nodes[i].packet.Lpl) - abs(min_rssi_node.packet.rssi)) > min_cir:
                 max_power_index = i - 1
-                print("max power index", i)
                 break
             else:
-                n.packet.phase_three(max_power)
+                nodes[i].packet.phase_three(max_power)
 
-        # Assign the remaining power levels to the inbetween nodes
+        # Assign the remaining power levels to the inbetween node
+        if (max_power_index < min_power_index):
+            print ("hit weird error")
+            quit()
         start_rssi = min_rssi_node.packet.rssi
         temp_index = min_power_index
         assign_loop = True
         index = 0
-        while assign_loop:
+        while assign_loop and index < len(power_levels):
             power_level = power_levels[index]
             for i in range(temp_index, max_power_index):
                 if (abs(power_level - nodes[i].packet.Lpl + abs(start_rssi)) > min_cir):
