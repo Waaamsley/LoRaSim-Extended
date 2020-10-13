@@ -275,10 +275,7 @@ class myTransmitter:
                 print("ERROR: packet already in")
             else:
                 global experiment
-                if experiment != 6:
-                    sensitivity = sensi[node.packet.sf - 7, [125, 250, 500].index(node.packet.bw) + 1]
-                else:
-                    sensitivity = -999
+                sensitivity = sensi[node.packet.sf - 7, [125, 250, 500].index(node.packet.bw) + 1]
                 if node.packet.rssi < sensitivity:
                     node.packet.lost = True
                     global nr_fall_short
