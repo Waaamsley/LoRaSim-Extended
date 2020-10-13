@@ -1325,6 +1325,8 @@ SF10 DER: 0.026697514193463206 Received/Sent/Lost/Collided/Interfered Packets: 1
 SF11 DER: 0.0007698426954758911 Received/Sent/Lost/Collided/Interfered Packets: 510.0/662473.0/0.0/661959.0/0.0
 SF12 DER: 3.0302479348860323e-06 Received/Sent/Lost/Collided/Interfered Packets: 2.0/660012.0/0.0/660005.0/0.0
 SF Counts: [665, 667, 667, 667, 667, 667]
+
+
 Configuration: 4. Repetition: 1. Region Counts: [1334, 0, 1333, 0, 1333, 0]
 maxDist: 487.66061680961025
 col1: [0, 0, 0, 0, 0, 0]
@@ -1419,6 +1421,8 @@ SF10 DER: 0.011020228830748303 Received/Sent/Lost/Collided/Interfered Packets: 9
 SF11 DER: 0.00012080314764681509 Received/Sent/Lost/Collided/Interfered Packets: 100.0/827793.0/0.0/827685.0/0.0
 SF12Exception: Received/Sent/Lost/Collided/Interefered Packets : 0.0/823246.0/0.0/823240.0/0.0
 SF Counts: [835, 833, 833, 833, 833, 833]
+
+
 Configuration: 4. Repetition: 1. Region Counts: [1668, 0, 1666, 0, 1666, 0]
 maxDist: 487.66061680961025
 col1: [0, 0, 0, 0, 0, 0]

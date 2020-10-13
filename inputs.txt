@@ -1,10 +1,10 @@
 131890
-4
-6
+5
+1
 131890000
 1
 1
 0
 controlled
 14
-rssi_mintp_dc1%_keydistributions_comprehensive.txt
+AFPD_dc1%_keydistributions.txt

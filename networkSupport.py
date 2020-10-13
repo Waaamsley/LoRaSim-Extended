@@ -122,7 +122,7 @@ class nodePlacer:
             min_rssi = self.Ptx + (-1 * self.sensi[region - 1, 1])
             region_min_distance = self.distanceFinder.max_distance(min_rssi)
         else:
-            region_min_distance = 0  # 0 number 15 introduces ma deadzone which is 12.64 metres
+            region_min_distance = 15  # 0 number 15 introduces ma deadzone which is 12.64 metres
 
         # Very bad way to account for minimum allowed distance.
         while dist < region_min_distance or dist > region_max_distance:
