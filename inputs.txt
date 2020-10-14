@@ -1,10 +1,10 @@
 131890
-5
-1
+4
+6
 131890000
 1
 1
 0
 controlled
 14
-AFPD_dc1%_keydistributions.txt
+RSSI_dc1%_keydistributions_comprehensive_nomindist.txt
