@@ -86,8 +86,12 @@ sensiDiff = np.array([sf7diff, sf8diff, sf9diff, sf10diff, sf11diff, sf12diff])
 
 TxPowers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
-# check for collisions at base station
-# Note: called before a packet (or rather node) is inserted into the list
+"""
+    check for collisions at base station
+    Note: called before a packet (or rather node) is inserted into the list
+    @:param packet: A nodes transmitted packet.
+    @:return boolean: Returns if current packet has collided with other(s).
+"""
 def checkcollision(packet):
     global fullCollision
     col = 0  # flag needed since there might be several collisions for packet
@@ -120,8 +124,13 @@ def checkcollision(packet):
         return col
     return 0
 
-# Compares the power difference between two packets.
-# Returns which packets have been lost due to collision.
+"""
+    Compares the power difference between two packets.
+    Returns which packets have been lost due to collision.
+    @:param p1: Packet one.
+    @:param p2: Packet two.
+    @:return [p1, ...]: Returns collided packets.
+"""
 def power_collision(p1, p2):
     global sf7InterferredWith
     global interferCount
@@ -149,8 +158,12 @@ def power_collision(p1, p2):
                 return p2,
 
     return []
-
-# Checks if a received packet is late enough to avoid interferring packet (only the first n - 5 preamble symbols overlap)
+"""
+    Checks if a received packet is late enough to avoid interferring packet (only the first n - 5 preamble symbols overlap).
+    @:param p1: Packet one.
+    @:param p2: Packet two.
+    @:return boolean: Returns a boolean of whether late evade is succesful or not.
+"""
 def late_evade(p1, p2):
     # assuming 8 preamble symbols
     npream = 8
@@ -165,8 +178,10 @@ def late_evade(p1, p2):
         return False
     return True
 
-
-# Creates a list of nodes and creates a simulation environment instance for each node.
+"""
+    Creates a list of nodes and creates a simulation environment instance for each node.
+    Updates global node list.
+"""
 def create_nodes():
     for i in range(0, nrNodes):
         node = myNode(i, bsId, avgSend)
@@ -174,10 +189,17 @@ def create_nodes():
         env.process(transmitter.transmit(node))
 
 
-#
-# This function creates a node.
-#
+"""
+    This function creates a node.
+"""
 class myNode:
+
+    """
+        Initialisaiton method.
+        @:param nodeid: The unique identifier for a node.
+        @:param bs: base station unique identifier. Used for multiple base station simulations.
+        @:param duty: The duty cycle for network transmissions.
+    """
     def __init__(self, nodeid, bs, duty):
         global experiment
         global plen
@@ -203,15 +225,27 @@ class myNode:
             global ax
             ax.add_artist(plt.Circle((self.x, self.y), 2, fill=True, color='blue'))
 
+    """
+        Comparator implementation for node isntances.
+        Compares Path loss for nodes.
+        @:param other: The other packet.
+        @:return boolean: Returns if this packet has less or more path loss than other node.
+    """
     def __lt__(self, other):
         return self.packet.Lpl < other.packet.Lpl
 
 
-#
-# This function creates a packet (associated with a node).
-# It also sets all parameters, currently random.
-#
+"""
+    This function creates a packet (associated with a node).
+    It also sets all parameters, currently random.
+"""
 class myPacket:
+
+    """
+    Initialisation method.
+    @:param nodeid: Unique identifier for a given node.
+    @:param distance: Nodes distances from the base station.
+    """
     def __init__(self, nodeid, distance):
         global Ptx
         global gamma
@@ -242,6 +276,15 @@ class myPacket:
         self.txpow = 14  # Default.
         self.rssi = 0
 
+    """
+        The second phase of assigning parameters to nodes when required information has been gained.
+        This phase is dependent on the parameter assigning algorithm class.
+        @:param sf: Spreading factor to assign.
+        @:param cr: Coding rate to assign.
+        @:param bw: Bandwidth to assign.
+        @:param ch: Channel to assign node to.
+        @:param rectime: Packets airtime.
+    """
     def phase_two(self, sf, cr, bw, ch, rectime):
         self.sf = sf
         self.cr = cr
@@ -250,22 +293,33 @@ class myPacket:
         self.rectime = rectime
         self.symTime = (2.0 ** self.sf) / self.bw
 
+    """
+        The third phase to assign parameters for a node.
+        This phase is dependent on the transmission power scheme class.
+        @:param txpow: Transmission power value to assign.
+    """
     def phase_three(self, txpow):
         self.txpow = txpow
         self.rssi = self.txpow - GL - self.Lpl
 
 
-#
-# Main discrete event loop, runs for each node.
-# A global list of packet being processed at the gateway is maintained.
-#
+"""
+    Main discrete event loop, runs for each node.
+    A global list of packet being processed at the gateway is maintained.
+"""
 class myTransmitter:
-    # Initialisation method.
+    """
+     Initialisation method.
+     @:param environment: Simulation environment class instance.
+     @:param obzerver: Observer class isntance, spelt funny due to class name clash.
+    """
     def __init__(self, environment, obzerver):
         self.env = environment
         self.observer = obzerver
-
-    # Handles transmission logic and simulator interactions.
+    """
+        Handles transmission logic and simulator interactions.
+        @:param node: Current node instance.
+    """
     def transmit(self, node):
         while True:
             yield self.env.timeout(random.expovariate(1.0 / float(node.period)))
@@ -328,9 +382,11 @@ class myTransmitter:
             node.packet.lost = False
 
 
-#
-# "main" program
-#
+"""
+    "main" program.
+    Normally I would have a main method but original code did not have one.
+    I have just continued the same coding style, this is very much 'researcher' code :(.
+"""
 
 # get arguments
 inputs = []

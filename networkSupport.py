@@ -10,15 +10,22 @@ import numpy as np
 import time
 import operator
 
-# Generates node distributions for simulation.
+"""
+    Generates node distributions for simulation.
+"""
 class placementGenerator:
-
-    # Initialisation method for distribution generation.
+    """
+        Initialisation method for distribution generation.
+        @:param nr_nodes: Number of nodes for experiment.
+    """
     def __init__(self, nr_nodes, region_counts):
         self.nr_nodes = nr_nodes
         self.region_counts = region_counts
 
-    # Generates a large set of node distributions for experiments.
+    """
+        Generates a large set of node distributions for experiments.
+        @:param configurations: List of output configurations to append node distributions to.
+    """
     def full_placement(self, configurations):
         start = [self.nr_nodes, 0, 0, 0, 0, 0]
         goal = list(self.region_counts)
@@ -39,8 +46,15 @@ class placementGenerator:
         goal = [0, 0, 0, 0, 0, self.nr_nodes]
         self.wave(configurations, start, goal, 5)
 
-    # Generates a wave effect of node distributions.
-    # Returns several distributions that when visualised, node placement change looks like a wave.
+    """
+        Generates a wave effect of node distributions.
+        Returns several distributions that when visualised, node placement change looks like a wave.
+        This is generated when given a starting and goal configuration, inbetween configs are generated.
+        @:param configurations: List of output configurations to append node distributions to.
+        @:param start: the starting configuration to generate from.
+        @:param goal: The final configuration.
+        @:param steps: How many frames of the wave to generate as configurations.
+    """
     def wave(self, configurations, start, goal, steps):
         differences = []
         total = 0
@@ -71,10 +85,21 @@ class placementGenerator:
             temp[0] += (self.nr_nodes - total)
             configurations.append(list(temp))
 
-# Provides the metrics that would be given as if the node is physically placed.
+
+"""
+    Provides the metrics that would be given as if the node is physically placed.
+"""
 class nodePlacer:
 
-    # Initialisation method.
+    """
+        Initialisation method.
+        @:param nodes: List of node instances.
+        @:param nrdnodes: List of the number of nodes for each experiment.
+        @:param distributiontype: The type of distribution to follow when placing nodes.
+        @:param sensi: The minimum sensitivity required for packet transmissions with specific parameters to be received.
+        @:param ptx: The default transmission power value to assign.
+        @:param placement: The ideal placement based on my and base paper core philosophy.
+    """
     def __init__(self, nodes, nrnodes, distributiontype, sensi, ptx, placement):
         self.nodes = nodes
         self.nrNodes = nrnodes
@@ -84,9 +109,13 @@ class nodePlacer:
         self.sfCounts = placement
         self.distanceFinder = maxDistFinder()
 
-        return
-
-    # Calculates actual distance between base-station and node given a x, y co-ordinate.
+    """
+        Calculates actual distance between base-station and node given a x, y co-ordinate.
+        @:param dist: Node distance from base station.
+        @:param bsx: x coord of base station.
+        @:param bsy: y coord of base station.
+        @:returns x, y, dist: x is node x coord, y is node y coord, dist is node distance to base station.
+    """
     @staticmethod
     def base_math(dist, bsx, bsy):
         a = random.random()
@@ -99,7 +128,14 @@ class nodePlacer:
 
         return x, y, dist
 
-    # Orchestrates the class logic on node placement based on experiment input.
+    """
+        Orchestrates the class logic on node placement based on experiment input.
+        @:param maxdist: The max distance a node could possibly transmit.
+        @:param bsx: x coord of base station.
+        @:param bsy: y coord of base station.
+        @:nodeid: The nodes unique identifier.
+        @:returns x, y, dist: x is node x coord, y is node y coord, dist is node distance to base station.
+    """
     def logic(self, maxdist, bsx, bsy, nodeid):
         x = 0
         y = 0
@@ -114,8 +150,14 @@ class nodePlacer:
 
         return x, y, dist
 
-    # One form of node placement.
-    # This form follows a set number of nodes per spreading factor region.
+    """
+        One form of node placement.
+        This form follows a set number of nodes per spreading factor region.
+        @:param bsx: x coord of base station.
+        @:param bsy: y coord of base station.
+        @:nodeid: The nodes unique identifier.
+        @:returns x, y, dist: x is node x coord, y is node y coord, dist is node distance to base station.
+    """
     def controlled_place(self, bsx, bsy, nodeid):
         x = 0
         y = 0
@@ -145,13 +187,25 @@ class nodePlacer:
 
         return x, y, dist
 
-    # Places the node as they currently are (random place).
+    """
+        Places the node as they currently are (random place).
+        @:param maxdist: The max distance a node could possibly transmit.
+        @:param bsx: x coord of base station.
+        @:param bsy: y coord of base station.
+        @:returns x, y, dist: x is node x coord, y is node y coord, dist is node distance to base station.
+    """
     def uniform_place_basic(self, max_dist, bsx, bsy):
         x, y, dist = self.base_math(max_dist, bsx, bsy)
 
         return x, y, dist
 
-    # Places node similar to above but ensures nodes are spaced apart.
+    """
+            Places node similar to above but ensures nodes are spaced apart.
+            @:param maxdist: The max distance a node could possibly transmit.
+            @:param bsx: x coord of base station.
+            @:param bsy: y coord of base station.
+            @:returns x, y, dist: x is node x coord, y is node y coord, dist is node distance to base station.
+    """
     def uniform_place(self, max_dist, bsx, bsy):
         found = 0
         rounds = 0
@@ -180,10 +234,20 @@ class nodePlacer:
 
         return x, y, dist
 
-# Provides experiment logic.
+"""
+    Provides experiment logic.
+"""
 class experiments:
 
-    # Initialisation method.
+    """
+        Initialisation method.
+        @:param xperiment: The experiment that is being simulated.
+        @:param nr_channels: How many channels are available for the network to use.
+        @:param sensi: Minimum sensitivities for node transmissions to be considered received/viable.
+        @:param plen: Packet length.
+        @:param gl: Overall transmissin gains/losses.
+        @:param ptx: Default transmission power value for nodes.
+    """
     def __init__(self, xperiment, nr_channels, sensi, plen, gl, ptx):
         self.experiment = xperiment
         self.esti = estimator()
@@ -195,7 +259,13 @@ class experiments:
         self.sfCounts = [0, 0, 0, 0, 0, 0]
         self.sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 
-    # Logic on which experiments to run depending on user input.
+    """
+        Logic on which experiments to run depending on user input.
+        @:param nodes: List of node instances.
+        @:param ideal: The ideal node distribution to achieve based on core philosophy.
+        @:param truth: The true node distribution.
+        @:param start: follow through parameter used for a specific experiment where this method gets recalled.
+    """
     def logic(self, nodes, ideal, truth, start):
         if self.experiment == 1:
             self.basic_experiment(nodes, 12, 4, 125)
@@ -218,7 +288,13 @@ class experiments:
             print("Invalid experiment!\nQuitting!")
             quit()
 
-    # Basic experiment supplied by original LoRaSim.
+    """
+        Basic experiment supplied by original LoRaSim.
+        @:param nodes: List of node instances.
+        @:param sf: Spreading factor value.
+        @:param cr: Coding rate value.
+        @:param bw: Bandwidth value.
+    """
     def basic_experiment(self, nodes, sf, cr, bw):
         for node in nodes:
             ch = random.randint(0, self.nrChannels - 1)
@@ -226,9 +302,12 @@ class experiments:
             node.packet.phase_two(sf, cr, bw, ch, rectime)
             self.sfCounts[sf - 7] += 1
 
-    # RSSI based method of assignin node parameters.
-    # Assigns parameters so that node transmissions have shortest viable airtime.
-    # I have implemented a code representaion of the RSSI solution found in several papers.
+    """
+        RSSI based method of assignin node parameters.
+        Assigns parameters so that node transmissions have shortest viable airtime.
+        I have implemented a code representaion of the RSSI solution found in several papers.
+        @:param nodes: List of node instances.
+    """
     def experiment_four(self, nodes):
         for node in nodes:
             ch = random.randint(0, self.nrChannels - 1)
@@ -247,11 +326,14 @@ class experiments:
             node.packet.phase_two(sf, 1, 125, ch, rectime)
             self.sfCounts[sf - 7] += 1
 
-    # My Solution
-    # ideal is desired nodes per group
-    # actual is the output
-    # sf_possible is the total amount possible for each group
-    # truth is the amount available for that group and no previous others.
+    """
+        My Solution
+        @:param nodes: List of node instances.
+        @:param ideal: The desired number of nodes per spreading factor group.
+        @:param truth: Number of nodes available to be assigned to each spreading factor group.
+        @:param actual: A list for the method to assign values to, this is fedback to method call.
+        @:param nr_nodes: How many nodes are in experiment.
+    """
     def experiment_five(self, nodes, ideal, truth, actual, nr_nodes):
         sf_possible = [0, 0, 0, 0, 0, 0]
         temp_total = 0
@@ -281,7 +363,7 @@ class experiments:
                         actual[i - 1] = split_ideal[0]
                         actual[i] = split_ideal[1]
 
-        # did i delete a sort line somewherE?
+        # did I delete a sort line somewhere?
         nodes.sort()
 
         counter = 0
@@ -294,8 +376,13 @@ class experiments:
                 self.sfCounts[sf - 7] += 1
                 counter += 1
 
-    # OG solution or FADR!
-    # Code implementation of one of the papers I based my work on.
+    """
+        OG solution or FADR!
+        Code implementation of one of the papers I based my work on.
+        @:param nodes: List of node instances.
+        @:param nr_nodes: Number of nodes in the experiment.
+        @:param start: Extra parameter for specific experiment where this method gets recalled.
+    """
     def experiment_six(self, nodes, nr_nodes, start):
         nodes.sort()
         validate2 = False
@@ -341,7 +428,10 @@ class experiments:
 
         return sf_assigns
 
-    # randomn assign parameters
+    """
+    Randomn assign parameters.
+    @:param nodes: List of node instances.
+    """
     def experiment_seven(self, nodes):
         sf_list = [7, 8, 9, 10, 11, 12]
         for node in nodes:
@@ -353,7 +443,10 @@ class experiments:
 
         return
 
-    # random assign parameters with viability check.
+    """
+        Random assign parameters with viability check.
+        @:param nodes: List of node instances.
+    """
     def experiment_eight(self, nodes):
         sf_list = [7, 8, 9, 10, 11, 12]
         for node in nodes:
@@ -367,11 +460,20 @@ class experiments:
                     self.sfCounts[node.packet.sf-7] += 1
                     break
 
-# Logic for assigning transmission powers to nodes.
-# Controls node power consumption.
+"""
+    Logic for assigning transmission powers to nodes.
+    Controls node power consumption.
+"""
 class powerControl:
 
-    # Initialisation method.
+    """
+        Initialisation method.
+        @:param power_scheme: The power scheme to follow.
+        @:param sensi: List of sensitivity values for a transmission to be considered viable/received.
+        @:param sensi_diff: List of sensitivity combination differences required for the capture effect.
+        @:param gl: Overall transmission gains/losses.
+        @:param ptx: Default transmission power value for nodes.
+    """
     def __init__(self, power_scheme, sensi, sensi_diff, gl, ptx):
         self.powerScheme = power_scheme
         self.sensi = sensi
@@ -380,7 +482,11 @@ class powerControl:
         self.ptx = ptx
         self.atrGet = operator.attrgetter
 
-    # Provides logic for which power schemes to use depending on user experiment input.
+    """
+        Provides logic for which power schemes to use depending on user experiment input.
+        @:param nodes: List of node instances.
+        @:param experi_logic: Which experiment is being simulation.
+    """
     def logic(self, nodes, experi_logic):
         if self.powerScheme == 1:
             self.power_one(nodes)
@@ -392,7 +498,10 @@ class powerControl:
             for node in nodes:
                 node.packet.phase_three(self.ptx)
 
-    # My transmission power scheme (TPS) method.
+    """
+        My transmission power scheme (TPS) method.
+        @:param nodes: List of node instances.
+    """
     def power_one(self, nodes):
         for node in nodes:
             minsensi = self.sensi[node.packet.sf - 7, 1]
@@ -401,7 +510,10 @@ class powerControl:
                 txpow = 14
             node.packet.phase_three(txpow)
 
-    # FADR - Fair Adaptive Data Rate
+    """
+        FADR - Fair Adaptive Data Rate
+        @:param nodes: List of node instances.
+    """
     def power_two(self, nodes):
         # First sort nodes by RSSI, done with __lt__ method on node class.
         nodes.sort()
@@ -475,7 +587,11 @@ class powerControl:
 
         return
 
-    # Original transmission power scheme solution from paper where I got my core insights.
+    """
+        Original transmission power scheme solution from paper where I got my core insights.
+        @:param nodes: List of node instances.
+        @:param experi_logic: Which experiment is being simulated.
+    """
     def power_three(self, nodes, experi_logic):
         validate = False
         nodes.sort()
@@ -543,14 +659,20 @@ class powerControl:
             node.packet.phase_three(txpow)
         """
 
-    #random assign power levels
+    """
+        Random assign power levels.
+        @:param nodes: List of node instances.
+    """
     def power_four(self, nodes):
         power_levels = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
         for node in nodes:
             new_txpow = random.choice(power_levels)
             node.packet.phase_three(new_txpow)
 
-    # random assign power levels with viability check.
+    """
+        random assign power levels with viability check.
+        @:param nodes: List of node instances.
+    """
     def power_five(self, nodes):
         power_levels = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
         for node in nodes:
@@ -565,10 +687,16 @@ class powerControl:
         for node in nodes:
             node.packet.phase_three(self.ptx)
 
-# An Observer class to get insights on channel usage.
-# Allows for detailed information on % of channel time used.
+"""
+    An Observer class to get insights on channel usage.
+    A very efficient way to observer the channel so that this code is only ran when needed.
+    Allows for detailed information on % of channel time used.
+    @:param Object: Object instance for auto updates so that this class can monitor the simulation.
+"""
 class channelUsage(object):
-    # Initialisation method.
+    """
+        Initialisation method.
+    """
     def __init__(self):
         # self.noTraffic = 0.0
         self._traffic = 0
@@ -578,13 +706,18 @@ class channelUsage(object):
         self.accum_e = 0.0
         self.accum_f = 0.0
 
-    # Property method for channelUsage instances.
+    """
+        Property method for channelUsage instances.
+    """
     @property
     def traffic(self):
         return self._traffic
 
-    # When correct event occurs, traffic value is updated.
-    # Includes logic to determine when packets are starting/finishing to get correct stats.
+    """
+        When correct event occurs, traffic value is updated.
+        Includes logic to determine when packets are starting/finishing to get correct stats.
+        @:param value: The time value to use to update channel usage statistics.
+    """
     @traffic.setter
     def traffic(self, value):
         self._traffic = value
@@ -609,34 +742,51 @@ Lpl = Lpld0 + 10*gamma*math.log10(distance/d0)
 Can rearrange above to get:
 distance = d0 * 10**((Lpl-Lpld0)/10*2.08)
 Above equation can give maximum distance for a given receiver sensitivity + Tx Power.
+
+Finds maximum viable distance for LoRaWAN node.
 """
-# Finds maximum viable distance for LoRaWAN node.
 class maxDistFinder:
 
-    # Initialisation method
-    # Was not needed.
+
+    """
+    Initialisation method.
+    Was not needed.
+    """
     def __init__(self):
         return
 
-    # This methods finds whether a given nodes packets can reach the base-station.
-    # This method also returns the minimum viable spreading factor.
+    """
+        This methods finds whether a given nodes packets can reach the base-station.
+        This method also returns the minimum viable spreading factor.
+        @:param max_loss: The maximum loss that can be had before packet is lost.
+        @:return distance: Maximum distance a node can transmit with its current parameters.
+    """
     @staticmethod
     def max_distance(max_loss):
         distance = 40 * 10 ** ((max_loss - 127.41) / 20.8)
 
         return distance
 
-# Code implementation of core math logic from core paper that I based much of my research on.
+"""
+    Code implementation of core math logic from core paper that I based much of my research on.
+"""
 class fairSF:
 
-    # Initialisation method.
+    """
+        Initialisation method.
+        @:param nr_nodes: Number of nodes in the experiment.
+        @:param sf_list: List of spreading factors being used in the experiment.
+    """
     def __init__(self, nr_nodes, sf_list):
         self.nrNodes = nr_nodes
         self.sfList = sf_list
         self.baseResult = self.base_function
         return
 
-    # Provides final calculation.
+    """
+        Provides final calculation.
+        @:return sum_result: Base function for other functions for core philosophy.
+    """
     @property
     def base_function(self):
         sum_result = 0.0
@@ -646,8 +796,11 @@ class fairSF:
 
         return sum_result
 
-    # Gets the number of nodes to assign to each spreading factor region.
-    # This is based on the logic of the fairness equation.
+    """
+        Gets the number of nodes to assign to each spreading factor region.
+        This is based on the logic of the fairness equation.
+        @:return sf_counts: number of nodes to ideally assign to each spreading factor group.
+    """
     def get_sf_counts(self):
         sf_counts = []
         total = 0
@@ -664,7 +817,10 @@ class fairSF:
         sf_counts[0] += difference
         return sf_counts
 
-    # Gets above as percentages.
+    """
+        Gets above as percentages.
+        @:return sf_percentages: Percentage of total node pool to ideally assign to each spreading factor group.
+    """
     def get_percentages(self):
         sf_percentages = []
 
@@ -673,22 +829,36 @@ class fairSF:
 
         return sf_percentages
 
-    # Gets a single percentage.
+    """
+        Gets a single percentage.
+        @:return sf_percentage: Percentage of nodes to ideally assign to current spreading factor group.
+    """
     def get_percentage(self, sf):
         sf_percentage = (sf / (2 ** sf)) / self.baseResult
 
         return sf_percentage
 
-# Seperate class to estimate LoRaWAN packet airtimes.
-# Mostly implemented this to firm my own understanding of this area.
+"""
+    Seperate class to estimate LoRaWAN packet airtimes.
+    Mostly implemented this to firm my own understanding of this area.
+"""
 class estimator:
 
-    # this function computes the airtime of a packet
-    # according to LoraDesignGuide_STD.pdf
+    """
+        This function computes the airtime of a packet
+        According to LoraDesignGuide_STD.pdf
+    """
     def __init__(self):
         pass
 
-    # Calulates airtime of LoRaWAN packet given inputs.
+    """
+        Calulates airtime of LoRaWAN packet given inputs.
+        @:param sf: Spreading Factor value.
+        @:param cr: Coding rate value.
+        @:param pl: Packet length value.
+        @:param bw: Bandwidth parameter.
+        @:return t_pream + t_payload: Total aitime for packet.
+    """
     @staticmethod
     def airtime(sf, cr, pl, bw):
         h = 0  # implicit header disabled (H=0) or not (H=1)
@@ -710,13 +880,21 @@ class estimator:
         t_payload = payload_symb_nb * t_sym
         return t_pream + t_payload
 
-    # Calculates chirp time for a given LoRaWAN packet.
+    """
+        Calculates chirp time for a given LoRaWAN packet.
+        @:param sf: Spreading Factor value.
+        @:param bw: Bandwidth parameter.
+        @:return chirpy_time: Time to send a chirp.
+    """
     @staticmethod
     def chirp_time(sf, bw):
         chirpy_time = (2 ** sf) / bw
         return chirpy_time
 
-    # Okumura-Hata path loss model.
+    """
+        Okumura-Hata path loss model.
+        @:param sensi: List of sensitivity values for a transmission to be considered viable/received.
+    """
     @staticmethod
     def hata_urban(sensi):
         path_loss = 17.5 - sensi
