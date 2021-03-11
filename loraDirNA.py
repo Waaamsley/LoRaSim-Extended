@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
 """
  LoRaSim 0.2.1: simulate collisions in LoRa
  Copyright © 2016 Thiemo Voigt <thiemo@sics.se> and Martin Bor <m.bor@lancaster.ac.uk>
@@ -13,6 +11,11 @@
 
  $Date: 2017-05-12 19:16:16 +0100 (Fri, 12 May 2017) $
  $Revision: 334 $
+
+ Edited and Extended by James Walmsley.
+ I have made significant extensions and replaced majority of this simulator.
+ These extensions implement many of the most recent academic findings for LoRaWAN collisions.
+ These extensions allow for much more accurate simulations and more detailed insights.
 """
 
 import simpy
@@ -22,7 +25,6 @@ import math
 import sys
 import matplotlib.pyplot as plt
 import networkSupport
-import operator
 
 """
  SYNOPSIS:
@@ -118,6 +120,8 @@ def checkcollision(packet):
         return col
     return 0
 
+# Compares the power difference between two packets.
+# Returns which packets have been lost due to collision.
 def power_collision(p1, p2):
     global sf7InterferredWith
     global interferCount
@@ -162,7 +166,7 @@ def late_evade(p1, p2):
     return True
 
 
-# Creates a list of nodes.
+# Creates a list of nodes and creates a simulation environment instance for each node.
 def create_nodes():
     for i in range(0, nrNodes):
         node = myNode(i, bsId, avgSend)
@@ -171,7 +175,7 @@ def create_nodes():
 
 
 #
-# this function creates a node
+# This function creates a node.
 #
 class myNode:
     def __init__(self, nodeid, bs, duty):
@@ -204,8 +208,8 @@ class myNode:
 
 
 #
-# this function creates a packet (associated with a node)
-# it also sets all parameters, currently random
+# This function creates a packet (associated with a node).
+# It also sets all parameters, currently random.
 #
 class myPacket:
     def __init__(self, nodeid, distance):
@@ -252,15 +256,16 @@ class myPacket:
 
 
 #
-# main discrete event loop, runs for each node
-# a global list of packet being processed at the gateway
-# is maintained
+# Main discrete event loop, runs for each node.
+# A global list of packet being processed at the gateway is maintained.
 #
 class myTransmitter:
+    # Initialisation method.
     def __init__(self, environment, obzerver):
         self.env = environment
         self.observer = obzerver
 
+    # Handles transmission logic and simulator interactions.
     def transmit(self, node):
         while True:
             yield self.env.timeout(random.expovariate(1.0 / float(node.period)))
@@ -358,6 +363,7 @@ results = open(results_file, "a")
 print("Nodes List: ", nrNodes_list)
 print("Results File: ", results_file)
 
+# Results file output with experiment data.
 results.write("Average Send Time / Inter Packet Arrival Time: " + str(avgSend) + "\n")
 results.write("Experiment: " + str(experiment) + "\n")
 results.write("Power Control Scheme: " + str(powerScheme) + "\n")
@@ -372,7 +378,8 @@ results.write("Base Tx Power: " +  str(Ptx) + "\n")
 # Can do a while loop from here to end to repeat simulations.
 sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 figure_count = 0
-# For loop for how different nrNodes.
+
+# For loop for number of different nrNodes.
 for nrNodes in nrNodes_list:
     fair_sf_getter = networkSupport.fairSF(nrNodes, sfs)
     sf_counts = fair_sf_getter.get_sf_counts()
@@ -399,6 +406,7 @@ for nrNodes in nrNodes_list:
         results.write("Configuration: " + str(config_rep + 1) + ". Repetition: " + str(repetition + 1)
                       + ". Region Counts: " + str(curr_config) + "\n")
 
+        # Resets required data for new experiment.
         nodes = []
         packetsAtBS = []
         env = simpy.Environment()
@@ -413,13 +421,14 @@ for nrNodes in nrNodes_list:
 
         # maximum number of packets the BS can receive at the same time
         maxBSReceives = 999
-
         gamma = 2.08
         d0 = 40.0
         var = 0  # variance ignored for nows
         Lpld0 = 127.41
         GL = 0
         plen = 20
+
+        # Re-initialises required objects for this experiment.
         distFinder = networkSupport.maxDistFinder()
         observer = networkSupport.channelUsage()
         nodePlacer = networkSupport.nodePlacer(nodes, nrNodes, distributionType, sensi, Ptx, curr_config)
@@ -469,7 +478,7 @@ for nrNodes in nrNodes_list:
             experiLogic.logic(nodes, sf_counts, curr_config, 0)
         powerLogic.logic(nodes, experiLogic)
 
-
+        # Run the simulation!
         env.run(until=simtime)
 
         # print stats and save into file
@@ -494,6 +503,7 @@ for nrNodes in nrNodes_list:
             print("ENERGY CALC ERROR", int(curr_node.nodeid), int(curr_node.packet.Lpl), int(curr_node.packet.txpow), int(curr_node.packet.sf))
             quit()
 
+        # Write out results.
         results.write("energy (in J): " + str(energy) + "\n")
         results.write("sent packets: " + str(sent) + "\n")
         results.write("collisions: " + str(nrCollisions) + "\n")
@@ -510,6 +520,7 @@ for nrNodes in nrNodes_list:
         print("nrReceived/sent. DER: " + str(der))
         results.write("nrReceived / sent. DER method 2: " + str(der) + "\n")
 
+        # Write out detailed results.
         counter = 7
         for receivedStat, sentStat, lostStat, collideStat, interferStat in zip(sfReceived, sfSent, sfLost, sfCollided,
                                                                                interferCount):
@@ -533,7 +544,7 @@ for nrNodes in nrNodes_list:
                           + "%" + "\n")
 
         repetition += 1
-        if repetition == 1:
+        if repetition == 5:
             repetition = 0
             config_rep += 1
 

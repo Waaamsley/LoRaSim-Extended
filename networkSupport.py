@@ -1,16 +1,24 @@
+"""
+    Written by James Walmsley.
+    This file contains all of the classes/methods that support the main simulation file.
+    Therefore, this can be thought of as my supporting library to simplify the main file loraDirNA.py.
+"""
+
 import random
 import math
 import numpy as np
 import time
 import operator
 
-
+# Generates node distributions for simulation.
 class placementGenerator:
 
+    # Initialisation method for distribution generation.
     def __init__(self, nr_nodes, region_counts):
         self.nr_nodes = nr_nodes
         self.region_counts = region_counts
 
+    # Generates a large set of node distributions for experiments.
     def full_placement(self, configurations):
         start = [self.nr_nodes, 0, 0, 0, 0, 0]
         goal = list(self.region_counts)
@@ -31,6 +39,8 @@ class placementGenerator:
         goal = [0, 0, 0, 0, 0, self.nr_nodes]
         self.wave(configurations, start, goal, 5)
 
+    # Generates a wave effect of node distributions.
+    # Returns several distributions that when visualised, node placement change looks like a wave.
     def wave(self, configurations, start, goal, steps):
         differences = []
         total = 0
@@ -61,9 +71,10 @@ class placementGenerator:
             temp[0] += (self.nr_nodes - total)
             configurations.append(list(temp))
 
-
+# Provides the metrics that would be given as if the node is physically placed.
 class nodePlacer:
 
+    # Initialisation method.
     def __init__(self, nodes, nrnodes, distributiontype, sensi, ptx, placement):
         self.nodes = nodes
         self.nrNodes = nrnodes
@@ -75,6 +86,7 @@ class nodePlacer:
 
         return
 
+    # Calculates actual distance between base-station and node given a x, y co-ordinate.
     @staticmethod
     def base_math(dist, bsx, bsy):
         a = random.random()
@@ -87,6 +99,7 @@ class nodePlacer:
 
         return x, y, dist
 
+    # Orchestrates the class logic on node placement based on experiment input.
     def logic(self, maxdist, bsx, bsy, nodeid):
         x = 0
         y = 0
@@ -101,6 +114,8 @@ class nodePlacer:
 
         return x, y, dist
 
+    # One form of node placement.
+    # This form follows a set number of nodes per spreading factor region.
     def controlled_place(self, bsx, bsy, nodeid):
         x = 0
         y = 0
@@ -130,11 +145,13 @@ class nodePlacer:
 
         return x, y, dist
 
+    # Places the node as they currently are (random place).
     def uniform_place_basic(self, max_dist, bsx, bsy):
         x, y, dist = self.base_math(max_dist, bsx, bsy)
 
         return x, y, dist
 
+    # Places node similar to above but ensures nodes are spaced apart.
     def uniform_place(self, max_dist, bsx, bsy):
         found = 0
         rounds = 0
@@ -163,9 +180,10 @@ class nodePlacer:
 
         return x, y, dist
 
-
+# Provides experiment logic.
 class experiments:
 
+    # Initialisation method.
     def __init__(self, xperiment, nr_channels, sensi, plen, gl, ptx):
         self.experiment = xperiment
         self.esti = estimator()
@@ -177,6 +195,7 @@ class experiments:
         self.sfCounts = [0, 0, 0, 0, 0, 0]
         self.sfs = [7.0, 8.0, 9.0, 10.0, 11.0, 12.0]
 
+    # Logic on which experiments to run depending on user input.
     def logic(self, nodes, ideal, truth, start):
         if self.experiment == 1:
             self.basic_experiment(nodes, 12, 4, 125)
@@ -199,6 +218,7 @@ class experiments:
             print("Invalid experiment!\nQuitting!")
             quit()
 
+    # Basic experiment supplied by original LoRaSim.
     def basic_experiment(self, nodes, sf, cr, bw):
         for node in nodes:
             ch = random.randint(0, self.nrChannels - 1)
@@ -206,7 +226,9 @@ class experiments:
             node.packet.phase_two(sf, cr, bw, ch, rectime)
             self.sfCounts[sf - 7] += 1
 
-    # rssi based.
+    # RSSI based method of assignin node parameters.
+    # Assigns parameters so that node transmissions have shortest viable airtime.
+    # I have implemented a code representaion of the RSSI solution found in several papers.
     def experiment_four(self, nodes):
         for node in nodes:
             ch = random.randint(0, self.nrChannels - 1)
@@ -273,6 +295,7 @@ class experiments:
                 counter += 1
 
     # OG solution or FADR!
+    # Code implementation of one of the papers I based my work on.
     def experiment_six(self, nodes, nr_nodes, start):
         nodes.sort()
         validate2 = False
@@ -298,6 +321,7 @@ class experiments:
                 total += 1
 
         # reassigns sf to nodes to validate transmissions. Not going to use.
+        # This is an extension I made to their solution to improve it for real world use.
         if validate2:
             for i, node in enumerate(nodes):
                 minsensi = self.sensi[node.packet.sf - 7, 1]
@@ -343,9 +367,11 @@ class experiments:
                     self.sfCounts[node.packet.sf-7] += 1
                     break
 
-
+# Logic for assigning transmission powers to nodes.
+# Controls node power consumption.
 class powerControl:
 
+    # Initialisation method.
     def __init__(self, power_scheme, sensi, sensi_diff, gl, ptx):
         self.powerScheme = power_scheme
         self.sensi = sensi
@@ -354,6 +380,7 @@ class powerControl:
         self.ptx = ptx
         self.atrGet = operator.attrgetter
 
+    # Provides logic for which power schemes to use depending on user experiment input.
     def logic(self, nodes, experi_logic):
         if self.powerScheme == 1:
             self.power_one(nodes)
@@ -448,7 +475,7 @@ class powerControl:
 
         return
 
-    # OG
+    # Original transmission power scheme solution from paper where I got my core insights.
     def power_three(self, nodes, experi_logic):
         validate = False
         nodes.sort()
@@ -538,8 +565,10 @@ class powerControl:
         for node in nodes:
             node.packet.phase_three(self.ptx)
 
-
+# An Observer class to get insights on channel usage.
+# Allows for detailed information on % of channel time used.
 class channelUsage(object):
+    # Initialisation method.
     def __init__(self):
         # self.noTraffic = 0.0
         self._traffic = 0
@@ -549,10 +578,13 @@ class channelUsage(object):
         self.accum_e = 0.0
         self.accum_f = 0.0
 
+    # Property method for channelUsage instances.
     @property
     def traffic(self):
         return self._traffic
 
+    # When correct event occurs, traffic value is updated.
+    # Includes logic to determine when packets are starting/finishing to get correct stats.
     @traffic.setter
     def traffic(self, value):
         self._traffic = value
@@ -578,36 +610,33 @@ Can rearrange above to get:
 distance = d0 * 10**((Lpl-Lpld0)/10*2.08)
 Above equation can give maximum distance for a given receiver sensitivity + Tx Power.
 """
-
-
+# Finds maximum viable distance for LoRaWAN node.
 class maxDistFinder:
-    """
-    Initialisation method
-    """
 
+    # Initialisation method
+    # Was not needed.
     def __init__(self):
         return
 
-    """
-    This methods finds whether a given nodes packets can reach the base-station.
-    This method also returns the minimum viable spreading factor.
-    """
-
+    # This methods finds whether a given nodes packets can reach the base-station.
+    # This method also returns the minimum viable spreading factor.
     @staticmethod
     def max_distance(max_loss):
         distance = 40 * 10 ** ((max_loss - 127.41) / 20.8)
 
         return distance
 
-
+# Code implementation of core math logic from core paper that I based much of my research on.
 class fairSF:
 
+    # Initialisation method.
     def __init__(self, nr_nodes, sf_list):
         self.nrNodes = nr_nodes
         self.sfList = sf_list
         self.baseResult = self.base_function
         return
 
+    # Provides final calculation.
     @property
     def base_function(self):
         sum_result = 0.0
@@ -617,6 +646,8 @@ class fairSF:
 
         return sum_result
 
+    # Gets the number of nodes to assign to each spreading factor region.
+    # This is based on the logic of the fairness equation.
     def get_sf_counts(self):
         sf_counts = []
         total = 0
@@ -633,6 +664,7 @@ class fairSF:
         sf_counts[0] += difference
         return sf_counts
 
+    # Gets above as percentages.
     def get_percentages(self):
         sf_percentages = []
 
@@ -641,12 +673,14 @@ class fairSF:
 
         return sf_percentages
 
+    # Gets a single percentage.
     def get_percentage(self, sf):
         sf_percentage = (sf / (2 ** sf)) / self.baseResult
 
         return sf_percentage
 
-
+# Seperate class to estimate LoRaWAN packet airtimes.
+# Mostly implemented this to firm my own understanding of this area.
 class estimator:
 
     # this function computes the airtime of a packet
@@ -654,6 +688,7 @@ class estimator:
     def __init__(self):
         pass
 
+    # Calulates airtime of LoRaWAN packet given inputs.
     @staticmethod
     def airtime(sf, cr, pl, bw):
         h = 0  # implicit header disabled (H=0) or not (H=1)
@@ -675,6 +710,7 @@ class estimator:
         t_payload = payload_symb_nb * t_sym
         return t_pream + t_payload
 
+    # Calculates chirp time for a given LoRaWAN packet.
     @staticmethod
     def chirp_time(sf, bw):
         chirpy_time = (2 ** sf) / bw
